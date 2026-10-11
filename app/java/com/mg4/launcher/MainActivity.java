@@ -27,8 +27,13 @@ import com.mg4.launcher.ui.Theme;
 /** Home del launcher: costruisce l'interfaccia e collega i servizi dell'auto. */
 public final class MainActivity extends Activity implements HomeView.Host, AppsView.Host, SettingsView.Host {
 
-    /** Spazio occupato dal dock MG (a sinistra) e dalla barra di stato (in alto) se la finestra è a schermo intero. */
-    private static final int DOCK_WIDTH = 142, STATUS_HEIGHT = 80;
+    /** Schermo intero: nasconde barra di stato e dock MG (la SystemUI SAIC segue i flag standard). */
+    private static final int IMMERSIVE = View.SYSTEM_UI_FLAG_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
 
     private Prefs prefs;
     private AppCatalog catalog;
@@ -59,6 +64,11 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
             if (r - l != or - ol || b - t != ob - ot) v.requestApplyInsets();
         });
         setContentView(root);
+        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(vis -> {
+            // se il sistema rimostra le barre (es. dopo un popup) le rinasconde
+            if ((vis & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) root.postDelayed(this::goFullscreen, 2500);
+        });
+        goFullscreen();
         build();
 
         vehicle.setListener(s -> {
@@ -81,18 +91,34 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         f.addAction(Intent.ACTION_PACKAGE_REPLACED);
         f.addDataScheme("package");
         registerReceiver(packages, f);
+        // all'avvio dell'auto le app utente compaiono solo dopo lo sblocco dell'utente Android
+        registerReceiver(packages, new IntentFilter(Intent.ACTION_USER_UNLOCKED));
     }
 
-    /** Se la finestra copre tutto lo schermo lascia libero lo spazio di dock e barra di stato. */
+    /** In schermo intero si usano solo i margini reali comunicati dal sistema. */
     private WindowInsets applyInsets(View v, WindowInsets in) {
-        int w = v.getWidth() > 0 ? v.getWidth() : getResources().getDisplayMetrics().widthPixels;
-        int h = v.getHeight() > 0 ? v.getHeight() : getResources().getDisplayMetrics().heightPixels;
-        int left = Math.max(in.getSystemWindowInsetLeft(), w >= 1880 ? DOCK_WIDTH : 0);
-        int top = Math.max(in.getSystemWindowInsetTop(), h >= 700 ? STATUS_HEIGHT : 0);
+        int left = in.getSystemWindowInsetLeft(), top = in.getSystemWindowInsetTop();
         int right = in.getSystemWindowInsetRight(), bottom = in.getSystemWindowInsetBottom();
         v.setPadding(left, top, right, bottom);
-        Diag.put("finestra", w + "×" + h + " · margini " + left + "," + top + "," + right + "," + bottom);
+        Diag.put("finestra", v.getWidth() + "×" + v.getHeight() + " · margini " + left + "," + top + "," + right + "," + bottom);
         return in.consumeSystemWindowInsets();
+    }
+
+    private void goFullscreen() {
+        View d = getWindow().getDecorView();
+        if (d.getSystemUiVisibility() != IMMERSIVE) d.setSystemUiVisibility(IMMERSIVE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        goFullscreen();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) goFullscreen();
     }
 
     private void build() {

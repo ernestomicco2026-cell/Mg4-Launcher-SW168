@@ -37,9 +37,18 @@ public final class VehicleClient {
     private static final String AC = "com.saicmotor.sdk.vehiclesettings.IAirConditionService";
     private static final int AC_OPEN_POWER = 5;
     private static final int AC_CLOSE_POWER = 6;
+    private static final int AC_SET_AIR_VOLUME = 15;
     private static final int AC_SET_DRV_TEMP = 41;
     private static final int AC_GET_POWER = 53;
+    private static final int AC_GET_AIR_VOLUME = 59;
+    private static final int AC_GET_MAX_AIR_VOLUME = 60;
+    private static final int AC_GET_MIN_AIR_VOLUME = 61;
     private static final int AC_GET_DRV_TEMP = 81;
+
+    /** Livelli ventola come nell'originale (AcCardView): 1..11, 0 = spenta, 15 = automatico. */
+    public static final int FAN_OFF = 0, FAN_AUTO = 15;
+    /** Per quanto tempo il valore impostato dall'utente prevale sulle letture (che arrivano in ritardo). */
+    private static final long HOLD_MS = 4000;
 
     public static final int TEMP_MIN = 17;   // "LO"
     public static final int TEMP_MAX = 33;   // "HI"
@@ -57,6 +66,8 @@ public final class VehicleClient {
         public int dischargeStatus = -1;
         public int acTemp = -1;           // °C, 17 = LO, 33 = HI
         public int hvacPower = -1;
+        public int fanLevel = -1;         // 0 spenta, 1..max, 15 auto
+        public int fanMin = 1, fanMax = 11;
     }
 
     public interface Listener {
@@ -70,7 +81,11 @@ public final class VehicleClient {
     private final Handler main = new Handler(Looper.getMainLooper());
     private Listener listener;
     private volatile State last = new State();
-    private volatile int pendingTemp = -1;
+    private volatile int pendingTemp = -1, pendingFan = -1;
+    private volatile int heldTemp = -1, heldFan = -1;
+    private volatile long tempHoldUntil, fanHoldUntil;
+    private int fanMin = 1, fanMax = 11;
+    private boolean fanRangeRead;
     private boolean running;
 
     public VehicleClient(Context ctx) {
@@ -179,12 +194,35 @@ public final class VehicleClient {
                 if (a != null) {
                     int pending = pendingTemp;
                     if (pending > 0) {
-                        Rpc.call(a, AC, AC_SET_DRV_TEMP, p -> p.writeInt(pending));
                         pendingTemp = -1;
+                        Rpc.call(a, AC, AC_SET_DRV_TEMP, p -> p.writeInt(pending));
                     }
-                    s.acTemp = Rpc.callInt(a, AC, AC_GET_DRV_TEMP);
+                    int fan = pendingFan;
+                    if (fan >= 0) {
+                        pendingFan = -1;
+                        Rpc.call(a, AC, AC_SET_AIR_VOLUME, p -> p.writeInt(fan));
+                    }
+                    if (!fanRangeRead) {
+                        int mn = Rpc.callInt(a, AC, AC_GET_MIN_AIR_VOLUME);
+                        int mx = Rpc.callInt(a, AC, AC_GET_MAX_AIR_VOLUME);
+                        if (mn >= 1 && mx > mn && mx < FAN_AUTO) {
+                            fanMin = mn;
+                            fanMax = mx;
+                        }
+                        fanRangeRead = true;
+                        Diag.put("clima.ventolaMinMax", mn + " / " + mx);
+                    }
+                    long now = android.os.SystemClock.uptimeMillis();
+                    int readTemp = Rpc.callInt(a, AC, AC_GET_DRV_TEMP);
+                    // subito dopo un comando l'auto restituisce ancora il valore vecchio: tieni quello richiesto
+                    s.acTemp = (now < tempHoldUntil && heldTemp > 0) ? heldTemp : readTemp;
+                    int readFan = Rpc.callInt(a, AC, AC_GET_AIR_VOLUME);
+                    s.fanLevel = (now < fanHoldUntil && heldFan >= 0) ? heldFan : readFan;
+                    s.fanMin = fanMin;
+                    s.fanMax = fanMax;
                     s.hvacPower = Rpc.callInt(a, AC, AC_GET_POWER);
-                    Diag.put("clima.tempGuidatore", s.acTemp);
+                    Diag.put("clima.tempGuidatore", readTemp + (s.acTemp != readTemp ? " (richiesta " + s.acTemp + ")" : ""));
+                    Diag.put("clima.ventola", readFan + (s.fanLevel != readFan ? " (richiesta " + s.fanLevel + ")" : ""));
                     Diag.put("clima.accensione", s.hvacPower);
                 }
             } catch (Exception e) {
@@ -200,14 +238,47 @@ public final class VehicleClient {
         });
     }
 
-    /** Imposta la temperatura lato guida (17..33). Inviata subito sul thread di servizio. */
+    /** Imposta la temperatura lato guida (17..33). Il valore richiesto resta visibile per qualche secondo. */
     public void setDriverTemp(int celsius) {
         int t = Math.max(TEMP_MIN, Math.min(TEMP_MAX, celsius));
+        heldTemp = t;
+        tempHoldUntil = android.os.SystemClock.uptimeMillis() + HOLD_MS;
         pendingTemp = t;
-        if (bg != null) bg.post(() -> {
-            bg.removeCallbacks(loop);
-            poll();
-            if (running) bg.postDelayed(loop, 2000);
+        sendSoon();
+    }
+
+    /** Livello ventola: 0 = spenta, fanMin..fanMax, 15 = automatico. */
+    public void setFanLevel(int level) {
+        int l = level == FAN_AUTO || level == FAN_OFF ? level : Math.max(fanMin, Math.min(fanMax, level));
+        heldFan = l;
+        fanHoldUntil = android.os.SystemClock.uptimeMillis() + HOLD_MS;
+        pendingFan = l;
+        sendSoon();
+    }
+
+    /** Invia il comando subito, senza riscrivere la UI con una lettura immediata. */
+    private void sendSoon() {
+        if (bg == null) return;
+        bg.post(() -> {
+            try {
+                IBinder a = sub("aircondition");
+                if (a == null) return;
+                int t = pendingTemp;
+                if (t > 0) {
+                    pendingTemp = -1;
+                    Rpc.call(a, AC, AC_SET_DRV_TEMP, p -> p.writeInt(t));
+                }
+                int f = pendingFan;
+                if (f >= 0) {
+                    pendingFan = -1;
+                    Rpc.call(a, AC, AC_SET_AIR_VOLUME, p -> p.writeInt(f));
+                }
+            } catch (Exception e) {
+                Diag.error("clima.comando", e.toString());
+                synchronized (subs) {
+                    subs.remove("aircondition");
+                }
+            }
         });
     }
 

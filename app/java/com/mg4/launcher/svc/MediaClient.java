@@ -310,6 +310,7 @@ public final class MediaClient {
     /** Codici sorgente del servizio media → sorgente del launcher (dall'analisi dell'originale). */
     private static int mapSource(int audioSource, int player) {
         switch (audioSource) {
+            case 3: return SRC_RADIO;   // MEDIA_SOURCE_RAIDO
             case 6: return SRC_USB;
             case 5: return SRC_BT;
             case 14: return SRC_ONLINE;
@@ -318,6 +319,8 @@ public final class MediaClient {
             default:
                 break;
         }
+        // sorgente nota ma non gestita (es. video USB): non indovinare dal tipo di player
+        if (audioSource > 0) return 0;
         switch (player) {
             case 2: return SRC_USB;
             case 3: return SRC_ONLINE;

@@ -14,7 +14,9 @@
         android:theme="@style/LauncherTheme"
         android:supportsRtl="false"
         android:allowBackup="false"
-        android:hardwareAccelerated="true">
+        android:hardwareAccelerated="true"
+        android:directBootAware="true"
+        android:defaultToDeviceProtectedStorage="true">
 
         <activity
             android:name=".MainActivity"

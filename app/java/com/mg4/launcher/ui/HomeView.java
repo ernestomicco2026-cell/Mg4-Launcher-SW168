@@ -1,6 +1,7 @@
 package com.mg4.launcher.ui;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -75,6 +76,9 @@ public final class HomeView extends LinearLayout {
     private ImageView miniArt;
 
     private int acTemp = -1;
+    private int fanLevel = -1, fanMin = 1, fanMax = 11;
+    private long localTempUntil, localFanUntil;
+    private TextView fanTv;
 
     public HomeView(Context c, Theme t, Prefs prefs, Host host, VehicleClient vehicle, MediaClient media, NavClient nav) {
         super(c);
@@ -194,10 +198,16 @@ public final class HomeView extends LinearLayout {
                 ? String.format(Locale.ITALY, "%.1f kWh/100", s.consumption) : "—");
         chipLimite.setText(s.chargeLimit > 0 && s.chargeLimit <= 100 ? s.chargeLimit + "%" : "—");
         chipV2l.setText(s.chargingStatus == 13 ? "Attivo" : "Spento");
-        if (s.acTemp > 0) {
+        if (s.acTemp > 0 && SystemClock.uptimeMillis() > localTempUntil) {
             acTemp = s.acTemp;
             tempTv.setText(tempLabel(acTemp));
         }
+        if (s.fanLevel >= 0 && SystemClock.uptimeMillis() > localFanUntil) {
+            fanLevel = s.fanLevel;
+            fanTv.setText(fanLabel(fanLevel));
+        }
+        fanMin = s.fanMin;
+        fanMax = s.fanMax;
     }
 
     private String chargeText(VehicleClient.State s) {
@@ -381,8 +391,14 @@ public final class HomeView extends LinearLayout {
             navCardTitle.setText(m.tbtDistance.isEmpty() ? (m.deviceType == MediaClient.DEV_AAUTO ? "Android Auto" : "CarPlay") : m.tbtDistance);
             navCardSub.setText(m.tbtRoad.isEmpty() ? "Navigazione dal telefono" : m.tbtRoad);
         } else if (n.navigating) {
-            navCardTitle.setText(n.road.isEmpty() ? "Navigazione in corso" : n.road);
-            navCardSub.setText(n.remainMeters > 0 ? "Mancano " + km(n.remainMeters) : "Tocca per aprire il navigatore");
+            if (n.turnMeters >= 0) {
+                navCardTitle.setText(km(n.turnMeters));
+                String next = !n.turnText.isEmpty() ? n.turnText : n.road;
+                navCardSub.setText(next.isEmpty() ? "Prossima manovra" : next);
+            } else {
+                navCardTitle.setText(n.road.isEmpty() ? "Navigazione in corso" : n.road);
+                navCardSub.setText(n.remainMeters > 0 ? "Mancano " + km(n.remainMeters) : "Tocca per aprire il navigatore");
+            }
             if (n.remainSeconds > 0) {
                 Date arrive = new Date(System.currentTimeMillis() + n.remainSeconds * 1000L);
                 navEtaArrive.setText(new SimpleDateFormat("HH:mm", Locale.ITALY).format(arrive) + " arrivo");
@@ -605,14 +621,30 @@ public final class HomeView extends LinearLayout {
         bar.addView(tempTv, new LayoutParams(dp(108), -2));
         bar.addView(Ui.iconButton(c, t, R.drawable.ic_chev_right, t.sub, 0, 56, 26, 28, "Aumenta temperatura",
                 v -> changeTemp(1)));
-        FrameLayout fan = Ui.iconButton(c, t, R.drawable.ic_fan, t.accent, t.chip, 56, 26, 16, "Clima",
-                v -> host.launch("com.saicmotor.hmi.hvac", "com.saicmotor.hmi.hvac.HvacActivity"));
-        fan.setOnLongClickListener(v -> {
-            VehicleClient.State s = vehicle.last();
-            vehicle.setHvacPower(s.hvacPower != 1);
+        bar.addView(Ui.divider(c, t.track, 48));
+
+        // ventola: ‹ livello ›, tocca l'icona = app Clima, tieni premuto = accendi/spegni il clima
+        bar.addView(Ui.iconButton(c, t, R.drawable.ic_chev_left, t.sub, 0, 56, 26, 28, "Ventola meno",
+                v -> changeFan(-1)));
+        LinearLayout fanBox = Ui.row(c);
+        fanBox.setGravity(Gravity.CENTER);
+        ImageView fanIc = Ui.icon(c, R.drawable.ic_fan, t.accent, 26);
+        fanBox.addView(fanIc, new LayoutParams(dp(26), dp(26)));
+        fanTv = Ui.text(c, "—", 26, t.text, Ui.REGULAR);
+        fanTv.setGravity(Gravity.CENTER);
+        fanBox.addView(fanTv, Ui.margins(new LayoutParams(-2, -2), dp(8), 0, 0, 0));
+        fanBox.setMinimumWidth(dp(104));
+        fanBox.setClickable(true);
+        fanBox.setContentDescription("Clima");
+        fanBox.setBackground(Ui.pressable(c, 0, 16, t));
+        fanBox.setOnClickListener(v -> host.launch("com.saicmotor.hmi.hvac", "com.saicmotor.hmi.hvac.HvacActivity"));
+        fanBox.setOnLongClickListener(v -> {
+            vehicle.setHvacPower(vehicle.last().hvacPower != 1);
             return true;
         });
-        bar.addView(fan, Ui.margins(Ui.lp(dp(56), dp(56)), dp(6), 0, 0, 0));
+        bar.addView(fanBox, new LayoutParams(-2, dp(56)));
+        bar.addView(Ui.iconButton(c, t, R.drawable.ic_chev_right, t.sub, 0, 56, 26, 28, "Ventola più",
+                v -> changeFan(1)));
 
         bar.addView(Ui.divider(c, t.track, 48));
 
@@ -664,7 +696,31 @@ public final class HomeView extends LinearLayout {
         if (acTemp <= 0) acTemp = vehicle.last().acTemp;
         if (acTemp <= 0) return;
         acTemp = Math.max(VehicleClient.TEMP_MIN, Math.min(VehicleClient.TEMP_MAX, acTemp + delta));
+        localTempUntil = SystemClock.uptimeMillis() + 4000;
         tempTv.setText(tempLabel(acTemp));
         vehicle.setDriverTemp(acTemp);
+    }
+
+    private static String fanLabel(int v) {
+        if (v == VehicleClient.FAN_AUTO) return "A";
+        if (v <= 0) return "OFF";
+        return String.valueOf(v);
+    }
+
+    /** Come l'originale: da spenta o automatico il primo tocco parte dal minimo/massimo. */
+    private void changeFan(int delta) {
+        if (fanLevel < 0) fanLevel = vehicle.last().fanLevel;
+        int cur = fanLevel;
+        int next;
+        if (cur == VehicleClient.FAN_AUTO) next = delta > 0 ? fanMax : fanMax - 1;
+        else if (cur <= 0) next = delta > 0 ? fanMin : 0;
+        else next = cur + delta;
+        if (next < fanMin) next = VehicleClient.FAN_OFF;
+        if (next > fanMax) next = fanMax;
+        if (next == cur) return;
+        fanLevel = next;
+        localFanUntil = SystemClock.uptimeMillis() + 4000;
+        fanTv.setText(fanLabel(fanLevel));
+        vehicle.setFanLevel(fanLevel);
     }
 }

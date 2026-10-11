@@ -7,7 +7,8 @@ Launcher in stile Tesla per l'infotainment della MG4 (EH32, Android Automotive 9
 - **Destra**: schede **Mappa** (guida in corso dal navigatore MG o da CarPlay/AA, oppure Navigatore/Casa/Lavoro),
   **Media** (sorgenti Radio, USB, Bluetooth, Online, CarPlay/AA con le frecce ‹ ›, indietro/play/avanti)
   e **CarPlay/Android Auto** (compare da sola quando colleghi il telefono).
-- **In basso**: temperatura clima (‹ ›, 17 = LO … 33 = HI; tasto ventola = app Clima, tieni premuto = accendi/spegni),
+- **In basso**: temperatura clima (‹ ›, 17 = LO … 33 = HI), velocità ventola (‹ ›, OFF / 1…11 / A = automatico;
+  tocca l'icona = app Clima, tieni premuto = accendi/spegni),
   mini-player, Telefono, Radio, Telecamera 360°, Impostazioni, App.
 - **App**: app dell'auto con icone disegnate + app installate da te, aggiunte in automatico con l'icona ridisegnata.
 - **Tema**: automatico (segue giorno/notte dell'auto), notte o giorno; 4 colori d'accento.
@@ -15,12 +16,15 @@ Launcher in stile Tesla per l'infotainment della MG4 (EH32, Android Automotive 9
 ## Installazione (prova)
 
 ```bash
-adb install -r MG4Launcher-0.1.0.apk
+adb install -r -f MG4Launcher-0.2.0.apk
 # rendilo la home predefinita
 adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity
 ```
 
 In alternativa premi il tasto Home: Android chiede quale home usare.
+
+Il launcher è a schermo intero (nasconde barra di stato e dock MG; trascina dal bordo per farli ricomparire)
+e parte già prima dello sblocco dell'utente, come la home originale.
 
 ## Tornare alla home MG originale
 
