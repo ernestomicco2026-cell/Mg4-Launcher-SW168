@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.3.1](releases/MG4Launcher-0.3.1.apk)**
+**Ultima versione / Latest version: [0.4.0](releases/MG4Launcher-0.4.0.apk)**
 
 > Progetto amatoriale e **non ufficiale**: non è affiliato né approvato da MG Motor o SAIC Motor.
 > I nomi MG / MG4 servono solo a indicare l'auto compatibile. Installalo e usalo a tuo rischio.
@@ -26,17 +26,18 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
   - **Mappa**: indicazioni del navigatore (prossima manovra, via, arrivo). Senza guida: Navigatore, Casa, Lavoro
     e la riga **Apri con** (MG, CarPlay/Android Auto se il telefono è collegato, Waze/Google Maps se installati sull'auto).
     Tieni premuto un pulsante della riga per renderlo il navigatore predefinito.
-  - **Media**: parte sempre dalla radio; le altre sorgenti si scelgono con le frecce ‹ ›
-    (USB, Bluetooth, Online, CarPlay/Android Auto). Per la radio: logo della stazione e preferiti FM/DAB
-    con i loghi, da toccare per cambiare stazione.
+  - **Media**: parte sempre dalla radio; in alto un pulsante per ogni sorgente
+    (Radio, USB, Bluetooth, Online, e CarPlay/Android Auto se il telefono è collegato). Per la radio: logo della stazione,
+    pulsanti **FM / DAB** per cambiare banda e preferiti FM/DAB con i loghi, da toccare per cambiare stazione.
   - **CarPlay / Android Auto**: la scheda compare da sola quando colleghi il telefono.
 - **Barra in basso**: temperatura ‹ › (17 = LO … 33 = HI), ventola ‹ › (OFF / 1…11 / A = automatico;
   tocca l'icona = app Clima, tieni premuto = accendi/spegni), mini-player, Telefono, Radio,
-  Telecamera 360°, Impostazioni, App.
-- **App**: scorri la home verso sinistra (o tocca il pulsante App) per le app dell'auto e quelle che installi tu,
+  Telecamera 360°, Impostazioni.
+- **App**: scorri la home verso sinistra per le app dell'auto e quelle che installi tu,
   con le icone tutte nello stesso stile; scorri verso destra per tornare. Con **Modifica** scegli quali app installate mostrare.
 - **Impostazioni** (tieni premuta l'auto): colore dell'auto, tetto nero, tema (automatico, notte, giorno),
-  navigatore predefinito (Automatico, MG, Telefono), aggiornamenti, diagnostica.
+  navigatore predefinito (Automatico, MG, Telefono), aggiornamenti, diagnostica con **Salva log**.
+  Si aprono anche dall'ingranaggio in alto a destra nella pagina App.
 - **Schermo intero**: barra di stato e dock MG nascosti (trascina dal bordo per richiamarli).
 - **Aggiornamenti**: le nuove versioni si scaricano e si installano dalle impostazioni, senza computer.
 
@@ -48,7 +49,7 @@ Il firmware MG blocca l'installazione normale delle app: l'opzione `-f` la perme
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.3.1.apk
+   adb install -r -f MG4Launcher-0.4.0.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -94,7 +95,21 @@ Nelle impostazioni la colonna **Diagnostica servizi auto** mostra i valori grezz
 (veicolo, clima, media, radio, CarPlay, navigatore) e gli errori recenti. Uno screenshot di quella colonna
 o il file `diagnostica.txt` bastano per capire cosa succede.
 
+Con **Salva log** (in alto nella colonna Diagnostica) il launcher scrive un log completo — valori, errori, eventi
+recenti e logcat del launcher — in `Android/data/com.mg4.launcher/files/mg4-launcher-log-….txt`.
+Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartella: basta aprirla dal computer o dal telefono.
+
 ### Versioni
+
+#### 0.4.0 — 11 ottobre 2026
+- Aggiornamenti dalle impostazioni: l'APK non viene più salvato in un file temporaneo ma va direttamente
+  all'installazione (installazione interna come `adb install -r -f`); download di riserva da raw.githubusercontent.com
+  e messaggi d'errore precisi (download o installazione).
+- Impostazioni → Diagnostica: pulsante **Salva log** (anche su chiavetta USB).
+- Media: un pulsante per ogni sorgente al posto delle frecce ‹ RADIO ›; riquadro più grande, comandi più grandi;
+  **FM / DAB** ora funzionanti (riprendono l'ultima stazione ascoltata su quella banda); tolto AM.
+- Tolto il pulsante App nella barra in basso e la freccia nella pagina App: si passa scorrendo.
+- Nuova icona a ingranaggio per Impostazioni (barra in basso e app) e per le impostazioni del launcher.
 
 #### 0.3.1 — 11 ottobre 2026
 - Radio: il pulsante play/pausa ora mostra lo stato reale e la radio riparte dopo la pausa
@@ -180,17 +195,18 @@ It replaces the original home screen, keeping its features, with a new, clean de
   - **Map**: navigation guidance (next manoeuvre, street, arrival). When not navigating: Navigator, Home, Work
     and the **Open with** row (MG, CarPlay/Android Auto when a phone is connected, Waze/Google Maps if installed on the car).
     Long-press a button in that row to make it the default navigator.
-  - **Media**: always starts on the radio; pick other sources with the ‹ › arrows
-    (USB, Bluetooth, Online, CarPlay/Android Auto). For the radio: station logo and FM/DAB favourites with logos,
-    tap one to tune in.
+  - **Media**: always starts on the radio; one button per source at the top
+    (Radio, USB, Bluetooth, Online, plus CarPlay/Android Auto when a phone is connected). For the radio: station logo,
+    **FM / DAB** buttons to switch band and FM/DAB favourites with logos, tap one to tune in.
   - **CarPlay / Android Auto**: the tab appears by itself when you connect a phone.
 - **Bottom bar**: temperature ‹ › (17 = LO … 33 = HI), fan ‹ › (OFF / 1…11 / A = auto;
   tap the icon = Climate app, long-press = climate on/off), mini player, Phone, Radio,
-  360° camera, Settings, Apps.
-- **Apps**: swipe the home screen left (or tap the Apps button) for the car's apps and the ones you install,
+  360° camera, Settings.
+- **Apps**: swipe the home screen left for the car's apps and the ones you install,
   all with matching icons; swipe right to go back. Use **Modifica** (Edit) to choose which installed apps to show.
 - **Settings** (long-press the car): car colour, black roof, theme (auto, night, day),
-  default navigator (Auto, MG, Phone), updates, diagnostics.
+  default navigator (Auto, MG, Phone), updates, diagnostics with **Salva log** (save log).
+  Also available from the gear at the top right of the Apps page.
 - **Full screen**: status bar and MG dock hidden (swipe from the edge to bring them back).
 - **Updates**: new versions download and install from the settings, no computer needed.
 
@@ -204,7 +220,7 @@ The MG firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.3.1.apk
+   adb install -r -f MG4Launcher-0.4.0.apk
    ```
 3. Make it the default home:
    ```bash
@@ -250,7 +266,21 @@ In the settings, the **Diagnostica servizi auto** (car services diagnostics) col
 each service (vehicle, climate, media, radio, CarPlay, navigator) and recent errors. A screenshot of that column
 or the `diagnostica.txt` file is enough to understand what is going on.
 
+**Salva log** (save log, at the top of the Diagnostics column) writes a full log — values, errors, recent events
+and the launcher's logcat — to `Android/data/com.mg4.launcher/files/mg4-launcher-log-….txt`.
+With a USB stick plugged in, the file is written there too, in the same folder.
+
 ### Changelog
+
+#### 0.4.0 — 11 October 2026
+- Updates from the settings: the APK is no longer saved to a temporary file but streamed straight into the installer
+  (internal install like `adb install -r -f`); fallback download from raw.githubusercontent.com and precise error
+  messages (download or install).
+- Settings → Diagnostics: **Salva log** (save log) button, also to a USB stick.
+- Media: one button per source instead of the ‹ RADIO › arrows; bigger artwork and controls;
+  **FM / DAB** now work (they resume the last station on that band); AM removed.
+- Apps button in the bottom bar and back arrow on the Apps page removed: swipe between pages.
+- New gear icon for Settings (bottom bar and apps) and for the launcher settings.
 
 #### 0.3.1 — 11 October 2026
 - Radio: the play/pause button now shows the real state and the radio resumes after a pause

@@ -1,6 +1,6 @@
 {
-  "version": "0.3.1",
-  "apk": "releases/MG4Launcher-0.3.1.apk",
-  "size": 335608,
-  "notes": "Radio: play/pausa corretti. Navigatore: riga Apri con (MG, CarPlay/Android Auto, Waze/Google Maps) e navigatore predefinito."
+  "version": "0.4.0",
+  "apk": "releases/MG4Launcher-0.4.0.apk",
+  "size": 339704,
+  "notes": "Aggiornamento dalle impostazioni corretto, pulsante Salva log, Media con un pulsante per sorgente e FM/DAB funzionanti, niente pulsante App, nuova icona a ingranaggio."
 }

@@ -37,7 +37,7 @@ public final class SettingsView extends FrameLayout {
     private TextView diag;
     private final LinearLayout colorRow, themeRow, navRow;
     private final TextView colorName;
-    private TextView updStatus, updInstall, updCheck;
+    private TextView updStatus, updInstall, updCheck, logBtn, logStatus;
     private Updater.Release found;
 
     public SettingsView(Context c, Theme t, Prefs prefs, Host host) {
@@ -108,6 +108,9 @@ public final class SettingsView extends FrameLayout {
         LinearLayout right = Ui.column(c);
         LinearLayout rh = Ui.row(c);
         rh.addView(label(c, "DIAGNOSTICA SERVIZI AUTO"), Ui.lpWeight(0, -2, 1));
+        logBtn = button(c, "Salva log", false, v -> saveLog());
+        logBtn.setMinHeight(dp(48));
+        rh.addView(logBtn, Ui.margins(Ui.lp(-2, dp(48)), 0, 0, dp(10), 0));
         rh.addView(Ui.iconButton(c, t, R.drawable.ic_close, t.text, t.chip, 56, 26, 28, "Chiudi", v -> host.closeSettings()));
         right.addView(rh);
         ScrollView ds = new ScrollView(c);
@@ -117,6 +120,8 @@ public final class SettingsView extends FrameLayout {
         diag.setTextIsSelectable(true);
         ds.addView(diag);
         right.addView(ds, Ui.margins(Ui.lpWeight(-1, 0, 1), 0, dp(12), 0, 0));
+        logStatus = Ui.text(c, "Salva log: con una chiavetta USB inserita il file finisce anche lì.", 14, t.sub, Ui.REGULAR);
+        right.addView(logStatus, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, dp(10), 0, 0));
         card.addView(right, Ui.margins(Ui.lpWeight(0, -1, 1f), dp(32), 0, 0, 0));
 
         buildSwatches();
@@ -161,6 +166,29 @@ public final class SettingsView extends FrameLayout {
         b.setClickable(true);
         b.setOnClickListener(l);
         return b;
+    }
+
+    /** Salva il log completo (in background) e mostra dove è finito. */
+    private void saveLog() {
+        logBtn.setEnabled(false);
+        logBtn.setAlpha(0.5f);
+        logStatus.setText("Salvataggio del log…");
+        Context app = getContext().getApplicationContext();
+        new Thread(() -> {
+            Diag.Saved r = Diag.saveLog(app);
+            main.post(() -> {
+                logBtn.setEnabled(true);
+                logBtn.setAlpha(1f);
+                if (r.paths.isEmpty()) {
+                    logStatus.setText("Non sono riuscito a salvare il log in nessuna cartella.");
+                    return;
+                }
+                StringBuilder sb = new StringBuilder(r.onUsb ? "Log salvato anche sulla chiavetta USB:\n" : "Log salvato:\n");
+                for (String path : r.paths) sb.append(path).append('\n');
+                if (!r.onUsb) sb.append("Per averlo su chiavetta: inseriscila e premi di nuovo Salva log.");
+                logStatus.setText(sb.toString().trim());
+            });
+        }, "mg4-log").start();
     }
 
     @Override

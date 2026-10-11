@@ -67,7 +67,11 @@ public final class HomeView extends LinearLayout {
     private boolean navWithPhone;
 
     // media
-    private TextView srcName, srcPos, mTitle, mSub, mMeta, mPos, mDur, artFreq, artUnit, artBand;
+    private LinearLayout srcRow;
+    private String srcSignature = "";
+    private int pendingSource, pendingBand;
+    private long pendingSourceUntil, pendingBandUntil;
+    private TextView mTitle, mSub, mMeta, mPos, mDur, artFreq, artUnit, artBand;
     private ImageView artIcon, artLogo;
     private LinearLayout artRadio, progressRow, bandRow, favRow;
     private View favScroll;
@@ -477,67 +481,57 @@ public final class HomeView extends LinearLayout {
 
     private View buildMediaPanel(Context c) {
         LinearLayout col = Ui.column(c);
-        col.setPadding(dp(40), dp(22), dp(40), dp(24));
+        col.setPadding(dp(28), dp(20), dp(36), dp(22));
 
-        // sorgente: ‹ RADIO › (in alto a sinistra, alla stessa altezza delle schede)
-        LinearLayout sel = Ui.row(c);
-        sel.addView(Ui.iconButton(c, t, R.drawable.ic_chev_left, t.text, 0, 52, 24, 26, "Sorgente precedente",
-                v -> media.cycleSource(-1)));
-        srcName = Ui.text(c, "RADIO", 17, t.text, Ui.MEDIUM);
-        srcName.setLetterSpacing(0.06f);
-        srcName.setGravity(Gravity.CENTER);
-        srcName.setMinWidth(dp(200));
-        srcName.setPadding(dp(16), dp(10), dp(16), dp(10));
-        srcName.setBackground(Ui.round(t.chip, dp(14)));
-        sel.addView(srcName, Ui.margins(new LayoutParams(-2, -2), dp(4), 0, dp(4), 0));
-        sel.addView(Ui.iconButton(c, t, R.drawable.ic_chev_right, t.text, 0, 52, 24, 26, "Sorgente successiva",
-                v -> media.cycleSource(1)));
-        srcPos = Ui.text(c, "", 15, t.sub, Ui.REGULAR);
-        sel.addView(srcPos, Ui.margins(new LayoutParams(-2, -2), dp(10), 0, 0, 0));
-        col.addView(sel, Ui.margins(new LayoutParams(-2, dp(56)), -dp(12), 0, 0, 0));
+        // sorgenti: un pulsante per ciascuna (Radio, USB, Bluetooth, Online, + CarPlay/Android Auto se collegato)
+        srcRow = Ui.row(c);
+        srcRow.setBackground(Ui.round(t.overlay, dp(16)));
+        srcRow.setPadding(dp(6), dp(6), dp(6), dp(6));
+        col.addView(srcRow, new LayoutParams(-2, dp(60)));
 
         // copertina / logo + informazioni + comandi
         LinearLayout main = Ui.row(c);
         main.setGravity(Gravity.CENTER_VERTICAL);
-        col.addView(main, Ui.lpWeight(-1, 0, 1));
+        col.addView(main, Ui.margins(Ui.lpWeight(-1, 0, 1), dp(8), dp(4), 0, 0));
 
         FrameLayout art = new FrameLayout(c);
-        art.setBackground(Ui.pressable(c, t.chip, 22, t));
+        art.setBackground(Ui.pressable(c, t.chip, 26, t));
         art.setClipToOutline(true);
         art.setClickable(true);
+        art.setContentDescription("Apri l'app della sorgente");
         art.setOnClickListener(v -> openCurrentSourceApp());
-        artIcon = Ui.icon(c, R.drawable.ic_music, t.sub, 88);
-        art.addView(artIcon, new FrameLayout.LayoutParams(dp(88), dp(88), Gravity.CENTER));
+        artIcon = Ui.icon(c, R.drawable.ic_music, t.sub, 100);
+        art.addView(artIcon, new FrameLayout.LayoutParams(dp(100), dp(100), Gravity.CENTER));
         artLogo = new ImageView(c);
         artLogo.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        artLogo.setPadding(dp(18), dp(18), dp(18), dp(18));
+        artLogo.setPadding(dp(20), dp(20), dp(20), dp(20));
         art.addView(artLogo, new FrameLayout.LayoutParams(-1, -1));
         artRadio = Ui.column(c);
         artRadio.setGravity(Gravity.CENTER);
-        artBand = Ui.text(c, "FM", 18, t.sub, Ui.MEDIUM);
+        artBand = Ui.text(c, "FM", 20, t.sub, Ui.MEDIUM);
         artBand.setLetterSpacing(0.12f);
         artBand.setGravity(Gravity.CENTER);
-        artFreq = Ui.oneLine(Ui.text(c, "", 56, t.text, Ui.LIGHT));
+        artFreq = Ui.oneLine(Ui.text(c, "", 64, t.text, Ui.LIGHT));
         artFreq.setGravity(Gravity.CENTER);
-        artUnit = Ui.oneLine(Ui.text(c, "MHz", 17, t.sub, Ui.REGULAR));
+        artUnit = Ui.oneLine(Ui.text(c, "MHz", 19, t.sub, Ui.REGULAR));
         artUnit.setGravity(Gravity.CENTER);
         artRadio.addView(artBand, new LayoutParams(-1, -2));
         artRadio.addView(artFreq, Ui.margins(new LayoutParams(-1, -2), 0, dp(2), 0, dp(2)));
         artRadio.addView(artUnit, new LayoutParams(-1, -2));
         artRadio.setPadding(dp(12), 0, dp(12), 0);
         art.addView(artRadio, new FrameLayout.LayoutParams(-1, -1));
-        main.addView(art, new LayoutParams(dp(220), dp(220)));
+        main.addView(art, new LayoutParams(dp(260), dp(260)));
 
         LinearLayout info = Ui.column(c);
-        main.addView(info, Ui.margins(Ui.lpWeight(0, -2, 1), dp(36), 0, 0, 0));
+        main.addView(info, Ui.margins(Ui.lpWeight(0, -2, 1), dp(40), 0, 0, 0));
 
-        mMeta = Ui.oneLine(Ui.text(c, "", 16, t.sub, Ui.MEDIUM));
+        mMeta = Ui.oneLine(Ui.text(c, "", 17, t.sub, Ui.MEDIUM));
         mMeta.setLetterSpacing(0.06f);
         info.addView(mMeta, new LayoutParams(-1, -2));
-        mTitle = Ui.oneLine(Ui.text(c, "", 40, t.text, Ui.MEDIUM));
-        info.addView(mTitle, Ui.margins(new LayoutParams(-1, -2), 0, dp(6), 0, 0));
-        mSub = Ui.oneLine(Ui.text(c, "", 20, t.sub, Ui.REGULAR));
-        info.addView(mSub, Ui.margins(new LayoutParams(-1, -2), 0, dp(6), 0, 0));
+        mTitle = Ui.oneLine(Ui.text(c, "", 46, t.text, Ui.MEDIUM));
+        info.addView(mTitle, Ui.margins(new LayoutParams(-1, -2), 0, dp(4), 0, 0));
+        mSub = Ui.oneLine(Ui.text(c, "", 21, t.sub, Ui.REGULAR));
+        info.addView(mSub, Ui.margins(new LayoutParams(-1, -2), 0, dp(4), 0, 0));
 
         progressRow = Ui.column(c);
         mProgress = new Bars.Progress(c);
@@ -550,25 +544,40 @@ public final class HomeView extends LinearLayout {
         times.addView(Ui.spacer(c));
         times.addView(mDur);
         progressRow.addView(times, Ui.margins(new LayoutParams(-1, -2), 0, dp(8), 0, 0));
-        info.addView(progressRow, Ui.margins(new LayoutParams(-1, -2), 0, dp(18), 0, 0));
+        info.addView(progressRow, Ui.margins(new LayoutParams(-1, -2), 0, dp(16), 0, 0));
 
+        // comandi grandi + scelta della banda (FM / DAB) subito accanto
         LinearLayout ctr = Ui.row(c);
-        ctr.addView(Ui.iconButton(c, t, R.drawable.ic_prev, t.text, t.chip, 64, 28, 32, "Precedente", v -> media.skip(false)));
-        FrameLayout play = Ui.iconButton(c, t, R.drawable.ic_pause, t.panel, t.text, 80, 34, 40, "Play o pausa", v -> media.playPause());
+        ctr.setGravity(Gravity.CENTER_VERTICAL);
+        ctr.addView(Ui.iconButton(c, t, R.drawable.ic_prev, t.text, t.chip, 72, 30, 36, "Precedente", v -> media.skip(false)));
+        FrameLayout play = Ui.iconButton(c, t, R.drawable.ic_pause, t.panel, t.text, 92, 38, 46, "Play o pausa", v -> media.playPause());
         playIcon = (ImageView) play.getChildAt(0);
-        ctr.addView(play, Ui.margins(Ui.lp(dp(80), dp(80)), dp(18), 0, dp(18), 0));
-        ctr.addView(Ui.iconButton(c, t, R.drawable.ic_next, t.text, t.chip, 64, 28, 32, "Successivo", v -> media.skip(true)));
-        ctr.addView(Ui.spacer(c));
+        ctr.addView(play, Ui.margins(Ui.lp(dp(92), dp(92)), dp(20), 0, dp(20), 0));
+        ctr.addView(Ui.iconButton(c, t, R.drawable.ic_next, t.text, t.chip, 72, 30, 36, "Successivo", v -> media.skip(true)));
         bandRow = Ui.row(c);
-        bandChips = new TextView[3];
-        String[] bands = {"FM", "DAB", "AM"};
-        for (int i = 0; i < 3; i++) {
-            TextView b = Ui.text(c, bands[i], 16, t.sub, Ui.MEDIUM);
-            b.setPadding(dp(14), dp(8), dp(14), dp(8));
-            bandRow.addView(b, Ui.margins(new LayoutParams(-2, -2), dp(6), 0, 0, 0));
+        bandRow.setBackground(Ui.round(t.chip, dp(16)));
+        bandRow.setPadding(dp(5), dp(5), dp(5), dp(5));
+        bandChips = new TextView[2];
+        String[] bands = {"FM", "DAB"};
+        int[] bandIds = {MediaClient.BAND_FM, MediaClient.BAND_DAB};
+        for (int i = 0; i < 2; i++) {
+            final int band = bandIds[i];
+            TextView b = Ui.text(c, bands[i], 18, t.sub, Ui.MEDIUM);
+            b.setGravity(Gravity.CENTER);
+            b.setMinWidth(dp(76));
+            b.setPadding(dp(16), 0, dp(16), 0);
+            b.setClickable(true);
+            b.setContentDescription("Radio " + bands[i]);
+            b.setOnClickListener(v -> {
+                pendingBand = band;
+                pendingBandUntil = SystemClock.uptimeMillis() + 4000;
+                styleBands(band);
+                media.switchBand(band);
+            });
+            bandRow.addView(b, Ui.margins(Ui.lp(-2, dp(54)), i == 0 ? 0 : dp(4), 0, 0, 0));
             bandChips[i] = b;
         }
-        ctr.addView(bandRow);
+        ctr.addView(bandRow, Ui.margins(Ui.lp(-2, dp(64)), dp(36), 0, 0, 0));
         info.addView(ctr, Ui.margins(new LayoutParams(-1, -2), 0, dp(20), 0, 0));
 
         // preferiti radio con i loghi (FM e DAB)
@@ -578,8 +587,73 @@ public final class HomeView extends LinearLayout {
         favRow = Ui.row(c);
         hs.addView(favRow);
         favScroll = hs;
-        col.addView(hs, Ui.margins(new LayoutParams(-1, dp(126)), 0, dp(14), 0, 0));
+        col.addView(hs, Ui.margins(new LayoutParams(-1, dp(122)), dp(8), dp(10), 0, 0));
         return col;
+    }
+
+    private void styleBands(int band) {
+        int sel = band == MediaClient.BAND_DAB ? 1 : band == MediaClient.BAND_FM ? 0 : -1;
+        for (int i = 0; i < bandChips.length; i++) {
+            bandChips[i].setBackground(i == sel ? Ui.round(t.text, dp(12)) : Ui.pressable(getContext(), 0, 12, t));
+            bandChips[i].setTextColor(i == sel ? t.panel : t.sub);
+        }
+    }
+
+    private static String sourceLabel(int src) {
+        switch (src) {
+            case MediaClient.SRC_RADIO: return "Radio";
+            case MediaClient.SRC_USB: return "USB";
+            case MediaClient.SRC_BT: return "Bluetooth";
+            case MediaClient.SRC_ONLINE: return "Online";
+            case MediaClient.SRC_CARPLAY: return "CarPlay";
+            case MediaClient.SRC_AAUTO: return "Android Auto";
+            default: return "Media";
+        }
+    }
+
+    /** Pulsanti delle sorgenti: si ricreano solo se cambia l'elenco, poi si aggiorna l'evidenziazione. */
+    private void showSources(MediaClient.State m) {
+        Context c = getContext();
+        StringBuilder sig = new StringBuilder();
+        for (int src : m.sources) sig.append(src).append(',');
+        if (!sig.toString().equals(srcSignature)) {
+            srcSignature = sig.toString();
+            srcRow.removeAllViews();
+            boolean compact = m.sources.size() > 4;
+            for (int i = 0; i < m.sources.size(); i++) {
+                final int src = m.sources.get(i);
+                TextView b = Ui.text(c, sourceLabel(src), 17, t.sub, Ui.MEDIUM);
+                b.setGravity(Gravity.CENTER_VERTICAL);
+                b.setPadding(dp(compact ? 14 : 18), 0, dp(compact ? 16 : 22), 0);
+                b.setCompoundDrawablePadding(dp(10));
+                b.setClickable(true);
+                b.setTag(src);
+                b.setContentDescription(sourceLabel(src));
+                b.setOnClickListener(v -> {
+                    pendingSource = src;
+                    pendingSourceUntil = SystemClock.uptimeMillis() + 3000;
+                    styleSources(src);
+                    media.selectSource(src);
+                });
+                srcRow.addView(b, Ui.margins(Ui.lp(-2, -1), i == 0 ? 0 : dp(4), 0, 0, 0));
+            }
+        }
+        int shown = SystemClock.uptimeMillis() < pendingSourceUntil ? pendingSource : m.source;
+        styleSources(shown);
+    }
+
+    private void styleSources(int selected) {
+        for (int i = 0; i < srcRow.getChildCount(); i++) {
+            TextView b = (TextView) srcRow.getChildAt(i);
+            int src = (Integer) b.getTag();
+            boolean on = src == selected;
+            b.setBackground(on ? Ui.round(t.text, dp(12)) : Ui.pressable(getContext(), 0, 12, t));
+            b.setTextColor(on ? t.panel : t.sub);
+            android.graphics.drawable.Drawable d = getContext().getDrawable(sourceIcon(src)).mutate();
+            d.setTint(on ? t.panel : t.sub);
+            d.setBounds(0, 0, dp(22), dp(22));
+            b.setCompoundDrawables(d, null, null, null);
+        }
     }
 
     /** Riquadro di una stazione preferita: logo (o iniziali) + nome. */
@@ -673,9 +747,7 @@ public final class HomeView extends LinearLayout {
 
     public void onMedia(MediaClient.State m) {
         boolean radio = m.source == MediaClient.SRC_RADIO;
-        srcName.setText(MediaClient.sourceName(m.source));
-        int idx = m.sources.indexOf(m.source);
-        srcPos.setText(idx >= 0 ? (idx + 1) + " / " + m.sources.size() : "");
+        showSources(m);
         mTitle.setText(m.title);
         mSub.setText(m.subtitle);
         boolean logo = radio && m.logo != null;
@@ -693,11 +765,7 @@ public final class HomeView extends LinearLayout {
             artUnit.setText(m.radioUnit);
             mMeta.setText(dab ? band + (m.radioUnit.isEmpty() ? "" : " · " + m.radioUnit)
                     : band + " · " + m.radioFreq + " " + m.radioUnit);
-            int sel = dab ? 1 : m.radioBand == MediaClient.BAND_AM ? 2 : 0;
-            for (int i = 0; i < 3; i++) {
-                bandChips[i].setBackground(i == sel ? Ui.round(t.chip, dp(10)) : null);
-                bandChips[i].setTextColor(i == sel ? t.text : t.sub);
-            }
+            styleBands(SystemClock.uptimeMillis() < pendingBandUntil ? pendingBand : m.radioBand);
             showFavorites(m);
         } else {
             mMeta.setText(MediaClient.sourceName(m.source));
@@ -836,8 +904,7 @@ public final class HomeView extends LinearLayout {
         bar.addView(shortcut(c, R.drawable.ic_radio, "Radio", v -> host.launch("com.saicmotor.hmi.radio", "com.saicmotor.hmi.radio.app.RadioHomeActivity")));
         bar.addView(shortcut(c, R.drawable.ic_cam360, "Telecamera 360", v -> host.launch("com.saicmotor.hmi.aroundview", "com.saicmotor.hmi.aroundview.AVMActivity")));
         bar.addView(shortcut(c, R.drawable.ic_gear, "Impostazioni", v -> host.launch("com.saicmotor.hmi.systemsettings", "com.saicmotor.hmi.systemsettings.SettingsActivity")));
-        FrameLayout apps = Ui.iconButton(c, t, R.drawable.ic_grid, t.text, t.chip, 68, 30, 18, "Tutte le app", v -> host.openApps());
-        bar.addView(apps, Ui.margins(Ui.lp(dp(68), dp(68)), dp(8), 0, 0, 0));
+        // le app si aprono scorrendo la home verso sinistra: niente pulsante dedicato
         return bar;
     }
 

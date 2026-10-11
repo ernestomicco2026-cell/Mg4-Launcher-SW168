@@ -65,6 +65,7 @@ public final class MediaClient {
     private static final String RAD = "com.saicmotor.sdk.radio.IRadioAppService";
     private static final int RAD_NEXT = 13, RAD_PREV = 14, RAD_CURRENT = 19, RAD_PLAY = 27, RAD_PAUSE = 28;
     private static final int RAD_FAVORITES = 7, RAD_TUNE = 8, RAD_TUNE_DAB = 9, RAD_SET_MUTED = 18, RAD_DAB_LOGO = 52;
+    private static final int RAD_LAST_INFO = 21, RAD_LIST = 22;
     public static final int BAND_AM = 1, BAND_FM = 2, BAND_DAB = 4;
 
     // --- CarPlay / Android Auto ---------------------------------------------------------------
@@ -635,23 +636,7 @@ public final class MediaClient {
         int n = p.readInt();
         for (int i = 0; i < n && i < 60; i++) {
             if (p.readInt() == 0) continue;
-            Station st = new Station();
-            p.readInt();                              // enable
-            String name = p.readString();
-            p.readInt();                              // isRds
-            p.readString();                           // cover
-            st.khz = p.readInt();
-            st.band = p.readInt();
-            p.readInt();                              // state
-            p.readInt();                              // isCollection
-            p.readString();                           // subStationName
-            p.readInt();                              // rssi
-            st.eid = p.readInt();
-            st.sid = p.readLong();
-            p.readInt();                              // pty
-            st.secId = p.readInt();
-            st.index = p.readInt();
-            char[] service = p.createCharArray();
+            Station st = readStationHead(p);
             p.createCharArray();                      // ensemble
             p.createCharArray();                      // dlPlus
             p.createCharArray();                      // dls
@@ -670,11 +655,99 @@ public final class MediaClient {
                 p.readInt();
             }
             p.readParcelable(null);                   // RadioMetadata (classe di sistema)
-            String sv = service != null ? new String(service).trim() : "";
-            st.name = st.band == BAND_DAB && !sv.isEmpty() ? sv : nz(name);
             out.add(st);
         }
         return out;
+    }
+
+    /** Prima parte di un RadioBean, fino al nome del servizio DAB compreso (il resto non serve). */
+    private static Station readStationHead(Parcel p) {
+        Station st = new Station();
+        p.readInt();                              // enable
+        String name = p.readString();
+        p.readInt();                              // isRds
+        p.readString();                           // cover
+        st.khz = p.readInt();
+        st.band = p.readInt();
+        p.readInt();                              // state
+        p.readInt();                              // isCollection
+        p.readString();                           // subStationName
+        p.readInt();                              // rssi
+        st.eid = p.readInt();
+        st.sid = p.readLong();
+        p.readInt();                              // pty
+        st.secId = p.readInt();
+        st.index = p.readInt();
+        char[] service = p.createCharArray();
+        String sv = service != null ? new String(service).trim() : "";
+        st.name = st.band == BAND_DAB && !sv.isEmpty() ? sv : nz(name);
+        return st;
+    }
+
+    /**
+     * Cambia banda (FM / DAB) come l'app Radio: riprende l'ultima stazione ascoltata su quella banda
+     * (getLastRadioInfo), altrimenti il primo preferito o la prima stazione trovata.
+     */
+    public void switchBand(int band) {
+        chosen = SRC_RADIO;
+        post(() -> {
+            try {
+                IBinder b = radio.binder();
+                if (b == null) throw new RemoteException("servizio radio non collegato");
+                Station st = null;
+                try {
+                    st = Rpc.call(b, RAD, RAD_LAST_INFO, p -> p.writeInt(band), p -> Rpc.readNullable(p, MediaClient::readStationHead));
+                } catch (Exception e) {
+                    Diag.error("radio.banda.ultima", e.toString());
+                }
+                if (!valid(st, band)) {
+                    st = null;
+                    for (Station f : favorites) if (f.band == band) { st = f; break; }
+                }
+                if (st == null) {
+                    try {
+                        List<Station> list = Rpc.call(b, RAD, RAD_LIST, p -> p.writeInt(band), MediaClient::readStations);
+                        if (list != null) for (Station f : list) if (valid(f, band)) { st = f; break; }
+                    } catch (Exception e) {
+                        Diag.error("radio.banda.elenco", e.toString());
+                    }
+                }
+                Diag.put("radio.banda.scelta", band + (st == null ? " (nessuna stazione)" : " → " + st.label()));
+                if (st == null && band == BAND_FM) {
+                    Station fm = new Station();
+                    fm.band = BAND_FM;
+                    fm.khz = 87500;
+                    st = fm;
+                }
+                if (st != null) tuneNow(b, st);
+            } catch (Exception e) {
+                Diag.error("radio.banda", e.toString());
+            }
+            poll();
+        });
+    }
+
+    private static boolean valid(Station st, int band) {
+        if (st == null || st.band != band) return false;
+        return band == BAND_DAB ? st.sid != 0 : st.khz > 0;
+    }
+
+    private void tuneNow(IBinder b, Station st) throws RemoteException {
+        if (st.band == BAND_DAB) {
+            Rpc.call(b, RAD, RAD_TUNE_DAB, p -> {
+                p.writeInt(st.index);
+                p.writeLong(st.sid);
+                p.writeInt(st.eid);
+                p.writeInt(st.secId);
+            });
+        } else {
+            Rpc.call(b, RAD, RAD_TUNE, p -> {
+                p.writeInt(st.band);
+                p.writeInt(st.khz);
+            });
+        }
+        radioPlaying = true;
+        radioHoldUntil = android.os.SystemClock.uptimeMillis() + 3000;
     }
 
     /** Sintonizza una stazione dei preferiti e passa alla radio. */
@@ -682,22 +755,7 @@ public final class MediaClient {
         chosen = SRC_RADIO;
         post(() -> {
             try {
-                IBinder b = radio.binder();
-                if (st.band == BAND_DAB) {
-                    Rpc.call(b, RAD, RAD_TUNE_DAB, p -> {
-                        p.writeInt(st.index);
-                        p.writeLong(st.sid);
-                        p.writeInt(st.eid);
-                        p.writeInt(st.secId);
-                    });
-                } else {
-                    Rpc.call(b, RAD, RAD_TUNE, p -> {
-                        p.writeInt(st.band);
-                        p.writeInt(st.khz);
-                    });
-                }
-                radioPlaying = true;
-                radioHoldUntil = android.os.SystemClock.uptimeMillis() + 3000;
+                tuneNow(radio.binder(), st);
             } catch (Exception e) {
                 Diag.error("radio.sintonia", e.toString());
             }

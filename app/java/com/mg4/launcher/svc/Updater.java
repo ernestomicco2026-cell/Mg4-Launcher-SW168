@@ -17,7 +17,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +40,7 @@ public final class Updater {
         public long apkSize;
         public boolean newer;
         boolean raw;                // file del repository (API contents) invece di allegato di release
+        String repo = "", path = "";  // per il download di riserva da raw.githubusercontent.com
     }
 
     public interface Listener {
@@ -109,28 +109,87 @@ public final class Updater {
         });
     }
 
-    /** Scarica l'APK della release e lo installa. */
+    /**
+     * Scarica l'APK della release e lo installa. L'APK resta in memoria e va direttamente nella sessione
+     * di installazione: nessun file temporaneo da salvare (era il punto che non riusciva sull'auto).
+     */
     public void install(Release r, String token) {
         if (busy || r == null || r.apkUrl == null) return;
         status("Download di " + r.apkName + "…", r, true);
         bg.post(() -> {
-            File apk = new File(ctx.getCacheDir(), "update.apk");
+            byte[] apk;
             try {
-                download(r, token, apk);
-                PackageInfo pi = ctx.getPackageManager().getPackageArchiveInfo(apk.getPath(), 0);
-                if (pi == null || !ctx.getPackageName().equals(pi.packageName)) {
-                    status("Il file scaricato non è un aggiornamento del launcher", r, false);
-                    return;
-                }
-                status("Installazione di " + pi.versionName + "… il launcher si riavvierà da solo", r, true);
-                installApk(apk);
+                apk = downloadWithFallback(r, token);
             } catch (HttpError e) {
                 status(e.getMessage(), r, false);
+                Diag.error("aggiornamenti.download", e.getMessage());
+                return;
             } catch (Exception e) {
-                status("Download non riuscito (" + e.getClass().getSimpleName() + ")", r, false);
-                Diag.error("aggiornamenti.download", e.toString());
+                status("Download non riuscito: " + describe(e), r, false);
+                Diag.error("aggiornamenti.download", Diag.trace(e));
+                return;
+            }
+            if (apk.length < 1024 || apk[0] != 'P' || apk[1] != 'K') {
+                status("Il file scaricato non è un APK valido (" + apk.length + " byte)", r, false);
+                Diag.error("aggiornamenti.download", "file non valido, " + apk.length + " byte");
+                return;
+            }
+            String version = checkPackage(apk);
+            if (version == null) {
+                status("Il file scaricato non è un aggiornamento del launcher", r, false);
+                return;
+            }
+            status("Installazione di " + version + "… il launcher si riavvierà da solo", r, true);
+            try {
+                installApk(apk);
+            } catch (Exception e) {
+                status("Installazione non riuscita: " + describe(e), r, false);
+                Diag.error("aggiornamenti.installazione", Diag.trace(e));
             }
         });
+    }
+
+    private static String describe(Exception e) {
+        String m = e.getMessage();
+        return e.getClass().getSimpleName() + (m == null || m.isEmpty() ? "" : " – " + m);
+    }
+
+    /** Prima l'API di GitHub, poi (per i file del repository) raw.githubusercontent.com. */
+    private byte[] downloadWithFallback(Release r, String token) throws Exception {
+        try {
+            return download(r.apkUrl, r, token, r.raw ? "application/vnd.github.raw" : "application/octet-stream");
+        } catch (Exception first) {
+            if (!r.raw || r.repo.isEmpty()) throw first;
+            Diag.error("aggiornamenti.download", "API GitHub: " + describe(first) + " → provo raw.githubusercontent.com");
+            return download("https://raw.githubusercontent.com/" + r.repo + "/main/" + r.path, r, "", "application/octet-stream");
+        }
+    }
+
+    /**
+     * Controlla nome del pacchetto e versione dell'APK scaricato. Serve un file per leggerlo: se non si
+     * riesce a scriverlo il controllo si salta (la sessione accetta comunque solo questo pacchetto).
+     */
+    private String checkPackage(byte[] apk) {
+        File[] dirs = {ctx.getCacheDir(), ctx.getFilesDir(), ctx.getExternalCacheDir()};
+        for (File dir : dirs) {
+            if (dir == null) continue;
+            File f = new File(dir, "update-check.apk");
+            try {
+                if (!dir.exists()) dir.mkdirs();
+                try (OutputStream os = new FileOutputStream(f)) {
+                    os.write(apk);
+                }
+                PackageInfo pi = ctx.getPackageManager().getPackageArchiveInfo(f.getPath(), 0);
+                f.delete();
+                if (pi == null) return null;
+                if (!ctx.getPackageName().equals(pi.packageName)) return null;
+                return pi.versionName;
+            } catch (Exception e) {
+                Diag.error("aggiornamenti.controllo", dir + ": " + describe(e));
+                f.delete();
+            }
+        }
+        return "nuova versione";
     }
 
     // ------------------------------------------------------------------------------------------
@@ -185,6 +244,8 @@ public final class Updater {
             r.apkName = apk.substring(apk.lastIndexOf('/') + 1);
             r.apkSize = o.optLong("size");
             r.raw = true;
+            r.repo = repo;
+            r.path = apk;
         }
         r.newer = compare(r.tag, currentVersion()) > 0;
         return r;
@@ -229,9 +290,9 @@ public final class Updater {
         return r;
     }
 
-    private void download(Release r, String token, File out) throws Exception {
+    private byte[] download(String url, Release r, String token, String accept) throws Exception {
         // l'allegato risponde con un redirect verso lo storage di GitHub: lo si segue senza il token
-        HttpURLConnection c = open(r.apkUrl, token, r.raw ? "application/vnd.github.raw" : "application/octet-stream");
+        HttpURLConnection c = open(url, token, accept);
         c.setInstanceFollowRedirects(false);
         int code = c.getResponseCode();
         for (int hops = 0; code / 100 == 3 && hops < 5; hops++) {
@@ -241,44 +302,64 @@ public final class Updater {
             c.setInstanceFollowRedirects(false);
             code = c.getResponseCode();
         }
-        if (code != 200) throw new HttpError("Download non riuscito: risposta " + code);
+        if (code != 200) {
+            c.disconnect();
+            throw new HttpError("Download non riuscito: risposta GitHub " + code);
+        }
         long total = c.getContentLengthLong() > 0 ? c.getContentLengthLong() : r.apkSize;
-        try (InputStream in = c.getInputStream(); OutputStream os = new FileOutputStream(out)) {
+        ByteArrayOutputStream bo = new ByteArrayOutputStream(total > 0 ? (int) total : 512 * 1024);
+        try (InputStream in = c.getInputStream()) {
             byte[] buf = new byte[64 * 1024];
             long done = 0, lastShown = 0;
             int n;
             while ((n = in.read(buf)) > 0) {
-                os.write(buf, 0, n);
+                bo.write(buf, 0, n);
                 done += n;
                 if (total > 0 && done - lastShown > total / 20) {
                     lastShown = done;
-                    status("Download " + (done * 100 / total) + "%…", r, true);
+                    status("Download " + Math.min(100, done * 100 / total) + "%…", r, true);
                 }
             }
         } finally {
             c.disconnect();
         }
+        Diag.put("aggiornamenti.scaricati", bo.size() + " byte");
+        return bo.toByteArray();
     }
 
-    private void installApk(File apk) throws Exception {
+    private void installApk(byte[] apk) throws Exception {
         PackageInstaller pi = ctx.getPackageManager().getPackageInstaller();
         PackageInstaller.SessionParams p = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
         p.setAppPackageName(ctx.getPackageName());
-        p.setSize(apk.length());
+        p.setSize(apk.length);
         // memoria interna esplicita: il firmware MG blocca le app non di sistema sull'archivio interno "automatico"
         p.setInstallLocation(PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY);
+        // come "adb install -r -f": INSTALL_REPLACE_EXISTING (0x2) + INSTALL_INTERNAL (0x10)
+        try {
+            java.lang.reflect.Field f = PackageInstaller.SessionParams.class.getField("installFlags");
+            f.setInt(p, f.getInt(p) | 0x2 | 0x10);
+        } catch (Throwable t) {
+            Diag.error("aggiornamenti.flag", t.toString());
+        }
         int id = pi.createSession(p);
         try (PackageInstaller.Session s = pi.openSession(id)) {
-            try (OutputStream os = s.openWrite("base.apk", 0, apk.length()); InputStream in = new FileInputStream(apk)) {
-                byte[] buf = new byte[64 * 1024];
-                int n;
-                while ((n = in.read(buf)) > 0) os.write(buf, 0, n);
+            try (OutputStream os = s.openWrite("base.apk", 0, apk.length)) {
+                os.write(apk);
                 s.fsync(os);
             }
-            ctx.registerReceiver(result, new IntentFilter(ACTION_RESULT));
+            try {
+                ctx.registerReceiver(result, new IntentFilter(ACTION_RESULT));
+            } catch (Exception ignored) {
+            }
             PendingIntent cb = PendingIntent.getBroadcast(ctx, id,
                     new Intent(ACTION_RESULT).setPackage(ctx.getPackageName()), PendingIntent.FLAG_UPDATE_CURRENT);
             s.commit(cb.getIntentSender());
+        } catch (Exception e) {
+            try {
+                pi.abandonSession(id);
+            } catch (Exception ignored) {
+            }
+            throw e;
         }
     }
 
@@ -301,6 +382,7 @@ public final class Updater {
                 status("Aggiornamento installato", null, false);
             } else {
                 String msg = i.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE);
+                Diag.error("aggiornamenti.installazione", "stato " + st + ": " + msg);
                 status("Installazione non riuscita: " + (msg == null ? "errore " + st : msg), null, false);
             }
         }

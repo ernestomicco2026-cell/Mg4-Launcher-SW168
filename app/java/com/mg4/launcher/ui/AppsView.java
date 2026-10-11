@@ -55,9 +55,8 @@ public final class AppsView extends LinearLayout {
 
         LinearLayout head = Ui.row(c);
         head.setPadding(dp(8), dp(4), dp(8), dp(4));
-        head.addView(Ui.iconButton(c, t, R.drawable.ic_chev_left, t.text, t.panel, 60, 28, 18, "Torna alla home",
-                v -> host.closeApps()));
-        head.addView(Ui.text(c, "App", 32, t.text, Ui.MEDIUM), Ui.margins(Ui.lp(-2, -2), dp(16), 0, 0, 0));
+        // si torna alla home scorrendo verso destra (o con il tasto Home)
+        head.addView(Ui.text(c, "App", 32, t.text, Ui.MEDIUM), Ui.margins(Ui.lp(-2, -2), dp(12), 0, 0, 0));
         head.addView(Ui.spacer(c));
         editBtn = Ui.text(c, "Modifica", 19, t.text, Ui.MEDIUM);
         editBtn.setGravity(Gravity.CENTER);
@@ -66,7 +65,7 @@ public final class AppsView extends LinearLayout {
         editBtn.setContentDescription("Scegli quali app installate mostrare");
         editBtn.setOnClickListener(v -> setEditing(!editing));
         head.addView(editBtn, Ui.margins(Ui.lp(-2, dp(60)), 0, 0, dp(12), 0));
-        head.addView(Ui.iconButton(c, t, R.drawable.ic_palette, t.text, t.panel, 60, 28, 18, "Impostazioni del launcher",
+        head.addView(Ui.iconButton(c, t, R.drawable.ic_gear, t.text, t.panel, 60, 28, 18, "Impostazioni del launcher",
                 v -> host.openSettings()));
         addView(head);
 
