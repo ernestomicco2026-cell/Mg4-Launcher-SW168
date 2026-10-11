@@ -11,6 +11,7 @@ Launcher in stile Tesla per l'infotainment della MG4 (EH32, Android Automotive 9
   tocca l'icona = app Clima, tieni premuto = accendi/spegni),
   mini-player, Telefono, Radio, Telecamera 360°, Impostazioni, App.
 - **App**: app dell'auto con icone disegnate + app installate da te, aggiunte in automatico con l'icona ridisegnata.
+  Con **Modifica** scegli quali app installate mostrare (tocca per nascondere/rimettere, poi **Fine**).
 - **Tema**: automatico (segue giorno/notte dell'auto), notte o giorno; 4 colori d'accento.
 
 ## Installazione (prova)
@@ -25,6 +26,22 @@ In alternativa premi il tasto Home: Android chiede quale home usare.
 
 Il launcher è a schermo intero (nasconde barra di stato e dock MG; trascina dal bordo per farli ricomparire)
 e parte già prima dello sblocco dell'utente, come la home originale.
+
+## Aggiornamenti da GitHub
+
+Impostazioni → **Aggiornamenti** → *Controlla aggiornamenti*: legge l'ultima release di questo repository e,
+se c'è una versione più nuova, *Scarica e installa* la installa da sola (il launcher si riavvia).
+
+Il repository è privato, quindi serve un token GitHub di sola lettura:
+GitHub → Settings → Developer settings → Fine-grained tokens → accesso solo a `mg4-launcher`, permesso *Contents: Read-only*.
+Si può scrivere nel campo delle impostazioni oppure inviarlo dal computer:
+
+```bash
+adb shell am broadcast -n com.mg4.launcher/.svc.TokenReceiver --es token github_pat_XXXX
+```
+
+Per pubblicare una versione: aumenta `version.properties`, `./build.sh`, poi crea una release con tag `vX.Y.Z`
+e allega `build/MG4Launcher-X.Y.Z.apk`.
 
 ## Tornare alla home MG originale
 

@@ -17,6 +17,7 @@ import com.mg4.launcher.apps.IconStyler;
 import com.mg4.launcher.svc.Diag;
 import com.mg4.launcher.svc.MediaClient;
 import com.mg4.launcher.svc.NavClient;
+import com.mg4.launcher.svc.Updater;
 import com.mg4.launcher.svc.VehicleClient;
 import com.mg4.launcher.ui.AppsView;
 import com.mg4.launcher.ui.HomeView;
@@ -31,7 +32,6 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     private static final int IMMERSIVE = View.SYSTEM_UI_FLAG_FULLSCREEN
             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
 
@@ -40,6 +40,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     private VehicleClient vehicle;
     private MediaClient media;
     private NavClient nav;
+    private Updater updater;
 
     private FrameLayout root;
     private Theme theme;
@@ -56,6 +57,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         vehicle = new VehicleClient(this);
         media = new MediaClient(this);
         nav = new NavClient(this);
+        updater = new Updater(this);
         lastUiMode = getResources().getConfiguration().uiMode;
 
         root = new FrameLayout(this);
@@ -95,12 +97,14 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         registerReceiver(packages, new IntentFilter(Intent.ACTION_USER_UNLOCKED));
     }
 
-    /** In schermo intero si usano solo i margini reali comunicati dal sistema. */
+    /**
+     * Schermo intero: il contenuto occupa sempre tutti i 1920×720 px. Le barre di sistema, se ricompaiono
+     * per un attimo (trascinando dal bordo), si sovrappongono senza spostare il layout.
+     */
     private WindowInsets applyInsets(View v, WindowInsets in) {
-        int left = in.getSystemWindowInsetLeft(), top = in.getSystemWindowInsetTop();
-        int right = in.getSystemWindowInsetRight(), bottom = in.getSystemWindowInsetBottom();
-        v.setPadding(left, top, right, bottom);
-        Diag.put("finestra", v.getWidth() + "×" + v.getHeight() + " · margini " + left + "," + top + "," + right + "," + bottom);
+        v.setPadding(0, 0, 0, 0);
+        Diag.put("finestra", v.getWidth() + "×" + v.getHeight() + " · margini sistema " + in.getSystemWindowInsetLeft() + ","
+                + in.getSystemWindowInsetTop() + "," + in.getSystemWindowInsetRight() + "," + in.getSystemWindowInsetBottom());
         return in.consumeSystemWindowInsets();
     }
 
@@ -205,7 +209,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     public void openApps() {
         if (apps == null) {
-            apps = new AppsView(this, theme, catalog, this);
+            apps = new AppsView(this, theme, catalog, prefs, this);
             root.addView(apps, new FrameLayout.LayoutParams(-1, -1));
         }
     }
@@ -273,6 +277,11 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         } else if (home != null) {
             home.applyCarLook();
         }
+    }
+
+    @Override
+    public Updater updater() {
+        return updater;
     }
 
     @Override

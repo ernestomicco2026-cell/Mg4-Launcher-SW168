@@ -1,11 +1,14 @@
 package com.mg4.launcher.ui;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.InputType;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 
 import com.mg4.launcher.R;
 import com.mg4.launcher.svc.Diag;
+import com.mg4.launcher.svc.Updater;
 
 /** Impostazioni del launcher (si aprono tenendo premuta l'auto o dalla griglia app). */
 public final class SettingsView extends FrameLayout {
@@ -26,6 +30,8 @@ public final class SettingsView extends FrameLayout {
         void settingsChanged(boolean rebuild);
 
         void openOriginalHome();
+
+        Updater updater();
     }
 
     private final Theme t;
@@ -35,6 +41,8 @@ public final class SettingsView extends FrameLayout {
     private TextView diag;
     private final LinearLayout colorRow, accentRow, themeRow;
     private final TextView colorName;
+    private TextView updStatus, updInstall, updCheck, tokenState;
+    private Updater.Release found;
 
     public SettingsView(Context c, Theme t, Prefs prefs, Host host) {
         super(c);
@@ -97,13 +105,7 @@ public final class SettingsView extends FrameLayout {
         original.setOnClickListener(v -> host.openOriginalHome());
         col.addView(original, top(28));
 
-        String version = "";
-        try {
-            PackageInfo pi = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
-            version = "MG4 Launcher " + pi.versionName;
-        } catch (Exception ignored) {
-        }
-        col.addView(Ui.text(c, version, 15, t.sub, Ui.REGULAR), top(18));
+        buildUpdates(c, col);
 
         // --- colonna diagnostica ---
         LinearLayout right = Ui.column(c);
@@ -121,6 +123,92 @@ public final class SettingsView extends FrameLayout {
         card.addView(right, Ui.margins(Ui.lpWeight(0, -1, 1f), dp(32), 0, 0, 0));
 
         buildSwatches();
+    }
+
+    // ---- aggiornamenti da GitHub ----------------------------------------------------------------
+
+    private void buildUpdates(Context c, LinearLayout col) {
+        Updater up = host.updater();
+        col.addView(label(c, "AGGIORNAMENTI"), top(30));
+        col.addView(Ui.text(c, "MG4 Launcher " + up.currentVersion() + " · " + prefs.updateRepo(), 17, t.text, Ui.REGULAR), top(10));
+
+        LinearLayout btns = Ui.row(c);
+        updCheck = button(c, "Controlla aggiornamenti", false, v -> up.check(prefs.updateRepo(), prefs.githubToken()));
+        btns.addView(updCheck, Ui.margins(Ui.lp(-2, dp(56)), 0, 0, dp(12), 0));
+        updInstall = button(c, "Scarica e installa", true, v -> up.install(found, prefs.githubToken()));
+        updInstall.setVisibility(GONE);
+        btns.addView(updInstall, Ui.lp(-2, dp(56)));
+        col.addView(btns, top(12));
+
+        updStatus = Ui.text(c, "", 16, t.sub, Ui.REGULAR);
+        col.addView(updStatus, top(10));
+
+        // token di sola lettura (repository privato)
+        LinearLayout tok = Ui.row(c);
+        EditText et = new EditText(c);
+        et.setHint(prefs.githubToken().isEmpty() ? "Token GitHub (repository privato)" : "Token salvato · scrivi per sostituirlo");
+        et.setHintTextColor(t.sub);
+        et.setTextColor(t.text);
+        et.setTextSize(17);
+        et.setSingleLine(true);
+        et.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        et.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_FULLSCREEN);
+        et.setBackground(Ui.round(t.chip, dp(14)));
+        et.setPadding(dp(18), 0, dp(18), 0);
+        tok.addView(et, Ui.lpWeight(0, dp(56), 1));
+        TextView save = button(c, "Salva", false, v -> {
+            String val = et.getText().toString().trim();
+            if (val.isEmpty()) return;
+            prefs.setGithubToken(val);
+            et.setText("");
+            et.setHint("Token salvato · scrivi per sostituirlo");
+            hideKeyboard(et);
+            updateTokenState();
+        });
+        tok.addView(save, Ui.margins(Ui.lp(-2, dp(56)), dp(10), 0, 0, 0));
+        et.setOnEditorActionListener((v, id, ev) -> {
+            save.performClick();
+            return true;
+        });
+        col.addView(tok, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, dp(14), dp(12), 0));
+        tokenState = Ui.text(c, "", 14, t.sub, Ui.REGULAR);
+        col.addView(tokenState, top(6));
+        updateTokenState();
+
+        up.setListener((text, r, busy) -> {
+            if (r != null) found = r;
+            updStatus.setText(text);
+            updCheck.setEnabled(!busy);
+            updCheck.setAlpha(busy ? 0.5f : 1f);
+            boolean canInstall = !busy && found != null && found.newer && found.apkUrl != null;
+            updInstall.setVisibility(canInstall ? VISIBLE : GONE);
+            if (canInstall) updInstall.setText("Scarica e installa " + found.tag);
+        });
+        updStatus.setText(up.isBusy() ? "Operazione in corso…" : "Premi Controlla per cercare una nuova versione");
+    }
+
+    private void updateTokenState() {
+        String tk = prefs.githubToken();
+        tokenState.setText(tk.isEmpty()
+                ? "Senza token il repository privato non è leggibile. Puoi anche inviarlo da computer con adb (vedi README)."
+                : "Token impostato (…" + tk.substring(Math.max(0, tk.length() - 4)) + ")");
+    }
+
+    private void hideKeyboard(View v) {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        v.clearFocus();
+    }
+
+    private TextView button(Context c, String text, boolean primary, View.OnClickListener l) {
+        TextView b = Ui.text(c, text, 18, primary ? t.onAccent : t.text, Ui.MEDIUM);
+        b.setGravity(Gravity.CENTER);
+        b.setPadding(dp(22), 0, dp(22), 0);
+        b.setMinHeight(dp(56));
+        b.setBackground(Ui.pressable(c, primary ? t.accent : t.chip, 16, t));
+        b.setClickable(true);
+        b.setOnClickListener(l);
+        return b;
     }
 
     @Override
@@ -212,5 +300,6 @@ public final class SettingsView extends FrameLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         main.removeCallbacks(refreshDiag);
+        host.updater().setListener(null);
     }
 }

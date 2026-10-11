@@ -3,6 +3,9 @@ package com.mg4.launcher.ui;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /** Impostazioni del launcher. */
 public final class Prefs {
     public static final String[] CAR_COLORS = {
@@ -50,5 +53,38 @@ public final class Prefs {
 
     public void setThemeMode(String m) {
         sp.edit().putString("theme", m).apply();
+    }
+
+    // --- app installate nascoste dalla griglia ---
+
+    public Set<String> hiddenApps() {
+        return new HashSet<>(sp.getStringSet("hiddenApps", new HashSet<>()));
+    }
+
+    public void setAppHidden(String key, boolean hide) {
+        Set<String> s = hiddenApps();
+        if (hide) s.add(key);
+        else s.remove(key);
+        sp.edit().putStringSet("hiddenApps", s).apply();
+    }
+
+    // --- aggiornamenti da GitHub ---
+    public static final String DEFAULT_REPO = "ernestomicco2026-cell/mg4-launcher";
+
+    public String updateRepo() {
+        return sp.getString("ghRepo", DEFAULT_REPO);
+    }
+
+    public void setUpdateRepo(String r) {
+        sp.edit().putString("ghRepo", r == null || r.trim().isEmpty() ? DEFAULT_REPO : r.trim()).apply();
+    }
+
+    /** Token GitHub di sola lettura: serve perché il repository è privato. */
+    public String githubToken() {
+        return sp.getString("ghToken", "");
+    }
+
+    public void setGithubToken(String tok) {
+        sp.edit().putString("ghToken", tok == null ? "" : tok.trim()).apply();
     }
 }
