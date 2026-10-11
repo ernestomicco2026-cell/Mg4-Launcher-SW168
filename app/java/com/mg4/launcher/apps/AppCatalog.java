@@ -64,7 +64,7 @@ public final class AppCatalog {
             {"Radio", "com.saicmotor.hmi.radio", "com.saicmotor.hmi.radio.app.RadioHomeActivity", "radio"},
             {"Musica", "com.saicmotor.hmi.music", "com.saicmotor.hmi.music.ui.activity.MusicActivity", "music"},
             {"Video USB", "com.saicmotor.hmi.video", "com.saicmotor.hmi.video.ui.activity.UsbVideoActivity", "video"},
-            {"Camera 360°", "com.saicmotor.hmi.aroundview", "com.saicmotor.hmi.aroundview.AVMActivity", "cam"},
+            {"Camera 360°", "com.saicmotor.hmi.aroundview", "com.saicmotor.hmi.aroundview.AVMActivity", "cam360"},
             {"Impostazioni", "com.saicmotor.hmi.systemsettings", "com.saicmotor.hmi.systemsettings.SettingsActivity", "gear"},
             {"Navigatore", "@nav", "", "nav"},
             {"EV Route", "com.saicmotor.evrouting", "com.saicmotor.evrouting.view.MainActivity", "route"},
@@ -158,7 +158,6 @@ public final class AppCatalog {
         }
         final Collator col = Collator.getInstance(Locale.ITALY);
         Collections.sort(out, (x, y) -> {
-            if (x.highlight != y.highlight) return x.highlight ? -1 : 1;
             return col.compare(x.label, y.label);
         });
         Diag.put("app.installate", out.size());

@@ -23,7 +23,7 @@ public final class Diag {
     public static synchronized void put(String key, Object value) {
         String v = String.valueOf(value);
         String old = VALUES.put(key, v);
-        if (!v.equals(old)) Log.d(TAG, key + " = " + v);
+        if (!v.equals(old)) Log.i(TAG, key + " = " + v);
     }
 
     public static synchronized void error(String where, String msg) {
@@ -32,6 +32,20 @@ public final class Diag {
         if (!ERRORS.isEmpty() && ERRORS.peekLast().endsWith(where + ": " + msg)) return;
         ERRORS.addLast(line);
         while (ERRORS.size() > 40) ERRORS.removeFirst();
+    }
+
+    /** Salva la diagnostica in Android/data/com.mg4.launcher/files/diagnostica.txt (si recupera con adb pull). */
+    public static void save(android.content.Context c) {
+        try {
+            java.io.File dir = c.getExternalFilesDir(null);
+            if (dir == null) return;
+            String text = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY).format(new Date()) + "\n\n" + dump();
+            try (java.io.FileOutputStream o = new java.io.FileOutputStream(new java.io.File(dir, "diagnostica.txt"))) {
+                o.write(text.getBytes("UTF-8"));
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "salvataggio diagnostica", e);
+        }
     }
 
     public static synchronized String dump() {

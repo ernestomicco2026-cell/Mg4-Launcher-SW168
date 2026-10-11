@@ -5,10 +5,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.InputType;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -39,9 +35,9 @@ public final class SettingsView extends FrameLayout {
     private final Host host;
     private final Handler main = new Handler(Looper.getMainLooper());
     private TextView diag;
-    private final LinearLayout colorRow, accentRow, themeRow;
+    private final LinearLayout colorRow, themeRow;
     private final TextView colorName;
-    private TextView updStatus, updInstall, updCheck, tokenState;
+    private TextView updStatus, updInstall, updCheck;
     private Updater.Release found;
 
     public SettingsView(Context c, Theme t, Prefs prefs, Host host) {
@@ -87,10 +83,6 @@ public final class SettingsView extends FrameLayout {
         });
         roof.addView(sw);
         col.addView(roof, top(18));
-
-        col.addView(label(c, "COLORE D'ACCENTO"), top(24));
-        accentRow = Ui.row(c);
-        col.addView(accentRow, top(10));
 
         col.addView(label(c, "TEMA"), top(24));
         themeRow = Ui.row(c);
@@ -143,38 +135,6 @@ public final class SettingsView extends FrameLayout {
         updStatus = Ui.text(c, "", 16, t.sub, Ui.REGULAR);
         col.addView(updStatus, top(10));
 
-        // token di sola lettura (repository privato)
-        LinearLayout tok = Ui.row(c);
-        EditText et = new EditText(c);
-        et.setHint(prefs.githubToken().isEmpty() ? "Token GitHub (repository privato)" : "Token salvato · scrivi per sostituirlo");
-        et.setHintTextColor(t.sub);
-        et.setTextColor(t.text);
-        et.setTextSize(17);
-        et.setSingleLine(true);
-        et.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        et.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_FULLSCREEN);
-        et.setBackground(Ui.round(t.chip, dp(14)));
-        et.setPadding(dp(18), 0, dp(18), 0);
-        tok.addView(et, Ui.lpWeight(0, dp(56), 1));
-        TextView save = button(c, "Salva", false, v -> {
-            String val = et.getText().toString().trim();
-            if (val.isEmpty()) return;
-            prefs.setGithubToken(val);
-            et.setText("");
-            et.setHint("Token salvato · scrivi per sostituirlo");
-            hideKeyboard(et);
-            updateTokenState();
-        });
-        tok.addView(save, Ui.margins(Ui.lp(-2, dp(56)), dp(10), 0, 0, 0));
-        et.setOnEditorActionListener((v, id, ev) -> {
-            save.performClick();
-            return true;
-        });
-        col.addView(tok, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, dp(14), dp(12), 0));
-        tokenState = Ui.text(c, "", 14, t.sub, Ui.REGULAR);
-        col.addView(tokenState, top(6));
-        updateTokenState();
-
         up.setListener((text, r, busy) -> {
             if (r != null) found = r;
             updStatus.setText(text);
@@ -185,19 +145,6 @@ public final class SettingsView extends FrameLayout {
             if (canInstall) updInstall.setText("Scarica e installa " + found.tag);
         });
         updStatus.setText(up.isBusy() ? "Operazione in corso…" : "Premi Controlla per cercare una nuova versione");
-    }
-
-    private void updateTokenState() {
-        String tk = prefs.githubToken();
-        tokenState.setText(tk.isEmpty()
-                ? "Senza token il repository privato non è leggibile. Puoi anche inviarlo da computer con adb (vedi README)."
-                : "Token impostato (…" + tk.substring(Math.max(0, tk.length() - 4)) + ")");
-    }
-
-    private void hideKeyboard(View v) {
-        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-        v.clearFocus();
     }
 
     private TextView button(Context c, String text, boolean primary, View.OnClickListener l) {
@@ -245,15 +192,6 @@ public final class SettingsView extends FrameLayout {
             }), Ui.margins(Ui.lp(dp(56), dp(56)), 0, 0, dp(12), 0));
         }
         colorName.setText(Prefs.CAR_COLORS[sel]);
-
-        accentRow.removeAllViews();
-        int acc = prefs.accent();
-        for (int a : Prefs.ACCENTS) {
-            accentRow.addView(swatch(c, a, a == acc, "Accento", v -> {
-                prefs.setAccent(a);
-                host.settingsChanged(true);
-            }), Ui.margins(Ui.lp(dp(56), dp(56)), 0, 0, dp(12), 0));
-        }
 
         themeRow.removeAllViews();
         String mode = prefs.themeMode();

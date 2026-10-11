@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
+import android.os.Binder;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Parcel;
 import android.os.Looper;
 import android.os.SystemClock;
 
@@ -63,7 +65,80 @@ public final class NavClient {
     public NavClient(Context ctx) {
         this.ctx = ctx.getApplicationContext();
         link = new ServiceLink(ctx, "navigatore", ServiceLink.byComponent(PKG, CLS, null));
-        link.setOnConnected(this::pollSoon);
+        link.setOnConnected(() -> {
+            registerPush();
+            pollSoon();
+        });
+    }
+
+    // ---- notifiche push del servizio (come il launcher originale: IGeneralNotificationListener) ----
+    private static final String LISTENER = "com.saicmotor.adapterservice.IGeneralNotificationListener";
+    private static final int REGISTER = 1, NAV_ACTIVE = 27;
+    private volatile int pushStatus = -1, pushTurnIcon = -1, pushTurnMeters = -1, pushRemainM = -1, pushRemainS = -1;
+    private volatile String pushTurnText = "", pushRoad = "";
+    private volatile long pushTime;
+
+    private final Binder push = new Binder() {
+        @Override
+        protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) {
+            if (code == INTERFACE_TRANSACTION) {
+                if (reply != null) reply.writeString(LISTENER);
+                return true;
+            }
+            try {
+                data.enforceInterface(LISTENER);
+                switch (code) {
+                    case 1: // guideStatusChange(int)
+                        pushStatus = data.readInt();
+                        Diag.put("nav.push.statoGuida", pushStatus);
+                        break;
+                    case 2: // guideInfosChange(int icon, int distance, String direction)
+                        pushTurnIcon = data.readInt();
+                        pushTurnMeters = data.readInt();
+                        String dir = data.readString();
+                        pushTurnText = dir == null ? "" : dir.trim();
+                        Diag.put("nav.push.manovra", pushTurnMeters + " m · icona " + pushTurnIcon + " · " + pushTurnText);
+                        break;
+                    case 3: // roadInfoChange(String)
+                        String road = data.readString();
+                        pushRoad = road == null ? "" : road.trim();
+                        Diag.put("nav.push.via", pushRoad);
+                        break;
+                    case 12: // remainingTimesChange(int)
+                        pushRemainS = data.readInt();
+                        Diag.put("nav.push.tempoRimanente", pushRemainS);
+                        break;
+                    case 13: // remainingDistanceChange(int)
+                        pushRemainM = data.readInt();
+                        Diag.put("nav.push.distanzaRimanente", pushRemainM);
+                        break;
+                    case 15: // navAppHasActivatedChange(boolean)
+                        Diag.put("nav.push.appAttiva", data.readInt() != 0);
+                        break;
+                    default:
+                        Diag.put("nav.push.altro", "codice " + code);
+                        break;
+                }
+                pushTime = SystemClock.uptimeMillis();
+                if (reply != null) reply.writeNoException();
+                main.post(NavClient.this::pollSoon);
+            } catch (Exception e) {
+                Diag.error("navigatore.push", e.toString());
+            }
+            return true;
+        }
+    };
+
+    private void registerPush() {
+        if (bg == null) return;
+        bg.post(() -> {
+            try {
+                Rpc.call(link.binder(), GS, REGISTER, p -> p.writeStrongBinder(push));
+                Diag.put("nav.push", "registrato");
+            } catch (Exception e) {
+                Diag.error("navigatore.registra", e.toString());
+            }
+        });
     }
 
     private final BroadcastReceiver guide = new BroadcastReceiver() {
@@ -193,10 +268,22 @@ public final class NavClient {
                 Diag.put("nav.unitaDistanza", Rpc.callInt(b, GS, DIST_UNIT));
                 Diag.put("nav.via", s.road);
                 Diag.put("nav.app", s.mapPackage);
+                Diag.put("nav.appAttiva", Rpc.callBool(b, GS, NAV_ACTIVE));
             } catch (Exception e) {
                 Diag.error("navigatore", e.toString());
             }
         }
+        // notifiche push del servizio
+        if (pushStatus > 0) s.navigating = true;
+        else if (pushStatus == 0 && status <= 0) s.navigating = false;
+        if (pushTurnMeters >= 0) {
+            s.turnMeters = pushTurnMeters;
+            s.turnIcon = pushTurnIcon;
+            s.turnText = pushTurnText;
+        }
+        if (s.road.isEmpty() && !pushRoad.isEmpty()) s.road = pushRoad;
+        if (s.remainMeters <= 0 && pushRemainM > 0) s.remainMeters = pushRemainM;
+        if (s.remainSeconds <= 0 && pushRemainS > 0) s.remainSeconds = pushRemainS;
         // broadcast diretti del navigatore (più rapidi del servizio)
         int bc = bcStatus;
         if (bc == 0 && status <= 0) s.navigating = false;

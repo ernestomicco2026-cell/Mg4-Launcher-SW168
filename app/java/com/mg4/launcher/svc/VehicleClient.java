@@ -44,6 +44,7 @@ public final class VehicleClient {
     private static final int AC_GET_MAX_AIR_VOLUME = 60;
     private static final int AC_GET_MIN_AIR_VOLUME = 61;
     private static final int AC_GET_DRV_TEMP = 81;
+    private static final int AC_GET_OUT_TEMP = 88;    // float, -10000 = non disponibile
 
     /** Livelli ventola come nell'originale (AcCardView): 1..11, 0 = spenta, 15 = automatico. */
     public static final int FAN_OFF = 0, FAN_AUTO = 15;
@@ -68,6 +69,7 @@ public final class VehicleClient {
         public int hvacPower = -1;
         public int fanLevel = -1;         // 0 spenta, 1..max, 15 auto
         public int fanMin = 1, fanMax = 11;
+        public float outsideTemp = -10000f;   // °C
     }
 
     public interface Listener {
@@ -221,6 +223,8 @@ public final class VehicleClient {
                     s.fanMin = fanMin;
                     s.fanMax = fanMax;
                     s.hvacPower = Rpc.callInt(a, AC, AC_GET_POWER);
+                    s.outsideTemp = Rpc.callFloat(a, AC, AC_GET_OUT_TEMP);
+                    Diag.put("clima.tempEsterna", s.outsideTemp);
                     Diag.put("clima.tempGuidatore", readTemp + (s.acTemp != readTemp ? " (richiesta " + s.acTemp + ")" : ""));
                     Diag.put("clima.ventola", readFan + (s.fanLevel != readFan ? " (richiesta " + s.fanLevel + ")" : ""));
                     Diag.put("clima.accensione", s.hvacPower);

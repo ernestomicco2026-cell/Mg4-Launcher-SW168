@@ -192,7 +192,7 @@ public final class Updater {
 
     private static HttpError httpError(int code, String token, String repo) {
         if (code == 404) return new HttpError(token.isEmpty()
-                ? "Repository privato: inserisci il token GitHub qui sotto"
+                ? "Nessuna versione trovata su GitHub"
                 : "Nessuna versione trovata su " + repo + " (o il token non può leggerla)");
         if (code == 401) return new HttpError("Token GitHub non valido o scaduto");
         if (code == 403) return new HttpError("GitHub ha rifiutato la richiesta (limite richieste o permessi del token)");

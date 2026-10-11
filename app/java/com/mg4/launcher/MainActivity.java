@@ -21,6 +21,7 @@ import com.mg4.launcher.svc.Updater;
 import com.mg4.launcher.svc.VehicleClient;
 import com.mg4.launcher.ui.AppsView;
 import com.mg4.launcher.ui.HomeView;
+import com.mg4.launcher.ui.Pager;
 import com.mg4.launcher.ui.Prefs;
 import com.mg4.launcher.ui.SettingsView;
 import com.mg4.launcher.ui.Theme;
@@ -46,6 +47,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     private Theme theme;
     private HomeView home;
     private AppsView apps;
+    private Pager pager;
     private SettingsView settings;
     private int lastUiMode;
 
@@ -95,7 +97,17 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         registerReceiver(packages, f);
         // all'avvio dell'auto le app utente compaiono solo dopo lo sblocco dell'utente Android
         registerReceiver(packages, new IntentFilter(Intent.ACTION_USER_UNLOCKED));
+        root.postDelayed(saveDiag, 15000);
     }
+
+    /** Ogni 15 s salva la diagnostica su file: adb pull /sdcard/Android/data/com.mg4.launcher/files/diagnostica.txt */
+    private final Runnable saveDiag = new Runnable() {
+        @Override
+        public void run() {
+            new Thread(() -> Diag.save(MainActivity.this), "mg4-diag").start();
+            root.postDelayed(this, 15000);
+        }
+    };
 
     /**
      * Schermo intero: il contenuto occupa sempre tutti i 1920×720 px. Le barre di sistema, se ricompaiono
@@ -129,10 +141,18 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         theme = Theme.resolve(this, prefs);
         root.setBackgroundColor(theme.bg);
         root.removeAllViews();
+        int keepPage = pager != null ? pager.page() : 0;
+        pager = new Pager(this);
         home = new HomeView(this, theme, prefs, this, vehicle, media, nav);
-        root.addView(home, new FrameLayout.LayoutParams(-1, -1));
-        apps = null;
+        apps = new AppsView(this, theme, catalog, prefs, this);
+        pager.addView(home);
+        pager.addView(apps);
+        pager.setListener(p -> {
+            if (p == 1) apps.reload();
+        });
+        root.addView(pager, new FrameLayout.LayoutParams(-1, -1));
         settings = null;
+        pager.show(keepPage, false);
         home.onVehicle(vehicle.last());
         home.onMedia(media.last());
         home.onNav(nav.last());
@@ -160,6 +180,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        root.removeCallbacks(saveDiag);
         vehicle.stop();
         media.stop();
         nav.stop();
@@ -180,7 +201,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     public void onBackPressed() {
         if (settings != null) closeSettings();
-        else if (apps != null) closeApps();
+        else if (pager != null && pager.page() != 0) closeApps();
         // altrimenti il launcher resta dov'è
     }
 
@@ -208,10 +229,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
 
     @Override
     public void openApps() {
-        if (apps == null) {
-            apps = new AppsView(this, theme, catalog, prefs, this);
-            root.addView(apps, new FrameLayout.LayoutParams(-1, -1));
-        }
+        if (pager != null) pager.show(1, true);
     }
 
     @Override
@@ -245,10 +263,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
 
     @Override
     public void closeApps() {
-        if (apps != null) {
-            root.removeView(apps);
-            apps = null;
-        }
+        if (pager != null) pager.show(0, true);
     }
 
     @Override
@@ -269,10 +284,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     public void settingsChanged(boolean rebuild) {
         if (rebuild) {
-            boolean appsOpen = apps != null;
             IconStyler.clearCache();
             build();
-            if (appsOpen) openApps();
             openSettings();
         } else if (home != null) {
             home.applyCarLook();

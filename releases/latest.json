@@ -1,6 +1,6 @@
 {
-  "version": "0.2.0",
-  "apk": "releases/MG4Launcher-0.2.0.apk",
-  "size": 319080,
-  "notes": "Schermo intero, radio, guida del navigatore, clima senza rimbalzo, ventola, scelta delle app installate, aggiornamenti da GitHub."
+  "version": "0.3.0",
+  "apk": "releases/MG4Launcher-0.3.0.apk",
+  "size": 331512,
+  "notes": "Icona 360°, temperatura esterna, home e app a scorrimento, niente colore d'accento, radio di default con preferiti FM/DAB e loghi, riquadro media ridisegnato, notifiche del navigatore, diagnostica su file."
 }

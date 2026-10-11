@@ -109,11 +109,7 @@ public final class AppsView extends LinearLayout {
         for (AppCatalog.App a : all) {
             if (editing || !hidden.contains(key(a))) mine.add(a);
         }
-        String note;
-        if (editing) note = "tocca un'app per mostrarla o nasconderla, poi premi Fine";
-        else if (all.isEmpty()) note = "le app che installi compaiono qui da sole";
-        else if (mine.isEmpty()) note = "hai nascosto tutte le app: premi Modifica per rimetterle";
-        else note = "compaiono qui da sole · " + (all.size() - mine.size() > 0 ? (all.size() - mine.size()) + " nascoste · " : "") + "Modifica per scegliere";
+        String note = editing ? "tocca per mostrare o nascondere" : null;
         content.addView(section(c, "INSTALLATE DA TE", note), Ui.margins(new LayoutParams(-1, -2), 0, dp(10), 0, 0));
         if (!mine.isEmpty()) addGrid(c, mine, hidden);
     }
@@ -167,8 +163,8 @@ public final class AppsView extends LinearLayout {
         }
 
         FrameLayout box = new FrameLayout(c);
-        int boxBg = app.highlight ? t.accent : t.chip;
-        int fg = app.highlight ? t.onAccent : t.text;
+        int boxBg = t.chip;
+        int fg = t.text;
         box.setBackground(Ui.round(boxBg, dp(22)));
         ImageView iv = new ImageView(c);
         iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
