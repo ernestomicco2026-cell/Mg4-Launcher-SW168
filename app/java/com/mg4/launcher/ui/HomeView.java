@@ -30,6 +30,10 @@ public final class HomeView extends LinearLayout {
         void launch(String pkg, String cls);
 
         void launchNavigator();
+
+        void launchNavigator(String which);
+
+        java.util.List<com.mg4.launcher.apps.AppCatalog.App> otherNavApps();
     }
 
     private static final int TAB_MAP = 0, TAB_MEDIA = 1, TAB_PHONE = 2;
@@ -59,6 +63,8 @@ public final class HomeView extends LinearLayout {
     private LinearLayout navIdle, navCard, navEta;
     private TextView navCardTitle, navCardSub, navEtaArrive, navEtaMin, navEtaKm;
     private TextView navHomeBtn, navOfficeBtn;
+    private LinearLayout navWith;
+    private boolean navWithPhone;
 
     // media
     private TextView srcName, srcPos, mTitle, mSub, mMeta, mPos, mDur, artFreq, artUnit, artBand;
@@ -110,6 +116,10 @@ public final class HomeView extends LinearLayout {
 
     private int dp(float v) {
         return Ui.dp(getContext(), v);
+    }
+
+    public void refreshNav() {
+        buildNavWith(getContext(), navWithPhone);
     }
 
     public void applyCarLook() {
@@ -328,6 +338,11 @@ public final class HomeView extends LinearLayout {
         btns.addView(navHomeBtn, Ui.margins(Ui.lp(-2, dp(64)), dp(14), 0, 0, 0));
         btns.addView(navOfficeBtn, Ui.margins(Ui.lp(-2, dp(64)), dp(14), 0, 0, 0));
         navIdle.addView(btns, Ui.margins(new LayoutParams(-2, -2), 0, dp(26), 0, 0));
+        // apri con: MG / telefono (CarPlay, Android Auto) / navigatori installati (Waze, Google Maps...)
+        navWith = Ui.row(c);
+        navWith.setGravity(Gravity.CENTER);
+        navIdle.addView(navWith, Ui.margins(new LayoutParams(-2, -2), 0, dp(22), 0, 0));
+        buildNavWith(c, false);
         f.addView(navIdle, new FrameLayout.LayoutParams(-1, -1));
 
         // guida in corso: indicazione in alto a sinistra + arrivo in basso
@@ -378,6 +393,36 @@ public final class HomeView extends LinearLayout {
         tv.setClickable(true);
         tv.setOnClickListener(l);
         return tv;
+    }
+
+    /** Riga "Apri con": piccoli pulsanti; tieni premuto per renderlo il navigatore predefinito. */
+    private void buildNavWith(Context c, boolean phone) {
+        navWithPhone = phone;
+        navWith.removeAllViews();
+        String pref = prefs.navApp();
+        addNavChip(c, "MG", Prefs.NAV_MG, pref);
+        if (phone) {
+            addNavChip(c, media.last().deviceType == MediaClient.DEV_AAUTO ? "Android Auto" : "CarPlay", Prefs.NAV_PHONE, pref);
+        }
+        for (com.mg4.launcher.apps.AppCatalog.App a : host.otherNavApps()) addNavChip(c, a.label, a.packageName, pref);
+        navWith.setVisibility(navWith.getChildCount() > 1 ? VISIBLE : GONE);
+    }
+
+    private void addNavChip(Context c, String label, String value, String pref) {
+        boolean def = value.equals(pref) || (Prefs.NAV_AUTO.equals(pref) && value.equals(navWithPhone ? Prefs.NAV_PHONE : Prefs.NAV_MG));
+        TextView chip = Ui.text(c, label, 16, def ? t.text : t.sub, Ui.MEDIUM);
+        chip.setGravity(Gravity.CENTER);
+        chip.setPadding(dp(18), 0, dp(18), 0);
+        chip.setMinHeight(dp(44));
+        chip.setBackground(Ui.pressable(c, def ? t.chip : t.overlay, 22, t));
+        chip.setClickable(true);
+        chip.setOnClickListener(v -> host.launchNavigator(value));
+        chip.setOnLongClickListener(v -> {
+            prefs.setNavApp(value);
+            buildNavWith(getContext(), navWithPhone);
+            return true;
+        });
+        navWith.addView(chip, Ui.margins(Ui.lp(-2, dp(44)), dp(5), 0, dp(5), 0));
     }
 
     private void openNavigation() {
@@ -681,6 +726,7 @@ public final class HomeView extends LinearLayout {
 
         // CarPlay / Android Auto: la scheda compare solo con il telefono collegato
         boolean phone = m.deviceType != 0;
+        if (phone != navWithPhone) buildNavWith(getContext(), phone);
         tabPhone.setVisibility(phone ? VISIBLE : GONE);
         tabPhone.setText(m.deviceType == MediaClient.DEV_AAUTO ? "Android Auto" : "CarPlay");
         if (!phone && tab == TAB_PHONE) selectTab(TAB_MEDIA, false);

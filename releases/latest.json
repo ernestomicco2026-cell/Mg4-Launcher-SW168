@@ -1,6 +1,6 @@
 {
-  "version": "0.3.0",
-  "apk": "releases/MG4Launcher-0.3.0.apk",
-  "size": 331512,
-  "notes": "Icona 360°, temperatura esterna, home e app a scorrimento, niente colore d'accento, radio di default con preferiti FM/DAB e loghi, riquadro media ridisegnato, notifiche del navigatore, diagnostica su file."
+  "version": "0.3.1",
+  "apk": "releases/MG4Launcher-0.3.1.apk",
+  "size": 335608,
+  "notes": "Radio: play/pausa corretti. Navigatore: riga Apri con (MG, CarPlay/Android Auto, Waze/Google Maps) e navigatore predefinito."
 }

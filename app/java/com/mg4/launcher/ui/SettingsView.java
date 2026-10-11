@@ -35,7 +35,7 @@ public final class SettingsView extends FrameLayout {
     private final Host host;
     private final Handler main = new Handler(Looper.getMainLooper());
     private TextView diag;
-    private final LinearLayout colorRow, themeRow;
+    private final LinearLayout colorRow, themeRow, navRow;
     private final TextView colorName;
     private TextView updStatus, updInstall, updCheck;
     private Updater.Release found;
@@ -87,6 +87,11 @@ public final class SettingsView extends FrameLayout {
         col.addView(label(c, "TEMA"), top(24));
         themeRow = Ui.row(c);
         col.addView(themeRow, top(10));
+
+        col.addView(label(c, "NAVIGATORE PREDEFINITO"), top(24));
+        navRow = Ui.row(c);
+        col.addView(navRow, top(10));
+        col.addView(Ui.text(c, "Automatico: quello del telefono se è collegato CarPlay o Android Auto, altrimenti MG.", 14, t.sub, Ui.REGULAR), top(8));
 
         TextView original = Ui.text(c, "Apri la home originale MG", 19, t.text, Ui.MEDIUM);
         original.setGravity(Gravity.CENTER_VERTICAL);
@@ -192,6 +197,25 @@ public final class SettingsView extends FrameLayout {
             }), Ui.margins(Ui.lp(dp(56), dp(56)), 0, 0, dp(12), 0));
         }
         colorName.setText(Prefs.CAR_COLORS[sel]);
+
+        navRow.removeAllViews();
+        String nav = prefs.navApp();
+        String[][] navs = {{Prefs.NAV_AUTO, "Automatico"}, {Prefs.NAV_MG, "MG"}, {Prefs.NAV_PHONE, "Telefono"}};
+        for (String[] m : navs) {
+            boolean on = m[0].equals(nav);
+            TextView b = Ui.text(c, m[1], 18, on ? t.panel : t.text, Ui.MEDIUM);
+            b.setGravity(Gravity.CENTER);
+            b.setPadding(dp(22), 0, dp(22), 0);
+            b.setMinHeight(dp(52));
+            b.setBackground(on ? Ui.round(t.text, dp(14)) : Ui.pressable(c, t.chip, 14, t));
+            b.setClickable(true);
+            b.setOnClickListener(v -> {
+                prefs.setNavApp(m[0]);
+                buildSwatches();
+                host.settingsChanged(false);
+            });
+            navRow.addView(b, Ui.margins(Ui.lp(-2, dp(52)), 0, 0, dp(10), 0));
+        }
 
         themeRow.removeAllViews();
         String mode = prefs.themeMode();

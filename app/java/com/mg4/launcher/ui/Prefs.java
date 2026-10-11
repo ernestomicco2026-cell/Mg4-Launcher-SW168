@@ -87,4 +87,15 @@ public final class Prefs {
     public void setGithubToken(String tok) {
         sp.edit().putString("ghToken", tok == null ? "" : tok.trim()).apply();
     }
+
+    // --- navigatore predefinito: "auto" (telefono se collegato, altrimenti MG), "mg", "phone" o nome pacchetto ---
+    public static final String NAV_AUTO = "auto", NAV_MG = "mg", NAV_PHONE = "phone";
+
+    public String navApp() {
+        return sp.getString("navApp", NAV_AUTO);
+    }
+
+    public void setNavApp(String v) {
+        sp.edit().putString("navApp", v).apply();
+    }
 }

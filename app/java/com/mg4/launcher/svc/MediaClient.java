@@ -64,7 +64,7 @@ public final class MediaClient {
     private static final String RADIO_ACTION = "com.saicmotor.service.radio.radioservice";
     private static final String RAD = "com.saicmotor.sdk.radio.IRadioAppService";
     private static final int RAD_NEXT = 13, RAD_PREV = 14, RAD_CURRENT = 19, RAD_PLAY = 27, RAD_PAUSE = 28;
-    private static final int RAD_FAVORITES = 7, RAD_TUNE = 8, RAD_TUNE_DAB = 9, RAD_DAB_LOGO = 52;
+    private static final int RAD_FAVORITES = 7, RAD_TUNE = 8, RAD_TUNE_DAB = 9, RAD_SET_MUTED = 18, RAD_DAB_LOGO = 52;
     public static final int BAND_AM = 1, BAND_FM = 2, BAND_DAB = 4;
 
     // --- CarPlay / Android Auto ---------------------------------------------------------------
@@ -122,6 +122,9 @@ public final class MediaClient {
     private volatile State last = new State();
     private volatile int chosen;               // sorgente scelta dall'utente con le frecce
     private volatile boolean radioPlaying;
+    private volatile int radioState = -1;      // dal servizio radio: 1 in onda, 2 in pausa
+    private volatile Station current;          // stazione in onda (per riprendere dopo la pausa)
+    private volatile long radioHoldUntil;
     private volatile long usbPos = -1, usbDur = -1, btPos = -1;
     private boolean running;
     private MediaBrowser browser;
@@ -417,15 +420,25 @@ public final class MediaClient {
                     q.readString();                    // cover
                     int khz = q.readInt();
                     int type = q.readInt();
-                    q.readInt();                       // state
+                    int state = q.readInt();           // 1 = in onda, 2 = in pausa
                     q.readInt();                       // isCollection (byte)
                     String sub = q.readString();
                     q.readInt();                       // rssi
-                    q.readInt();                       // ensembleId
+                    int eid = q.readInt();             // ensembleId
                     long sid = q.readLong();           // serviceId
                     q.readInt();                       // pty
-                    q.readInt();                       // secondaryServiceId
-                    q.readInt();                       // frequencyIndex
+                    int secId = q.readInt();           // secondaryServiceId
+                    int fIndex = q.readInt();          // frequencyIndex
+                    Station cur = new Station();
+                    cur.band = type;
+                    cur.khz = khz;
+                    cur.sid = sid;
+                    cur.eid = eid;
+                    cur.secId = secId;
+                    cur.index = fIndex;
+                    current = cur;
+                    radioState = state;
+                    Diag.put("radio.stato", state);
                     char[] service = q.createCharArray();
                     char[] ensemble = q.createCharArray();
                     q.createCharArray();               // dlPlus
@@ -451,7 +464,9 @@ public final class MediaClient {
                     Diag.put("radio.corrente", "banda " + type + ", " + khz + " kHz, " + s.title);
                     return null;
                 }));
-                s.playing = isActive || radioPlaying;
+                // stato reale del servizio radio (1 = in onda); il comando appena dato prevale per 3 s
+                long now = android.os.SystemClock.uptimeMillis();
+                s.playing = now < radioHoldUntil ? radioPlaying : (radioState > 0 ? radioState == 1 : isActive || radioPlaying);
                 if (s.radioBand == BAND_DAB) {
                     try {
                         Bitmap logo = Rpc.call(b, RAD, RAD_DAB_LOGO, Rpc.NONE, p -> Rpc.readNullable(p, Bitmap.CREATOR::createFromParcel));
@@ -539,8 +554,7 @@ public final class MediaClient {
                 break;
             }
             case SRC_RADIO:
-                Rpc.call(radio.binder(), RAD, RAD_PLAY, Rpc.NONE, Parcel::readInt);
-                radioPlaying = true;
+                radioResume();
                 break;
             case SRC_CARPLAY:
             case SRC_AAUTO:
@@ -549,6 +563,43 @@ public final class MediaClient {
             default:
                 break;
         }
+    }
+
+    // ---- radio: pausa e ripresa come la home originale ---------------------------------------
+
+    /** Pausa: setMuted(false, banda), lo stesso comando usato dal launcher MG. */
+    private void radioPause() throws RemoteException {
+        Station cur = current;
+        int band = cur != null ? cur.band : BAND_FM;
+        Rpc.call(radio.binder(), RAD, RAD_SET_MUTED, p -> {
+            p.writeInt(0);
+            p.writeInt(band);
+        });
+        radioPlaying = false;
+        radioHoldUntil = android.os.SystemClock.uptimeMillis() + 3000;
+    }
+
+    /** Ripresa: si risintonizza la stazione corrente (FM/AM per frequenza, DAB per servizio). */
+    private void radioResume() throws RemoteException {
+        IBinder b = radio.binder();
+        Station cur = current;
+        if (cur != null && cur.band == BAND_DAB && cur.sid != 0) {
+            Rpc.call(b, RAD, RAD_TUNE_DAB, p -> {
+                p.writeInt(cur.index);
+                p.writeLong(cur.sid);
+                p.writeInt(cur.eid);
+                p.writeInt(cur.secId);
+            });
+        } else if (cur != null && cur.khz > 0) {
+            Rpc.call(b, RAD, RAD_TUNE, p -> {
+                p.writeInt(cur.band);
+                p.writeInt(cur.khz);
+            });
+        } else {
+            Rpc.call(b, RAD, RAD_PLAY, Rpc.NONE, Parcel::readInt);
+        }
+        radioPlaying = true;
+        radioHoldUntil = android.os.SystemClock.uptimeMillis() + 3000;
     }
 
     // ---- preferiti radio -------------------------------------------------------------------
@@ -645,7 +696,8 @@ public final class MediaClient {
                         p.writeInt(st.khz);
                     });
                 }
-                if (!radioPlaying) startSource(SRC_RADIO);
+                radioPlaying = true;
+                radioHoldUntil = android.os.SystemClock.uptimeMillis() + 3000;
             } catch (Exception e) {
                 Diag.error("radio.sintonia", e.toString());
             }
@@ -675,13 +727,8 @@ public final class MediaClient {
                         Rpc.call(online.binder(), ONL, s.playing ? ONL_PAUSE : ONL_PLAY, Rpc.NONE, Parcel::readInt);
                         break;
                     case SRC_RADIO:
-                        if (s.playing) {
-                            Rpc.call(radio.binder(), RAD, RAD_PAUSE, Rpc.NONE);
-                            radioPlaying = false;
-                        } else {
-                            Rpc.call(radio.binder(), RAD, RAD_PLAY, Rpc.NONE, Parcel::readInt);
-                            radioPlaying = true;
-                        }
+                        if (s.playing) radioPause();
+                        else radioResume();
                         break;
                     case SRC_CARPLAY:
                     case SRC_AAUTO:

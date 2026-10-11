@@ -247,6 +247,30 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
 
     @Override
     public void launchNavigator() {
+        launchNavigator(prefs.navApp());
+    }
+
+    /** Apre il navigatore scelto: MG, quello del telefono (CarPlay/Android Auto) o un'app installata. */
+    @Override
+    public void launchNavigator(String which) {
+        boolean phone = media.last().deviceType != 0;
+        if (Prefs.NAV_PHONE.equals(which) || (Prefs.NAV_AUTO.equals(which) && phone)) {
+            if (phone) {
+                media.openProjection();
+                media.openRemoteNavigation();
+                return;
+            }
+        } else if (!Prefs.NAV_AUTO.equals(which) && !Prefs.NAV_MG.equals(which)) {
+            Intent li = getPackageManager().getLaunchIntentForPackage(which);
+            if (li != null) {
+                try {
+                    startActivity(li.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    return;
+                } catch (Exception e) {
+                    Diag.error("navigatore.app", e.toString());
+                }
+            }
+        }
         Intent i = catalog.navIntent(nav.last().mapPackage);
         if (i != null) {
             try {
@@ -257,6 +281,11 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
             }
         }
         nav.openNavigator();
+    }
+
+    @Override
+    public java.util.List<AppCatalog.App> otherNavApps() {
+        return catalog.otherNavApps(nav.last().mapPackage);
     }
 
     // --- AppsView.Host ------------------------------------------------------------------------
@@ -289,6 +318,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
             openSettings();
         } else if (home != null) {
             home.applyCarLook();
+            home.refreshNav();
         }
     }
 

@@ -120,6 +120,33 @@ public final class AppCatalog {
         return out;
     }
 
+    /** Navigatori di terze parti installati sull'auto (Waze, Google Maps, OsmAnd, ...). */
+    public List<App> otherNavApps(String mgNavPackage) {
+        Set<String> pkgs = new java.util.LinkedHashSet<>();
+        Collections.addAll(pkgs, "com.waze", "com.google.android.apps.maps", "com.google.android.apps.maps.auto",
+                "net.osmand", "net.osmand.plus", "com.sygic.aura", "com.here.app.maps", "com.tomtom.gplay.navapp",
+                "com.mapfactor.navigator", "cz.seznam.mapy");
+        try {
+            Intent geo = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse("geo:0,0?q=roma"));
+            for (ResolveInfo ri : pm.queryIntentActivities(geo, 0)) pkgs.add(ri.activityInfo.packageName);
+        } catch (Exception ignored) {
+        }
+        List<App> out = new ArrayList<>();
+        for (String p : pkgs) {
+            if (p.equals(mgNavPackage) || p.startsWith("com.saicmotor") || p.startsWith("com.telenav")
+                    || p.startsWith("com.nng") || p.startsWith("com.tomtom.navigation")) continue;
+            Intent li = pm.getLaunchIntentForPackage(p);
+            if (li == null) continue;
+            String label = p;
+            try {
+                label = String.valueOf(pm.getApplicationLabel(pm.getApplicationInfo(p, 0)));
+            } catch (Exception ignored) {
+            }
+            out.add(new App(label, null, li, 0, false, p));
+        }
+        return out;
+    }
+
     public Intent navIntent(String hint) {
         List<String> candidates = new ArrayList<>();
         if (hint != null && !hint.isEmpty()) candidates.add(hint);
