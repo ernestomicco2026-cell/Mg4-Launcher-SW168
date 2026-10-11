@@ -40,6 +40,7 @@ public final class Updater {
         public String apkName = "";
         public long apkSize;
         public boolean newer;
+        boolean raw;                // file del repository (API contents) invece di allegato di release
     }
 
     public interface Listener {
@@ -140,18 +141,71 @@ public final class Updater {
         }
     }
 
+    /**
+     * Prima la cartella releases/ del repository (latest.json + APK, caricati con un normale push),
+     * poi le Release di GitHub.
+     */
     private Release latest(String repo, String token) throws Exception {
+        Release fromRepo = null;
+        HttpError err = null;
+        try {
+            fromRepo = latestFromRepo(repo, token);
+        } catch (HttpError e) {
+            err = e;
+        }
+        Release fromReleases = null;
+        try {
+            fromReleases = latestRelease(repo, token);
+        } catch (HttpError e) {
+            if (err == null || fromRepo != null) err = e;
+        }
+        if (fromRepo != null && (fromReleases == null || fromReleases.apkUrl == null
+                || compare(fromRepo.tag, fromReleases.tag) >= 0)) return fromRepo;
+        if (fromReleases != null) return fromReleases;
+        throw err != null ? err : new HttpError("Nessuna versione trovata su " + repo);
+    }
+
+    private Release latestFromRepo(String repo, String token) throws Exception {
+        String base = "https://api.github.com/repos/" + repo + "/contents/";
+        HttpURLConnection c = open(base + "releases/latest.json", token, "application/vnd.github.raw");
+        int code = c.getResponseCode();
+        if (code != 200) {
+            c.disconnect();
+            throw httpError(code, token, repo);
+        }
+        JSONObject o = new JSONObject(readAll(c.getInputStream()));
+        c.disconnect();
+        Release r = new Release();
+        r.tag = o.optString("version", "");
+        r.name = "MG4 Launcher " + r.tag;
+        r.notes = o.optString("notes", "");
+        String apk = o.optString("apk", "");
+        if (!apk.isEmpty()) {
+            r.apkUrl = base + apk;
+            r.apkName = apk.substring(apk.lastIndexOf('/') + 1);
+            r.apkSize = o.optLong("size");
+            r.raw = true;
+        }
+        r.newer = compare(r.tag, currentVersion()) > 0;
+        return r;
+    }
+
+    private static HttpError httpError(int code, String token, String repo) {
+        if (code == 404) return new HttpError(token.isEmpty()
+                ? "Repository privato: inserisci il token GitHub qui sotto"
+                : "Nessuna versione trovata su " + repo + " (o il token non può leggerla)");
+        if (code == 401) return new HttpError("Token GitHub non valido o scaduto");
+        if (code == 403) return new HttpError("GitHub ha rifiutato la richiesta (limite richieste o permessi del token)");
+        return new HttpError("Risposta GitHub inattesa: " + code);
+    }
+
+    private Release latestRelease(String repo, String token) throws Exception {
         HttpURLConnection c = open("https://api.github.com/repos/" + repo + "/releases/latest", token, "application/vnd.github+json");
         int code = c.getResponseCode();
-        if (code == 404) {
+        if (code != 200) {
             c.disconnect();
-            throw new HttpError(token.isEmpty()
-                    ? "Repository privato: inserisci il token GitHub qui sotto"
-                    : "Nessuna release trovata su " + repo + " (o il token non può leggerla)");
+            throw httpError(code, token, repo);
         }
-        if (code == 401) throw new HttpError("Token GitHub non valido o scaduto");
-        if (code == 403) throw new HttpError("GitHub ha rifiutato la richiesta (limite richieste o permessi del token)");
-        if (code != 200) throw new HttpError("Risposta GitHub inattesa: " + code);
         JSONObject o = new JSONObject(readAll(c.getInputStream()));
         c.disconnect();
 
@@ -177,7 +231,7 @@ public final class Updater {
 
     private void download(Release r, String token, File out) throws Exception {
         // l'allegato risponde con un redirect verso lo storage di GitHub: lo si segue senza il token
-        HttpURLConnection c = open(r.apkUrl, token, "application/octet-stream");
+        HttpURLConnection c = open(r.apkUrl, token, r.raw ? "application/vnd.github.raw" : "application/octet-stream");
         c.setInstanceFollowRedirects(false);
         int code = c.getResponseCode();
         for (int hops = 0; code / 100 == 3 && hops < 5; hops++) {

@@ -40,8 +40,9 @@ Si può scrivere nel campo delle impostazioni oppure inviarlo dal computer:
 adb shell am broadcast -n com.mg4.launcher/.svc.TokenReceiver --es token github_pat_XXXX
 ```
 
-Per pubblicare una versione: aumenta `version.properties`, `./build.sh`, poi crea una release con tag `vX.Y.Z`
-e allega `build/MG4Launcher-X.Y.Z.apk`.
+Per pubblicare una versione: aumenta `version.properties`, `./build.sh`, copia l'APK in `releases/` e aggiorna
+`releases/latest.json` (versione e nome file), poi fai commit e push. In alternativa funziona anche una Release GitHub
+con tag `vX.Y.Z` e l'APK allegato: il launcher prende la più recente tra le due.
 
 ## Tornare alla home MG originale
 
