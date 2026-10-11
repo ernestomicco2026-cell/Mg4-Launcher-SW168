@@ -1,0 +1,104 @@
+package com.mg4.launcher.ui;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.view.View;
+
+/** Barre orizzontali arrotondate (batteria, avanzamento brano) e sfondo stilizzato della mappa. */
+public final class Bars {
+    private Bars() {}
+
+    public static final class Progress extends View {
+        private final Paint track = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint fill = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private float value;          // 0..1, < 0 = sconosciuto
+        private float limit = -1;     // tacca opzionale (limite di ricarica)
+        private final Paint mark = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        public Progress(Context c) {
+            super(c);
+        }
+
+        public void setColors(int trackColor, int fillColor) {
+            track.setColor(trackColor);
+            fill.setColor(fillColor);
+            mark.setColor(fillColor);
+            mark.setAlpha(160);
+            invalidate();
+        }
+
+        public void setValue(float v) {
+            if (v != value) {
+                value = v;
+                invalidate();
+            }
+        }
+
+        public void setLimit(float l) {
+            limit = l;
+            invalidate();
+        }
+
+        @Override
+        protected void onDraw(Canvas c) {
+            float w = getWidth(), h = getHeight(), r = h / 2f;
+            c.drawRoundRect(0, 0, w, h, r, r, track);
+            if (value > 0) {
+                float fw = Math.max(h, w * Math.min(1f, value));
+                c.drawRoundRect(0, 0, fw, h, r, r, fill);
+            }
+            if (limit > 0 && limit < 1) {
+                float x = w * limit;
+                c.drawRect(x - 1.5f, -h * 0.6f, x + 1.5f, h * 1.6f, mark);
+            }
+        }
+    }
+
+    /** Sfondo decorativo "mappa" (strade stilizzate) per il pannello di navigazione. */
+    public static final class MapDecor extends View {
+        private final Paint major = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint minor = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Path p = new Path();
+        private int bg;
+
+        public MapDecor(Context c) {
+            super(c);
+            major.setStyle(Paint.Style.STROKE);
+            major.setStrokeCap(Paint.Cap.ROUND);
+            minor.setStyle(Paint.Style.STROKE);
+        }
+
+        public void setColors(int background, int road, int roadMinor) {
+            bg = background;
+            major.setColor(road);
+            minor.setColor(roadMinor);
+            invalidate();
+        }
+
+        @Override
+        protected void onDraw(Canvas c) {
+            float w = getWidth(), h = getHeight();
+            c.drawColor(bg);
+            float k = w / 1170f;
+            minor.setStrokeWidth(6 * k);
+            major.setStrokeWidth(14 * k);
+            float[][] minorLines = {{120, -20, 180, 520}, {520, -20, 560, 520}, {940, -20, 980, 520},
+                    {-20, 230, 1200, 250}, {-20, 450, 1200, 430}, {640, -20, 620, 520}};
+            for (float[] l : minorLines) c.drawLine(l[0] * k, l[1] * k, l[2] * k, l[3] * k, minor);
+            p.reset();
+            p.moveTo(-20 * k, 360 * k);
+            p.cubicTo(200 * k, 330 * k, 380 * k, 380 * k, 560 * k, 300 * k);
+            p.cubicTo(740 * k, 220 * k, 880 * k, 180 * k, 1200 * k, 210 * k);
+            c.drawPath(p, major);
+            c.drawLine(300 * k, -20 * k, 360 * k, 520 * k, major);
+            p.reset();
+            p.moveTo(760 * k, -20 * k);
+            p.cubicTo(740 * k, 160 * k, 800 * k, 330 * k, 720 * k, 520 * k);
+            c.drawPath(p, major);
+            c.drawLine(-20 * k, 120 * k, 1200 * k, 90 * k, major);
+            if (h > 520 * k) c.drawLine(-20 * k, 600 * k, 1200 * k, 620 * k, minor);
+        }
+    }
+}

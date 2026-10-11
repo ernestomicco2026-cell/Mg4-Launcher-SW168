@@ -1,0 +1,224 @@
+package com.mg4.launcher.apps;
+
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
+
+import com.mg4.launcher.R;
+import com.mg4.launcher.svc.Diag;
+
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
+/**
+ * Elenco delle app: quelle dell'auto (componenti SAIC noti, con icone disegnate) e quelle
+ * installate dall'utente (lette dal sistema, aggiornate a ogni installazione/disinstallazione).
+ */
+public final class AppCatalog {
+
+    public static final class App {
+        public final String label;
+        public final ComponentName component;   // null = usa launchIntent
+        public final Intent launchIntent;
+        public final int iconRes;               // 0 = icona ridisegnata dall'originale
+        public final boolean highlight;
+        public final String packageName;
+
+        App(String label, ComponentName cn, Intent li, int iconRes, boolean highlight, String pkg) {
+            this.label = label;
+            this.component = cn;
+            this.launchIntent = li;
+            this.iconRes = iconRes;
+            this.highlight = highlight;
+            this.packageName = pkg;
+        }
+
+        public Intent intent() {
+            Intent i;
+            if (component != null) {
+                i = new Intent(Intent.ACTION_MAIN).setComponent(component);
+            } else {
+                i = new Intent(launchIntent);
+            }
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+            return i;
+        }
+    }
+
+    /** App dell'auto, nell'ordine del launcher MG (componenti dal file app_pool_list dell'originale). */
+    private static final String[][] CAR_APPS = {
+            {"Veicolo", "com.saicmotor.hmi.vehiclesettings", "com.saicmotor.hmi.vehiclesettings.vehicleconfig.ui.VehicleSettingsActivity", "car"},
+            {"Clima", "com.saicmotor.hmi.hvac", "com.saicmotor.hmi.hvac.HvacActivity", "fan"},
+            {"Energia", "com.saicmotor.hmi.vehiclesettings", "com.saicmotor.hmi.vehiclesettings.chargemanagement.ui.ChargeManagementActivity", "bolt"},
+            {"Consumi", "com.saicmotor.hmi.vehiclesettings", "com.saicmotor.hmi.vehiclesettings.energyconsumption.ui.EnergyConsumptionActivity", "chart"},
+            {"Telefono", "com.saicmotor.hmi.btcall", "com.saicmotor.hmi.btcall.BtCallActivity", "phone"},
+            {"Radio", "com.saicmotor.hmi.radio", "com.saicmotor.hmi.radio.app.RadioHomeActivity", "radio"},
+            {"Musica", "com.saicmotor.hmi.music", "com.saicmotor.hmi.music.ui.activity.MusicActivity", "music"},
+            {"Video USB", "com.saicmotor.hmi.video", "com.saicmotor.hmi.video.ui.activity.UsbVideoActivity", "video"},
+            {"Camera 360°", "com.saicmotor.hmi.aroundview", "com.saicmotor.hmi.aroundview.AVMActivity", "cam"},
+            {"Impostazioni", "com.saicmotor.hmi.systemsettings", "com.saicmotor.hmi.systemsettings.SettingsActivity", "gear"},
+            {"Navigatore", "@nav", "", "nav"},
+            {"EV Route", "com.saicmotor.evrouting", "com.saicmotor.evrouting.view.MainActivity", "route"},
+            {"Spotify", "com.saicmotor.mediacenter", "com.saicmotor.mediacenter.spotify.MainActivity", "wave"},
+            {"Meteo", "com.saicmotor.weathers", "com.saicmotor.weathers.activity.MainActivity", "cloud"},
+            {"Manuale", "com.saicmotor.hmi.pdfreader", "com.saicmotor.hmi.pdfreader.QRcodeActivity", "book"},
+            {"MG Touchpoint", "com.saic.saicmaintenance", "com.saic.saicmaintenance.module.maintaince.MaintaiceEp21Activity", "info"},
+            {"Account", "com.saic.avnlogin", "com.saic.avnlogin.mvp.login.LoginActivity", "user"},
+            {"Chiamata SOS", "com.saicmotor.rescuecall", "com.saicmotor.rescuecall.module.ICallCenterAct", "sos"},
+    };
+
+    /** Navigatori possibili (dall'originale: Telenav, iGo, SAIC). */
+    private static final String[] NAV_PACKAGES = {"com.telenav.app.arp", "com.nng.igo.primong", "com.saicmotor.navigation"};
+
+    /** Pacchetti di sistema da non mostrare tra le app installate. */
+    private static final String[] HIDDEN_PREFIX = {"com.saicmotor.", "com.saic.", "com.allgo.", "com.android.", "android",
+            "com.yfve.", "com.mediatek.", "com.mtk.", "com.google.android.car", "com.telenav.", "com.nng."};
+
+    private final Context ctx;
+    private final PackageManager pm;
+
+    public AppCatalog(Context c) {
+        ctx = c.getApplicationContext();
+        pm = ctx.getPackageManager();
+    }
+
+    public static int iconFor(Context c, String name) {
+        return c.getResources().getIdentifier("ic_" + name, "drawable", c.getPackageName());
+    }
+
+    public List<App> carApps(String navPackageHint) {
+        List<App> out = new ArrayList<>();
+        for (String[] a : CAR_APPS) {
+            int icon = iconFor(ctx, a[3]);
+            if ("@nav".equals(a[1])) {
+                Intent nav = navIntent(navPackageHint);
+                if (nav != null) {
+                    String pkg = nav.getComponent() != null ? nav.getComponent().getPackageName() : String.valueOf(nav.getPackage());
+                    out.add(new App(a[0], null, nav, icon, false, pkg));
+                }
+                continue;
+            }
+            ComponentName cn = new ComponentName(a[1], a[2]);
+            if (exists(cn)) {
+                out.add(new App(a[0], cn, null, icon, false, a[1]));
+            } else {
+                Intent li = pm.getLaunchIntentForPackage(a[1]);
+                if (li != null && !"Energia".equals(a[0]) && !"Consumi".equals(a[0])) {
+                    out.add(new App(a[0], null, li, icon, false, a[1]));
+                }
+            }
+        }
+        return out;
+    }
+
+    public Intent navIntent(String hint) {
+        List<String> candidates = new ArrayList<>();
+        if (hint != null && !hint.isEmpty()) candidates.add(hint);
+        Collections.addAll(candidates, NAV_PACKAGES);
+        for (String p : candidates) {
+            Intent i = pm.getLaunchIntentForPackage(p);
+            if (i != null) return i;
+        }
+        return null;
+    }
+
+    private boolean exists(ComponentName cn) {
+        try {
+            ActivityInfo ai = pm.getActivityInfo(cn, 0);
+            return ai != null && ai.enabled;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    /** App installate dall'utente (DiPlay, Task Manager, ...), in ordine alfabetico. */
+    public List<App> userApps() {
+        Intent q = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> list = pm.queryIntentActivities(q, 0);
+        List<App> out = new ArrayList<>();
+        Set<String> seen = new HashSet<>();
+        for (ResolveInfo ri : list) {
+            String pkg = ri.activityInfo.packageName;
+            if (pkg.equals(ctx.getPackageName()) || hidden(pkg)) continue;
+            String key = pkg + "/" + ri.activityInfo.name;
+            if (!seen.add(key)) continue;
+            String label = String.valueOf(ri.loadLabel(pm));
+            boolean mine = pkg.toLowerCase(Locale.ROOT).contains("diplay") || label.toLowerCase(Locale.ROOT).contains("diplay")
+                    || label.toLowerCase(Locale.ROOT).contains("task manager") || pkg.toLowerCase(Locale.ROOT).contains("taskmanager");
+            out.add(new App(label, new ComponentName(pkg, ri.activityInfo.name), null, 0, mine, pkg));
+        }
+        final Collator col = Collator.getInstance(Locale.ITALY);
+        Collections.sort(out, (x, y) -> {
+            if (x.highlight != y.highlight) return x.highlight ? -1 : 1;
+            return col.compare(x.label, y.label);
+        });
+        Diag.put("app.installate", out.size());
+        return out;
+    }
+
+    private static boolean hidden(String pkg) {
+        for (String p : HIDDEN_PREFIX) {
+            if (pkg.startsWith(p)) return true;
+        }
+        return false;
+    }
+
+    public Drawable originalIcon(App a) {
+        try {
+            if (a.component != null) return pm.getActivityIcon(a.component);
+            return pm.getApplicationIcon(a.packageName);
+        } catch (Exception e) {
+            return ctx.getDrawable(R.drawable.ic_app);
+        }
+    }
+
+    public App findByPackageHint(String... needles) {
+        for (App a : userApps()) {
+            String p = a.packageName.toLowerCase(Locale.ROOT), l = a.label.toLowerCase(Locale.ROOT);
+            for (String n : needles) {
+                if (p.contains(n) || l.contains(n)) return a;
+            }
+        }
+        return null;
+    }
+
+    public boolean launch(App a) {
+        try {
+            ctx.startActivity(a.intent());
+            return true;
+        } catch (Exception e) {
+            Diag.error("avvio " + a.label, e.toString());
+            return false;
+        }
+    }
+
+    public boolean launchComponent(String pkg, String cls) {
+        try {
+            ctx.startActivity(new Intent(Intent.ACTION_MAIN).setComponent(new ComponentName(pkg, cls))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            return true;
+        } catch (Exception e) {
+            Intent li = pm.getLaunchIntentForPackage(pkg);
+            if (li == null) {
+                Diag.error("avvio " + pkg, e.toString());
+                return false;
+            }
+            try {
+                ctx.startActivity(li.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                return true;
+            } catch (Exception e2) {
+                Diag.error("avvio " + pkg, e2.toString());
+                return false;
+            }
+        }
+    }
+}

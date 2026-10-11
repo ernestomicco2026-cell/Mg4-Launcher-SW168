@@ -1,0 +1,6 @@
+build/
+*.class
+tools/android.jar
+tools/d8.jar
+keys/platform.key.pem
+art/preview_*
