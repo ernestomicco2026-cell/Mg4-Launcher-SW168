@@ -17,7 +17,60 @@ Launcher in stile Tesla per l'infotainment della MG4 (EH32, Android Automotive 9
   Con **Modifica** scegli quali app installate mostrare (tocca per nascondere/rimettere, poi **Fine**).
 - **Tema**: automatico (segue giorno/notte dell'auto), notte o giorno; 4 colori d'accento.
 
-## Installazione (prova)
+## Versioni
+
+### 0.2.0 — 11 ottobre 2026
+
+**Schermata**
+- Schermo intero: barra di stato e dock MG nascosti, il launcher usa tutti i 1920×720 px
+  (trascinando dal bordo le barre compaiono sopra, senza spostare il contenuto).
+- Parte già prima dello sblocco dell'utente Android, come la home originale (avvio più rapido all'accensione).
+  Le impostazioni ora stanno nella memoria disponibile all'avvio: colore auto, accento e tema vanno reimpostati una volta.
+
+**Media**
+- Radio riconosciuta correttamente quando è in riproduzione (sorgente audio 3 = radio).
+- Se l'auto indica una sorgente non gestita (es. video USB) il launcher non la confonde più con un'altra.
+
+**Navigazione**
+- Il pannello Mappa si aggiorna all'avvio della guida: oltre a `isMapNavigating` usa lo stato guida,
+  la distanza rimanente che cambia e gli avvisi diretti del navigatore (TomTom / navimaps).
+- La card mostra la distanza dalla prossima manovra e la via, oltre a minuti rimanenti e orario di arrivo.
+
+**Clima**
+- Corretto il rimbalzo della temperatura al primo tocco (23 → 24 → 23): il valore scelto resta fermo
+  per qualche secondo mentre l'auto lo applica.
+- Nuovo controllo della ventola nella barra in basso: ‹ OFF / 1…11 / A (automatico) ›.
+  Tocca l'icona = app Clima, tieni premuto = accendi/spegni il clima.
+
+**App**
+- Pulsante **Modifica** nella schermata App: scegli quali app installate mostrare.
+
+**Aggiornamenti**
+- Impostazioni → **Aggiornamenti**: controlla, scarica e installa le nuove versioni da GitHub
+  (cartella `releases/` del repository o Release GitHub), senza computer.
+- Token GitHub opzionale per il repository privato, inseribile dalle impostazioni o via adb.
+
+**Note**
+- Avviso nel README: progetto non ufficiale.
+
+### 0.1.0 — prima versione
+
+- Home in stile Tesla: autonomia, percentuale, barra batteria con tacca del limite di ricarica, stato di ricarica e V2L.
+- MG4 disegnata dalla foto ufficiale e ricolorabile con gli 8 colori della gamma, tetto nero opzionale.
+- Schede **Mappa** (navigatore MG, Casa/Lavoro, indicazioni di CarPlay/Android Auto), **Media**
+  (Radio, USB, Bluetooth, Online, CarPlay/Android Auto con frecce ‹ › e comandi indietro/play/avanti)
+  e **CarPlay/Android Auto**, che compare da sola quando colleghi il telefono.
+- Barra in basso: temperatura clima, mini-player, Telefono, Radio, Telecamera 360°, Impostazioni, App.
+- Griglia App: app dell'auto con icone disegnate + app installate aggiunte in automatico con icona ridisegnata.
+- Tema automatico (giorno/notte dell'auto), notte o giorno; 4 colori d'accento.
+- Colonna **Diagnostica** nelle impostazioni con i valori grezzi dei servizi dell'auto.
+- Compilazione senza Gradle e firma con la chiave platform AOSP.
+
+### Da sistemare
+- "Ricarica fino a" mostra un valore sbagliato (5%): serve il valore grezzo dalla Diagnostica.
+- Il consumo non viene ancora mostrato.
+
+## Installazione
 
 ```bash
 adb install -r -f MG4Launcher-0.2.0.apk
