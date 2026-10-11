@@ -2,6 +2,9 @@
 
 Launcher in stile Tesla per l'infotainment della MG4 (EH32, Android Automotive 9).
 
+> Progetto amatoriale e **non ufficiale**: non è affiliato né approvato da MG Motor o SAIC Motor.
+> I nomi MG / MG4 servono solo a indicare l'auto compatibile. Installalo e usalo a tuo rischio.
+
 - **Sinistra**: autonomia, percentuale, barra batteria (con tacca del limite di ricarica), stato di ricarica/V2L
   e la tua MG4 ricolorabile (8 colori MG4 + tetto nero). Tocca → Gestione energia. Tieni premuto → impostazioni del launcher.
 - **Destra**: schede **Mappa** (guida in corso dal navigatore MG o da CarPlay/AA, oppure Navigatore/Casa/Lavoro),
@@ -32,7 +35,7 @@ e parte già prima dello sblocco dell'utente, come la home originale.
 Impostazioni → **Aggiornamenti** → *Controlla aggiornamenti*: legge l'ultima release di questo repository e,
 se c'è una versione più nuova, *Scarica e installa* la installa da sola (il launcher si riavvia).
 
-Il repository è privato, quindi serve un token GitHub di sola lettura:
+Se il repository è pubblico non serve altro. Se è privato serve un token GitHub di sola lettura:
 GitHub → Settings → Developer settings → Fine-grained tokens → accesso solo a `mg4-launcher`, permesso *Contents: Read-only*.
 Si può scrivere nel campo delle impostazioni oppure inviarlo dal computer:
 
