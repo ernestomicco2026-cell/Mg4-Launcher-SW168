@@ -32,7 +32,10 @@ public final class VehicleClient {
     private static final int CHG_RANGE_VALID = 30;     // bool  getCurrentEnduranceMileageV
     private static final int CHG_DISCHARGE_STATUS = 48;// int   getDischrgControlStatus
     private static final int CHG_BATTERY_VOLT = 64;    // float getPowerBatteryVol
-    private static final int CHG_CONSUMPTION = 66;     // float getElecCsumpPerKm
+    private static final int CHG_CONSUMPTION = 66;     // float getElecCsumpPerKm (ultimo km, kWh/100km)
+    private static final int CHG_CONSUMPTION_LIST = 68;// String getElecCsumpPerKmList (JSON, ultimi 50 km)
+    private static final int CHG_ACC_AFTER_CHARGE = 73, CHG_ACC_AFTER_START = 74,
+            CHG_TOT_AFTER_CHARGE = 75, CHG_TOT_AFTER_START = 76;   // solo diagnostica
 
     private static final String AC = "com.saicmotor.sdk.vehiclesettings.IAirConditionService";
     private static final int AC_OPEN_POWER = 5;
@@ -62,8 +65,8 @@ public final class VehicleClient {
         public int chargingStatus = -1;   // codici SAIC, vedi ChargeText
         public int predictMinutes = -1;
         public float chargeKw = 0;
-        public int chargeLimit = -1;      // %
-        public float consumption = -1;    // kWh/100km (da verificare sull'auto)
+        public int chargeLimit = -1;      // % (convertito dal codice SAIC)
+        public float consumption = -1;    // kWh/100km, media degli ultimi 50 km come la pagina Energia
         public int dischargeStatus = -1;
         public int acTemp = -1;           // °C, 17 = LO, 33 = HI
         public int hvacPower = -1;
@@ -159,6 +162,38 @@ public final class VehicleClient {
         return b;
     }
 
+    /**
+     * Limite di ricarica: il servizio restituisce un codice, non una percentuale.
+     * 1 = 40%, 2 = 50% … 5 = 80% (modalità salute batteria) … 7 = 100% (come l'app MG iSmart).
+     */
+    static int limitPercent(int code) {
+        if (code >= 1 && code <= 7) return (code + 3) * 10;
+        return -1;
+    }
+
+    /** Media dell'elenco JSON dei consumi per km (es. "[15.2,16.0,…]"), ignorando i valori non validi. */
+    static float average(String json) {
+        if (json == null) return -1;
+        float sum = 0;
+        int n = 0;
+        for (String part : json.replace("[", "").replace("]", "").split(",")) {
+            try {
+                float v = Float.parseFloat(part.trim());
+                if (v > 0 && v < 100) {
+                    sum += v;
+                    n++;
+                }
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return n == 0 ? -1 : sum / n;
+    }
+
+    private static int count(String json) {
+        if (json == null || json.length() < 3) return 0;
+        return json.split(",").length;
+    }
+
     private void poll() {
         State s = new State();
         s.connected = hub.isConnected();
@@ -170,19 +205,38 @@ public final class VehicleClient {
                     s.rangeKm = Rpc.callInt(c, CHG, CHG_RANGE);
                     s.chargingStatus = Rpc.callInt(c, CHG, CHG_STATUS);
                     s.predictMinutes = Rpc.callInt(c, CHG, CHG_PREDICT_TIME);
-                    s.chargeLimit = Rpc.callInt(c, CHG, CHG_LIMIT_SOC);
+                    int limitCode = Rpc.callInt(c, CHG, CHG_LIMIT_SOC);
+                    s.chargeLimit = limitPercent(limitCode);
                     s.dischargeStatus = Rpc.callInt(c, CHG, CHG_DISCHARGE_STATUS);
                     float amps = Rpc.callFloat(c, CHG, CHG_CURRENT);
                     float volts = Rpc.callFloat(c, CHG, CHG_BATTERY_VOLT);
                     s.chargeKw = Math.abs(amps * volts) / 1000f;
-                    s.consumption = Rpc.callFloat(c, CHG, CHG_CONSUMPTION);
+                    float lastKm = Rpc.callFloat(c, CHG, CHG_CONSUMPTION);
+                    String list = null;
+                    try {
+                        list = Rpc.callString(c, CHG, CHG_CONSUMPTION_LIST);
+                    } catch (Exception e) {
+                        Diag.error("consumo.elenco", e.toString());
+                    }
+                    float avg = average(list);
+                    s.consumption = avg > 0 ? avg : lastKm;
+                    Diag.putQuiet("veicolo.consumo.ultimoKm", lastKm);
+                    Diag.put("veicolo.consumo.media50km", avg > 0 ? String.format(java.util.Locale.ITALY, "%.1f", avg)
+                            + " (" + count(list) + " km)" : "nessun dato");
+                    try {
+                        Diag.put("veicolo.consumo.altri", "accDaAvvio " + Rpc.callFloat(c, CHG, CHG_ACC_AFTER_START)
+                                + " · totDaAvvio " + Rpc.callFloat(c, CHG, CHG_TOT_AFTER_START)
+                                + " · accDaRicarica " + Rpc.callFloat(c, CHG, CHG_ACC_AFTER_CHARGE)
+                                + " · totDaRicarica " + Rpc.callFloat(c, CHG, CHG_TOT_AFTER_CHARGE));
+                    } catch (Exception e) {
+                        Diag.error("consumo.altri", e.toString());
+                    }
                     Diag.put("veicolo.soc", s.soc + " (valido " + Rpc.callBool(c, CHG, CHG_SOC_VALID) + ")");
                     Diag.put("veicolo.autonomia", s.rangeKm + " (valido " + Rpc.callBool(c, CHG, CHG_RANGE_VALID) + ")");
                     Diag.put("veicolo.statoRicarica", s.chargingStatus);
                     Diag.put("veicolo.minutiRicarica", s.predictMinutes);
-                    Diag.put("veicolo.correnteA/tensioneV", amps + " / " + volts);
-                    Diag.put("veicolo.limiteRicarica", s.chargeLimit);
-                    Diag.put("veicolo.consumo", s.consumption);
+                    Diag.putQuiet("veicolo.correnteA/tensioneV", amps + " / " + volts);
+                    Diag.put("veicolo.limiteRicarica", "codice " + limitCode + " = " + s.chargeLimit + "%");
                     Diag.put("veicolo.statoScarica(V2L)", s.dischargeStatus);
                 }
             } catch (Exception e) {

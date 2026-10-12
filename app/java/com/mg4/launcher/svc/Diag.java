@@ -47,6 +47,11 @@ public final class Diag {
         }
     }
 
+    /** Come put, ma senza riempire gli eventi (valori che cambiano di continuo, es. corrente). */
+    public static synchronized void putQuiet(String key, Object value) {
+        VALUES.put(key, String.valueOf(value));
+    }
+
     public static synchronized void error(String where, String msg) {
         String line = now() + "  " + where + ": " + msg;
         Log.w(TAG, line);
@@ -156,10 +161,6 @@ public final class Diag {
         try {
             File[] ext = c.getExternalFilesDirs(null);
             if (ext != null) for (File f : ext) if (f != null) dirs.add(f);
-        } catch (Exception ignored) {
-        }
-        try {
-            dirs.add(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
         } catch (Exception ignored) {
         }
         dirs.add(c.getFilesDir());

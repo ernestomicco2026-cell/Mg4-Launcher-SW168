@@ -179,7 +179,7 @@ public final class HomeView extends LinearLayout {
         p.addView(car, Ui.margins(Ui.lpWeight(-1, 0, 1), 0, dp(4), 0, dp(4)));
 
         LinearLayout chips = Ui.row(c);
-        chipConsumo = addChip(c, chips, "Consumo", true);
+        chipConsumo = addChip(c, chips, "Consumo medio", true);
         chipLimite = addChip(c, chips, "Ricarica fino a", true);
         chipV2l = addChip(c, chips, "V2L", false);
         p.addView(chips, new LayoutParams(-1, -2));

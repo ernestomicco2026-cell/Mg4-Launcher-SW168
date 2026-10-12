@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.4.0](releases/MG4Launcher-0.4.0.apk)**
+**Ultima versione / Latest version: [0.4.1](releases/MG4Launcher-0.4.1.apk)**
 
 > Progetto amatoriale e **non ufficiale**: non è affiliato né approvato da MG Motor o SAIC Motor.
 > I nomi MG / MG4 servono solo a indicare l'auto compatibile. Installalo e usalo a tuo rischio.
@@ -49,7 +49,7 @@ Il firmware MG blocca l'installazione normale delle app: l'opzione `-f` la perme
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.4.0.apk
+   adb install -r -f MG4Launcher-0.4.1.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -101,6 +101,13 @@ Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartell
 
 ### Versioni
 
+#### 0.4.1 — 12 ottobre 2026
+- "Ricarica fino a" corretto: l'auto restituisce un codice (5 = 80%), ora convertito in percentuale; anche la tacca
+  del limite sulla barra della batteria è nel punto giusto.
+- Consumo: ora è la **media degli ultimi 50 km**, come la pagina Energia dell'auto, invece del valore dell'ultimo km.
+  In Diagnostica ci sono anche gli altri valori di consumo dell'auto, per il confronto.
+- Log più leggibile: corrente e tensione non riempiono più gli eventi; niente più tentativo di scrivere in Download.
+
 #### 0.4.0 — 11 ottobre 2026
 - Aggiornamenti dalle impostazioni: l'APK non viene più salvato in un file temporaneo ma va direttamente
   all'installazione (installazione interna come `adb install -r -f`); download di riserva da raw.githubusercontent.com
@@ -140,8 +147,6 @@ Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartell
 - Griglia App con le app installate aggiunte in automatico; tema automatico, notte o giorno; Diagnostica.
 
 #### In lavorazione
-- "Ricarica fino a" mostra un valore sbagliato.
-- Il consumo non viene ancora mostrato.
 - Verifica sull'auto delle indicazioni del navigatore MG.
 
 ### Compilare
@@ -220,7 +225,7 @@ The MG firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.4.0.apk
+   adb install -r -f MG4Launcher-0.4.1.apk
    ```
 3. Make it the default home:
    ```bash
@@ -272,6 +277,13 @@ With a USB stick plugged in, the file is written there too, in the same folder.
 
 ### Changelog
 
+#### 0.4.1 — 12 October 2026
+- "Ricarica fino a" (charge limit) fixed: the car returns a code (5 = 80%), now converted to a percentage; the
+  limit mark on the battery bar is in the right place too.
+- Consumption: now the **average of the last 50 km**, like the car's Energy page, instead of the last-km value.
+  Diagnostics also lists the car's other consumption values for comparison.
+- Cleaner log: current and voltage no longer flood the events; no more attempt to write to Download.
+
 #### 0.4.0 — 11 October 2026
 - Updates from the settings: the APK is no longer saved to a temporary file but streamed straight into the installer
   (internal install like `adb install -r -f`); fallback download from raw.githubusercontent.com and precise error
@@ -311,8 +323,6 @@ With a USB stick plugged in, the file is written there too, in the same folder.
 - App grid with installed apps added automatically; auto, night or day theme; Diagnostics.
 
 #### Work in progress
-- "Ricarica fino a" (charge limit) shows a wrong value.
-- Energy consumption is not shown yet.
 - On-car check of MG navigator guidance.
 
 ### Building
