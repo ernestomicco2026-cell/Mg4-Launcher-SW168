@@ -4,11 +4,14 @@
 
 **Ultima versione / Latest version: [0.4.1](releases/MG4Launcher-0.4.1.apk)**
 
+> ⚠️ **Compatibilità / Compatibility:** solo infotainment **SW168 SAIC 1.0+** · only **SW168 SAIC 1.0+** infotainment.
+> Versione per **SW169 Color Radio** in lavorazione · **SW169 Color Radio** version in progress.
+
 > Progetto amatoriale e **non ufficiale**: non è affiliato né approvato da MG Motor o SAIC Motor.
-> I nomi MG / MG4 servono solo a indicare l'auto compatibile. Installalo e usalo a tuo rischio.
+> I nomi MG / MG4 servono solo a indicare l'auto compatibile (infotainment SW168). Installalo e usalo a tuo rischio.
 >
 > Hobby project, **not official**: not affiliated with or endorsed by MG Motor or SAIC Motor.
-> The MG / MG4 names only identify the compatible car. Install and use it at your own risk.
+> The MG / MG4 names only identify the compatible car (SW168 infotainment). Install and use it at your own risk.
 
 ---
 <img width="1920" height="720" alt="home" src="https://github.com/user-attachments/assets/8203ad98-edb2-4a32-a596-4ed198426cd3" />
@@ -17,7 +20,11 @@
 
 ## Italiano
 
-Launcher in stile Tesla per l'infotainment della **MG4** (EH32, Android Automotive 9).
+Launcher in stile Tesla per l'infotainment della **MG4** con software **SW168 SAIC 1.0+** (EH32, Android Automotive 9).
+
+**Compatibilità:** funziona **solo con il software SW168 SAIC 1.0 e successivi**. Con altri software dell'infotainment
+i servizi dell'auto possono essere diversi e il launcher potrebbe non funzionare (o funzionare solo in parte): non installarlo.
+Sto lavorando alla versione per **SW169 Color Radio**.
 Sostituisce la schermata home originale mantenendone le funzioni, con una grafica nuova e pulita.
 
 ### Cosa fa
@@ -46,8 +53,8 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
 
 ### Installazione
 
-Serve un computer con [adb](https://developer.android.com/tools/releases/platform-tools) collegato all'auto.
-Il firmware MG blocca l'installazione normale delle app: l'opzione `-f` la permette.
+Solo per infotainment **SW168 SAIC 1.0+**. Serve un computer con [adb](https://developer.android.com/tools/releases/platform-tools) collegato all'auto.
+Il firmware MG SW168 blocca l'installazione normale delle app: l'opzione `-f` la permette.
 
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
@@ -174,6 +181,8 @@ allega da sola `releases/MG4Launcher-X.Y.Z.apk` (e, se la descrizione è vuota, 
 
 ### Come comunica con l'auto
 
+Servizi del software **SW168 SAIC 1.0+** (ricavati dall'analisi di questo firmware; su SW169 possono essere diversi).
+
 | Funzione | Servizio | Note |
 |---|---|---|
 | Energia, ricarica, V2L | `com.saicmotor.service.vehicle` → hub → `vehiclecharging` | |
@@ -195,7 +204,11 @@ il pannello Mappa mostra le indicazioni e apre il navigatore a schermo intero.
 
 ## English
 
-Tesla-style launcher for the **MG4** infotainment system (EH32, Android Automotive 9).
+Tesla-style launcher for the **MG4** infotainment system running **SW168 SAIC 1.0+** software (EH32, Android Automotive 9).
+
+**Compatibility:** works **only with SW168 SAIC 1.0 and later**. Other infotainment software versions use different
+car services and the launcher may not work (or only partly): do not install it.
+A version for **SW169 Color Radio** is in progress.
 It replaces the original home screen, keeping its features, with a new, clean design.
 
 ### Features
@@ -226,8 +239,8 @@ The app's interface is in Italian.
 
 ### Installation
 
-You need a computer with [adb](https://developer.android.com/tools/releases/platform-tools) connected to the car.
-The MG firmware blocks normal app installs; the `-f` option allows it.
+Only for **SW168 SAIC 1.0+** infotainment. You need a computer with [adb](https://developer.android.com/tools/releases/platform-tools) connected to the car.
+The MG SW168 firmware blocks normal app installs; the `-f` option allows it.
 
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
@@ -351,6 +364,8 @@ then commit and push. The launcher checks `releases/latest.json` and GitHub Rele
 (tag `vX.Y.Z` with the APK attached) and offers the newest one.
 
 ### How it talks to the car
+
+Services of the **SW168 SAIC 1.0+** software (taken from analysing this firmware; they may differ on SW169).
 
 | Feature | Service | Notes |
 |---|---|---|
