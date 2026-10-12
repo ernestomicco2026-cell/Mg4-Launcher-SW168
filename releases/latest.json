@@ -2,5 +2,5 @@
   "version": "0.4.1",
   "apk": "releases/MG4Launcher-0.4.1.apk",
   "size": 339704,
-  "notes": "Ricarica fino a corretto (codice auto convertito in %), consumo medio degli ultimi 50 km, log più leggibile."
+  "notes": "Ricarica fino a corretto (codice auto convertito in %), consumo medio degli ultimi 50 km, V2L cliccabile (apre la scarica), log più leggibile."
 }

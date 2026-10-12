@@ -245,6 +245,21 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         catalog.launchComponent(pkg, cls);
     }
 
+    /** Come la home originale (EnergyView): ChargeManagementActivity con l'extra "module" = scheda da aprire. */
+    @Override
+    public void openEnergy(String module) {
+        try {
+            startActivity(new Intent(Intent.ACTION_MAIN)
+                    .addCategory(Intent.CATEGORY_HOME)
+                    .setComponent(new android.content.ComponentName("com.saicmotor.hmi.vehiclesettings",
+                            "com.saicmotor.hmi.vehiclesettings.chargemanagement.ui.ChargeManagementActivity"))
+                    .putExtra("module", module)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        } catch (Exception e) {
+            com.mg4.launcher.svc.Diag.error("energia " + module, e.toString());
+        }
+    }
+
     @Override
     public void launchNavigator() {
         launchNavigator(prefs.navApp());

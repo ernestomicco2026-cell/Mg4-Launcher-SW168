@@ -1,0 +1,47 @@
+# Quando pubblichi una release (tag vX.Y.Z), allega in automatico releases/MG4Launcher-X.Y.Z.apk
+# e, se la descrizione è vuota, usa le note di releases/latest.json.
+name: Allega APK alla release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag della release (es. v0.4.1)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  allega:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
+
+      - name: Allega l'APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: |
+          VER="${TAG#v}"
+          APK="releases/MG4Launcher-${VER}.apk"
+          if [ ! -f "$APK" ]; then
+            echo "::error::Non trovo $APK nel repository per il tag $TAG"
+            ls releases
+            exit 1
+          fi
+          gh release upload "$TAG" "$APK" --clobber -R "$GITHUB_REPOSITORY"
+          BODY="$(gh release view "$TAG" -R "$GITHUB_REPOSITORY" --json body -q .body)"
+          if [ -z "$BODY" ] && [ -f releases/latest.json ]; then
+            NOTES="$(jq -r 'select(.version=="'"$VER"'") | .notes' releases/latest.json)"
+            if [ -n "$NOTES" ]; then
+              gh release edit "$TAG" -R "$GITHUB_REPOSITORY" --notes "$NOTES
+
+          Installazione: \`adb install -r -f MG4Launcher-${VER}.apk\` oppure Impostazioni del launcher → Aggiornamenti."
+            fi
+          fi
+          echo "Allegato $APK alla release $TAG"

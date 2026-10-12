@@ -20,7 +20,7 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
 ### Cosa fa
 
 - **Auto e batteria** (a sinistra): autonomia, percentuale, barra batteria con tacca del limite di ricarica,
-  stato di ricarica e V2L, temperatura esterna. La tua MG4 ricolorabile con gli 8 colori della gamma, tetto nero opzionale.
+  stato di ricarica e V2L (tocca V2L per la scarica), temperatura esterna. La tua MG4 ricolorabile con gli 8 colori della gamma, tetto nero opzionale.
   Tocca l'auto → Gestione energia. Tienila premuta → impostazioni del launcher.
 - **Mappa / Media / CarPlay** (a destra):
   - **Mappa**: indicazioni del navigatore (prossima manovra, via, arrivo). Senza guida: Navigatore, Casa, Lavoro
@@ -107,6 +107,8 @@ Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartell
 - Consumo: ora è la **media degli ultimi 50 km**, come la pagina Energia dell'auto, invece del valore dell'ultimo km.
   In Diagnostica ci sono anche gli altri valori di consumo dell'auto, per il confronto.
 - Log più leggibile: corrente e tensione non riempiono più gli eventi; niente più tentativo di scrivere in Download.
+- **V2L** cliccabile: apre direttamente la scheda Scarica (presa esterna) della gestione energia.
+- Release su GitHub: l'APK viene allegato in automatico (GitHub Actions) quando si pubblica la release.
 
 #### 0.4.0 — 11 ottobre 2026
 - Aggiornamenti dalle impostazioni: l'APK non viene più salvato in un file temporaneo ma va direttamente
@@ -164,6 +166,8 @@ Prima di compilare metti in `tools/` i due file non inclusi nel repository:
 copia l'APK in `releases/`, aggiorna `releases/latest.json` (versione, nome del file e dimensione) e le Versioni
 qui sopra, poi commit e push. Il launcher controlla `releases/latest.json` e anche le Release di GitHub
 (tag `vX.Y.Z` con l'APK allegato) e propone la più recente.
+Per la Release di GitHub basta crearla con il tag `vX.Y.Z`: l'automazione `.github/workflows/allega-apk.yml`
+allega da sola `releases/MG4Launcher-X.Y.Z.apk` (e, se la descrizione è vuota, usa le note di `latest.json`).
 
 ### Come comunica con l'auto
 
@@ -194,7 +198,7 @@ It replaces the original home screen, keeping its features, with a new, clean de
 ### Features
 
 - **Car and battery** (left): range, percentage, battery bar with a charge-limit mark, charging and V2L status,
-  outside temperature. Your MG4, recolourable with the 8 factory colours, optional black roof.
+  outside temperature (tap V2L for discharging). Your MG4, recolourable with the 8 factory colours, optional black roof.
   Tap the car → Energy management. Long-press it → launcher settings.
 - **Map / Media / CarPlay** (right):
   - **Map**: navigation guidance (next manoeuvre, street, arrival). When not navigating: Navigator, Home, Work
@@ -283,6 +287,8 @@ With a USB stick plugged in, the file is written there too, in the same folder.
 - Consumption: now the **average of the last 50 km**, like the car's Energy page, instead of the last-km value.
   Diagnostics also lists the car's other consumption values for comparison.
 - Cleaner log: current and voltage no longer flood the events; no more attempt to write to Download.
+- **V2L** is tappable: opens the Discharge (external socket) tab of energy management.
+- GitHub releases: the APK is attached automatically (GitHub Actions) when the release is published.
 
 #### 0.4.0 — 11 October 2026
 - Updates from the settings: the APK is no longer saved to a temporary file but streamed straight into the installer

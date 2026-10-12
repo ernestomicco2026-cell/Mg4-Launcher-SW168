@@ -29,6 +29,9 @@ public final class HomeView extends LinearLayout {
 
         void launch(String pkg, String cls);
 
+        /** Gestione energia dell'auto su una scheda: "ChargeManagementFragment" o "DischargeManagementFragment" (V2L). */
+        void openEnergy(String module);
+
         void launchNavigator();
 
         void launchNavigator(String which);
@@ -139,8 +142,7 @@ public final class HomeView extends LinearLayout {
         p.setBackground(Ui.pressable(c, t.panel, 24, t));
         p.setPadding(dp(32), dp(28), dp(32), dp(24));
         p.setClickable(true);
-        p.setOnClickListener(v -> host.launch("com.saicmotor.hmi.vehiclesettings",
-                "com.saicmotor.hmi.vehiclesettings.chargemanagement.ui.ChargeManagementActivity"));
+        p.setOnClickListener(v -> host.openEnergy("ChargeManagementFragment"));
         p.setOnLongClickListener(v -> {
             host.openSettings();
             return true;
@@ -182,6 +184,12 @@ public final class HomeView extends LinearLayout {
         chipConsumo = addChip(c, chips, "Consumo medio", true);
         chipLimite = addChip(c, chips, "Ricarica fino a", true);
         chipV2l = addChip(c, chips, "V2L", false);
+        // V2L: tocca per aprire la scheda Scarica (presa esterna) della gestione energia
+        View v2l = (View) chipV2l.getParent();
+        v2l.setBackground(Ui.pressable(c, t.chip, 14, t));
+        v2l.setClickable(true);
+        v2l.setContentDescription("V2L, apri la gestione della scarica");
+        v2l.setOnClickListener(v -> host.openEnergy("DischargeManagementFragment"));
         p.addView(chips, new LayoutParams(-1, -2));
         return p;
     }
