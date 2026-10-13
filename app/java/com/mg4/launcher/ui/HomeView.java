@@ -52,7 +52,7 @@ public final class HomeView extends LinearLayout {
     // pannello auto
     private TextView clockTv;
     private TextView acBtn, autoBtn;
-    private FrameLayout defrostBtn, frontFogBtn, rearFogBtn;
+    private FrameLayout frontFogBtn, rearFogBtn;
     private TextView rangeTv, socTv, statusTv, chipConsumo, chipLimite, chipV2l;
     private ImageView statusIcon;
     private Bars.Progress battery;
@@ -265,7 +265,6 @@ public final class HomeView extends LinearLayout {
         fanMax = s.fanMax;
         styleToggle(acBtn, s.acOn);
         styleToggle(autoBtn, s.autoOn);
-        styleToggle(defrostBtn, s.defrostOn);
         frontFogBtn.setVisibility(s.hasFrontFog ? VISIBLE : GONE);
         styleToggle(frontFogBtn, s.frontFog, 0xFF34C77B);
         styleToggle(rearFogBtn, s.rearFog, 0xFFFFB020);
@@ -1138,13 +1137,11 @@ public final class HomeView extends LinearLayout {
                 v -> changeFan(1)));
         bar.addView(fanGroup, Ui.margins(new LayoutParams(-2, dp(76)), dp(10), 0, 0, 0));
 
-        // A/C, AUTO, sbrinamento parabrezza
+        // A/C e AUTO (lo sbrinamento ha il tasto fisico)
         acBtn = toggleText(c, "A/C", L.s(R.string.ac_desc), v -> vehicle.toggleAc());
         bar.addView(acBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(10), 0, 0, 0));
         autoBtn = toggleText(c, "AUTO", L.s(R.string.auto_desc), v -> vehicle.toggleAuto());
         bar.addView(autoBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(8), 0, 0, 0));
-        defrostBtn = toggleIcon(c, R.drawable.ic_defrost, L.s(R.string.defrost_desc), v -> vehicle.toggleFrontDefrost());
-        bar.addView(defrostBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(8), 0, 0, 0));
 
         bar.addView(Ui.divider(c, t.track, 48));
 

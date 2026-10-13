@@ -70,7 +70,7 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
   - **CarPlay / Android Auto**: la scheda compare da sola quando colleghi il telefono.
 - **Barra in basso**: clima con pulsanti grandi da usare in guida — temperatura ‹ › (17 = LO … 33 = HI),
   ventola ‹ › (OFF / 1…11 / A = automatico; tocca l'icona = app Clima, tieni premuto = accendi/spegni),
-  **A/C**, **AUTO** e **sbrinamento parabrezza** —, mini-player compatto, **fendinebbia** (anteriori se presenti
+  **A/C** e **AUTO** —, mini-player compatto, **fendinebbia** (anteriori se presenti
   e retronebbia: sulla MG4 si accendono solo dallo schermo), Telefono, Radio, Telecamera 360°, Impostazioni.
 - **In alto a destra**: indicatori di **Bluetooth**, **Wi-Fi** e rete **4G** della T-Box (con le tacche del segnale).
 - **App**: scorri la home verso sinistra per le app dell'auto e quelle che installi tu,
@@ -149,7 +149,7 @@ Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartell
 - **Fendinebbia** nella barra in basso: retronebbia sempre, anteriori se l'auto li ha (stessi comandi della barra
   di stato originale); icona verde / ambra quando sono accesi.
 - **Clima più grande e più comodo in guida**: temperatura e ventola con pulsanti grandi, nuovi pulsanti **A/C**,
-  **AUTO** e **sbrinamento parabrezza** con lo stato acceso/spento; mini-player più compatto.
+  **AUTO** con lo stato acceso/spento; mini-player più compatto.
 - **Indicatori in alto a destra**: Bluetooth (acceso / collegato), Wi-Fi (con intensità) e rete mobile della T-Box
   (2G / 3G / 4G con le tacche), letti come la barra di stato originale.
 - Media: con il telefono collegato le sorgenti non scelte mostrano solo l'icona, per lasciare spazio agli indicatori.
@@ -285,8 +285,8 @@ It replaces the original home screen, keeping its features, with a new, clean de
     tune in) and FM/DAB favourites with logos.
   - **CarPlay / Android Auto**: the tab appears by itself when you connect a phone.
 - **Bottom bar**: climate with large buttons for use while driving — temperature ‹ › (17 = LO … 33 = HI),
-  fan ‹ › (OFF / 1…11 / A = auto; tap the icon = Climate app, long-press = climate on/off), **A/C**, **AUTO** and
-  **windscreen defrost** —, compact mini player, **fog lights** (front if fitted, and rear: on the MG4 they can only be
+  fan ‹ › (OFF / 1…11 / A = auto; tap the icon = Climate app, long-press = climate on/off), **A/C** and **AUTO** —,
+  compact mini player, **fog lights** (front if fitted, and rear: on the MG4 they can only be
   switched from the screen), Phone, Radio, 360° camera, Settings.
 - **Top right**: **Bluetooth**, **Wi-Fi** and T-Box **4G** indicators (with signal bars).
 - **Apps**: swipe the home screen left for the car's apps and the ones you install,
@@ -364,8 +364,8 @@ With a USB stick plugged in, the file is written there too, in the same folder.
 - **Clock** in the battery panel, as large as the range; the percentage moves next to the bar.
 - **Fog lights** in the bottom bar: rear always, front if the car has them (same commands as the original status bar);
   green / amber icon when on.
-- **Bigger, easier climate controls while driving**: large temperature and fan buttons, new **A/C**, **AUTO** and
-  **windscreen defrost** buttons with on/off state; more compact mini player.
+- **Bigger, easier climate controls while driving**: large temperature and fan buttons, new **A/C** and
+  **AUTO** buttons with on/off state; more compact mini player.
 - **Top-right indicators**: Bluetooth (on / connected), Wi-Fi (with strength) and T-Box mobile network
   (2G / 3G / 4G with bars), read like the original status bar.
 - Media: with a phone connected, unselected sources show only their icon to make room for the indicators.
