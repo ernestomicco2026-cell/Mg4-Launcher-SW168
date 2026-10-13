@@ -1,11 +1,11 @@
-# MG4 Launcher
+# MG4 Launcher — SW168 SAIC 1.0+
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
 **Ultima versione / Latest version: [0.4.1](releases/MG4Launcher-0.4.1.apk)**
 
 > ⚠️ **Compatibilità / Compatibility:** solo infotainment **SW168 SAIC 1.0+** · only **SW168 SAIC 1.0+** infotainment.
-> Versione per **SW169 Color Radio** in lavorazione · **SW169 Color Radio** version in progress.
+> Per **SW169 Color Radio** usa [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169) · for **SW169 Color Radio** use [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169).
 
 > Progetto amatoriale e **non ufficiale**: non è affiliato né approvato da MG Motor o SAIC Motor.
 > I nomi MG / MG4 servono solo a indicare l'auto compatibile (infotainment SW168). Installalo e usalo a tuo rischio.
@@ -18,13 +18,36 @@
 
 ---
 
+## Quale versione installare? / Which version should I install?
+
+Ci sono **due launcher diversi**, uno per ciascun software dell'infotainment MG4. Non sono intercambiabili:
+servizi dell'auto, radio, media e clima sono diversi, e con la versione sbagliata il launcher si apre ma non legge
+nulla dall'auto ("Servizio veicolo non disponibile").
+
+| Software dell'auto | Repository | File APK |
+|---|---|---|
+| **SW168 SAIC 1.0+** | **questo repository** | `MG4Launcher-X.Y.Z.apk` |
+| **SW169 Color Radio** | [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169) | `MG4Launcher-SW169-X.Y.Z.apk` |
+
+**Come sapere quale software hai:** con il computer collegato all'auto
+`adb shell getprop ro.build.mt2712.version` → se inizia con `SWI69-` è la **SW169**, altrimenti (es. `SWI68-…`) è la **SW168**.
+Se il launcher è già installato: impostazioni → riga **MG4 Launcher X.Y.Z · repository** sotto *Aggiornamenti*;
+il nome del repository dice quale versione hai. Se nella *Diagnostica* compaiono `veicolo.bind = fallito` e
+`media.usb.bind = fallito`, hai installato la versione SW168 su un'auto SW169 (o viceversa).
+
+There are **two different launchers**, one per MG4 infotainment software, and they are not interchangeable.
+Check your software with `adb shell getprop ro.build.mt2712.version` (starts with `SWI69-` = SW169, otherwise SW168) and
+use the matching repository above.
+
+---
+
 ## Italiano
 
 Launcher in stile Tesla per l'infotainment della **MG4** con software **SW168 SAIC 1.0+** (EH32, Android Automotive 9).
 
 **Compatibilità:** funziona **solo con il software SW168 SAIC 1.0 e successivi**. Con altri software dell'infotainment
 i servizi dell'auto possono essere diversi e il launcher potrebbe non funzionare (o funzionare solo in parte): non installarlo.
-Sto lavorando alla versione per **SW169 Color Radio**.
+Per **SW169 Color Radio** c'è un launcher dedicato: [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169).
 Sostituisce la schermata home originale mantenendone le funzioni, con una grafica nuova e pulita.
 
 ### Cosa fa
@@ -181,7 +204,7 @@ allega da sola `releases/MG4Launcher-X.Y.Z.apk` (e, se la descrizione è vuota, 
 
 ### Come comunica con l'auto
 
-Servizi del software **SW168 SAIC 1.0+** (ricavati dall'analisi di questo firmware; su SW169 possono essere diversi).
+Servizi del software **SW168 SAIC 1.0+** (ricavati dall'analisi di questo firmware; sulla SW169 sono diversi, vedi [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169)).
 
 | Funzione | Servizio | Note |
 |---|---|---|
@@ -208,7 +231,7 @@ Tesla-style launcher for the **MG4** infotainment system running **SW168 SAIC 1.
 
 **Compatibility:** works **only with SW168 SAIC 1.0 and later**. Other infotainment software versions use different
 car services and the launcher may not work (or only partly): do not install it.
-A version for **SW169 Color Radio** is in progress.
+For **SW169 Color Radio** there is a dedicated launcher: [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169).
 It replaces the original home screen, keeping its features, with a new, clean design.
 
 ### Features
@@ -365,7 +388,7 @@ then commit and push. The launcher checks `releases/latest.json` and GitHub Rele
 
 ### How it talks to the car
 
-Services of the **SW168 SAIC 1.0+** software (taken from analysing this firmware; they may differ on SW169).
+Services of the **SW168 SAIC 1.0+** software (taken from analysing this firmware; they are different on SW169, see [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169)).
 
 | Feature | Service | Notes |
 |---|---|---|
