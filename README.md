@@ -5,6 +5,8 @@
 **Ultima versione / Latest version: [0.5.0](releases/MG4Launcher-0.5.0.apk)**
 
 > ⚠️ **Compatibilità / Compatibility:** solo infotainment **SW168 SAIC 1.0+** · only **SW168 SAIC 1.0+** infotainment.
+> Provato su **MG4 Luxury MY22 R69**; dovrebbe funzionare su tutte le versioni con radio SAIC 1.0+ ·
+> tested on **MG4 Luxury MY22 R69**; it should work on every version with the SAIC 1.0+ radio.
 > Per **SW169 Color Radio** usa [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169) · for **SW169 Color Radio** use [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169).
 
 > Progetto amatoriale e **non ufficiale**: non è affiliato né approvato da MG Motor o SAIC Motor.
@@ -47,6 +49,8 @@ Launcher in stile Tesla per l'infotainment della **MG4** con software **SW168 SA
 
 **Compatibilità:** funziona **solo con il software SW168 SAIC 1.0 e successivi**. Con altri software dell'infotainment
 i servizi dell'auto possono essere diversi e il launcher potrebbe non funzionare (o funzionare solo in parte): non installarlo.
+Al momento il funzionamento è garantito sulla **MG4 Luxury MY22 R69**. Il launcher usa però gli stessi servizi e dati
+dell'infotainment originale (FICM), quindi dovrebbe funzionare su tutte le versioni con la radio **SAIC 1.0+**.
 Per **SW169 Color Radio** c'è un launcher dedicato: [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169).
 Sostituisce la schermata home originale mantenendone le funzioni, con una grafica nuova e pulita.
 
@@ -249,6 +253,8 @@ Tesla-style launcher for the **MG4** infotainment system running **SW168 SAIC 1.
 
 **Compatibility:** works **only with SW168 SAIC 1.0 and later**. Other infotainment software versions use different
 car services and the launcher may not work (or only partly): do not install it.
+It is currently guaranteed on the **MG4 Luxury MY22 R69**. However, the launcher uses the same services and data as the
+original infotainment unit (FICM), so it should work on every version with the **SAIC 1.0+** radio.
 For **SW169 Color Radio** there is a dedicated launcher: [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169).
 It replaces the original home screen, keeping its features, with a new, clean design.
 
