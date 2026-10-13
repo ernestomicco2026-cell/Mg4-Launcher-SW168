@@ -1,19 +1,19 @@
-# MG4 Launcher — SW168 SAIC 1.0+
+# MG4 Launcher — SWI68 SAIC 1.0+
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
 **Ultima versione / Latest version: [0.6.0](releases/MG4Launcher-0.6.0.apk)**
 
-> ⚠️ **Compatibilità / Compatibility:** solo infotainment **SW168 SAIC 1.0+** · only **SW168 SAIC 1.0+** infotainment.
+> ⚠️ **Compatibilità / Compatibility:** solo infotainment **SWI68 SAIC 1.0+** · only **SWI68 SAIC 1.0+** infotainment.
 > Provato su **MG4 Luxury MY22 R69**; dovrebbe funzionare su tutte le versioni con radio SAIC 1.0+ ·
 > tested on **MG4 Luxury MY22 R69**; it should work on every version with the SAIC 1.0+ radio.
 > Per **SW169 Color Radio** usa [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169) · for **SW169 Color Radio** use [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169).
 
 > Progetto amatoriale e **non ufficiale**: non è affiliato né approvato da MG Motor o SAIC Motor.
-> I nomi MG / MG4 servono solo a indicare l'auto compatibile (infotainment SW168). Installalo e usalo a tuo rischio.
+> I nomi MG / MG4 servono solo a indicare l'auto compatibile (infotainment SWI68). Installalo e usalo a tuo rischio.
 >
 > Hobby project, **not official**: not affiliated with or endorsed by MG Motor or SAIC Motor.
-> The MG / MG4 names only identify the compatible car (SW168 infotainment). Install and use it at your own risk.
+> The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
 <img width="1920" height="720" alt="home" src="https://github.com/user-attachments/assets/8203ad98-edb2-4a32-a596-4ed198426cd3" />
@@ -28,26 +28,26 @@ nulla dall'auto ("Servizio veicolo non disponibile").
 
 | Software dell'auto | Repository | File APK |
 |---|---|---|
-| **SW168 SAIC 1.0+** | **questo repository** | `MG4Launcher-X.Y.Z.apk` |
+| **SWI68 SAIC 1.0+** | **questo repository** | `MG4Launcher-X.Y.Z.apk` |
 | **SW169 Color Radio** | [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169) | `MG4Launcher-SW169-X.Y.Z.apk` |
 
 **Come sapere quale software hai:** con il computer collegato all'auto
-`adb shell getprop ro.build.mt2712.version` → se inizia con `SWI69-` è la **SW169**, altrimenti (es. `SWI68-…`) è la **SW168**.
+`adb shell getprop ro.build.mt2712.version` → se inizia con `SWI69-` è la **SW169**, altrimenti (es. `SWI68-…`) è la **SWI68**.
 Se il launcher è già installato: impostazioni → riga **MG4 Launcher X.Y.Z · repository** sotto *Aggiornamenti*;
 il nome del repository dice quale versione hai. Se nella *Diagnostica* compaiono `veicolo.bind = fallito` e
-`media.usb.bind = fallito`, hai installato la versione SW168 su un'auto SW169 (o viceversa).
+`media.usb.bind = fallito`, hai installato la versione SWI68 su un'auto SW169 (o viceversa).
 
 There are **two different launchers**, one per MG4 infotainment software, and they are not interchangeable.
-Check your software with `adb shell getprop ro.build.mt2712.version` (starts with `SWI69-` = SW169, otherwise SW168) and
+Check your software with `adb shell getprop ro.build.mt2712.version` (starts with `SWI69-` = SW169, otherwise SWI68) and
 use the matching repository above.
 
 ---
 
 ## Italiano
 
-Launcher in stile Tesla per l'infotainment della **MG4** con software **SW168 SAIC 1.0+** (EH32, Android Automotive 9).
+Launcher in stile Tesla per l'infotainment della **MG4** con software **SWI68 SAIC 1.0+** (EH32, Android Automotive 9).
 
-**Compatibilità:** funziona **solo con il software SW168 SAIC 1.0 e successivi**. Con altri software dell'infotainment
+**Compatibilità:** funziona **solo con il software SWI68 SAIC 1.0 e successivi**. Con altri software dell'infotainment
 i servizi dell'auto possono essere diversi e il launcher potrebbe non funzionare (o funzionare solo in parte): non installarlo.
 Al momento il funzionamento è garantito sulla **MG4 Luxury MY22 R69**. Il launcher usa però gli stessi servizi e dati
 dell'infotainment originale (FICM), quindi dovrebbe funzionare su tutte le versioni con la radio **SAIC 1.0+**.
@@ -86,8 +86,8 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
 
 ### Installazione
 
-Solo per infotainment **SW168 SAIC 1.0+**. Serve un computer con [adb](https://developer.android.com/tools/releases/platform-tools) collegato all'auto.
-Il firmware MG SW168 blocca l'installazione normale delle app: l'opzione `-f` la permette.
+Solo per infotainment **SWI68 SAIC 1.0+**. Serve un computer con [adb](https://developer.android.com/tools/releases/platform-tools) collegato all'auto.
+Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la permette.
 
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
@@ -238,7 +238,7 @@ allega da sola `releases/MG4Launcher-X.Y.Z.apk` (e, se la descrizione è vuota, 
 
 ### Come comunica con l'auto
 
-Servizi del software **SW168 SAIC 1.0+** (ricavati dall'analisi di questo firmware; sulla SW169 sono diversi, vedi [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169)).
+Servizi del software **SWI68 SAIC 1.0+** (ricavati dall'analisi di questo firmware; sulla SW169 sono diversi, vedi [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169)).
 
 | Funzione | Servizio | Note |
 |---|---|---|
@@ -261,9 +261,9 @@ il pannello Mappa mostra le indicazioni e apre il navigatore a schermo intero.
 
 ## English
 
-Tesla-style launcher for the **MG4** infotainment system running **SW168 SAIC 1.0+** software (EH32, Android Automotive 9).
+Tesla-style launcher for the **MG4** infotainment system running **SWI68 SAIC 1.0+** software (EH32, Android Automotive 9).
 
-**Compatibility:** works **only with SW168 SAIC 1.0 and later**. Other infotainment software versions use different
+**Compatibility:** works **only with SWI68 SAIC 1.0 and later**. Other infotainment software versions use different
 car services and the launcher may not work (or only partly): do not install it.
 It is currently guaranteed on the **MG4 Luxury MY22 R69**. However, the launcher uses the same services and data as the
 original infotainment unit (FICM), so it should work on every version with the **SAIC 1.0+** radio.
@@ -302,8 +302,8 @@ It replaces the original home screen, keeping its features, with a new, clean de
 
 ### Installation
 
-Only for **SW168 SAIC 1.0+** infotainment. You need a computer with [adb](https://developer.android.com/tools/releases/platform-tools) connected to the car.
-The MG SW168 firmware blocks normal app installs; the `-f` option allows it.
+Only for **SWI68 SAIC 1.0+** infotainment. You need a computer with [adb](https://developer.android.com/tools/releases/platform-tools) connected to the car.
+The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
@@ -452,7 +452,7 @@ then commit and push. The launcher checks `releases/latest.json` and GitHub Rele
 
 ### How it talks to the car
 
-Services of the **SW168 SAIC 1.0+** software (taken from analysing this firmware; they are different on SW169, see [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169)).
+Services of the **SWI68 SAIC 1.0+** software (taken from analysing this firmware; they are different on SW169, see [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169)).
 
 | Feature | Service | Notes |
 |---|---|---|
