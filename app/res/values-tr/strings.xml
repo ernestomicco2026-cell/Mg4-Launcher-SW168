@@ -26,6 +26,11 @@
     <string name="v2l_done" formatted="false">V2L bitti</string>
     <string name="ready" formatted="false">Hazır</string>
     <string name="outside_temp">Dış %s°</string>
+    <string name="ac_desc" formatted="false">Klima</string>
+    <string name="auto_desc" formatted="false">Otomatik klima</string>
+    <string name="defrost_desc" formatted="false">Ön cam buz çözme</string>
+    <string name="fog_front" formatted="false">Ön sis farları</string>
+    <string name="fog_rear" formatted="false">Arka sis lambası</string>
     <string name="climate" formatted="false">Klima</string>
     <string name="tab_map" formatted="false">Harita</string>
     <string name="tab_media" formatted="false">Medya</string>

@@ -37,6 +37,11 @@ S = {
     "v2l_done": ("V2L terminato", "V2L finished", "V2L finalizado", "V2L beendet", "V2L terminado", "V2L terminé", "V2L bitti"),
     "ready": ("Pronta", "Ready", "Lista", "Bereit", "Pronta", "Prête", "Hazır"),
     "outside_temp": ("%s° esterni", "%s° outside", "%s° exterior", "%s° außen", "%s° exterior", "%s° extérieur", "Dış %s°"),
+    "ac_desc": ("Aria condizionata", "Air conditioning", "Aire acondicionado", "Klimaanlage", "Ar condicionado", "Climatisation", "Klima"),
+    "auto_desc": ("Clima automatico", "Automatic climate", "Climatización automática", "Klimaautomatik", "Climatização automática", "Climatisation automatique", "Otomatik klima"),
+    "defrost_desc": ("Sbrinamento parabrezza", "Windscreen defrost", "Desempañado del parabrisas", "Frontscheibe enteisen", "Desembaciar para-brisas", "Désembuage du pare-brise", "Ön cam buz çözme"),
+    "fog_front": ("Fendinebbia anteriori", "Front fog lights", "Antiniebla delanteros", "Nebelscheinwerfer", "Faróis de nevoeiro", "Antibrouillards avant", "Ön sis farları"),
+    "fog_rear": ("Retronebbia", "Rear fog light", "Antiniebla trasero", "Nebelschlussleuchte", "Farol de nevoeiro traseiro", "Antibrouillard arrière", "Arka sis lambası"),
     "climate": ("Clima", "Climate", "Climatización", "Klima", "Climatização", "Climatisation", "Klima"),
 
     # --- pannello destro ---

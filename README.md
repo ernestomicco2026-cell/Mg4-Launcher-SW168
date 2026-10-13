@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.5.0](releases/MG4Launcher-0.5.0.apk)**
+**Ultima versione / Latest version: [0.6.0](releases/MG4Launcher-0.6.0.apk)**
 
 > ⚠️ **Compatibilità / Compatibility:** solo infotainment **SW168 SAIC 1.0+** · only **SW168 SAIC 1.0+** infotainment.
 > Provato su **MG4 Luxury MY22 R69**; dovrebbe funzionare su tutte le versioni con radio SAIC 1.0+ ·
@@ -56,7 +56,7 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
 
 ### Cosa fa
 
-- **Auto e batteria** (a sinistra): autonomia, percentuale, barra batteria con tacca del limite di ricarica,
+- **Auto e batteria** (a sinistra): autonomia e **orologio** in grande, barra batteria con percentuale e tacca del limite di ricarica,
   stato di ricarica e V2L (tocca V2L per la scarica), temperatura esterna. La tua MG4 ricolorabile con gli 8 colori della gamma, tetto nero opzionale.
   Tocca l'auto → Gestione energia. Tienila premuta → impostazioni del launcher.
 - **Mappa / Media / CarPlay** (a destra):
@@ -68,9 +68,11 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
     pulsanti **FM / DAB** per cambiare banda, **elenco delle stazioni trovate** sulla banda attuale (a destra, tocca per
     sintonizzare) e preferiti FM/DAB con i loghi.
   - **CarPlay / Android Auto**: la scheda compare da sola quando colleghi il telefono.
-- **Barra in basso**: temperatura ‹ › (17 = LO … 33 = HI), ventola ‹ › (OFF / 1…11 / A = automatico;
-  tocca l'icona = app Clima, tieni premuto = accendi/spegni), mini-player, Telefono, Radio,
-  Telecamera 360°, Impostazioni.
+- **Barra in basso**: clima con pulsanti grandi da usare in guida — temperatura ‹ › (17 = LO … 33 = HI),
+  ventola ‹ › (OFF / 1…11 / A = automatico; tocca l'icona = app Clima, tieni premuto = accendi/spegni),
+  **A/C**, **AUTO** e **sbrinamento parabrezza** —, mini-player compatto, **fendinebbia** (anteriori se presenti
+  e retronebbia: sulla MG4 si accendono solo dallo schermo), Telefono, Radio, Telecamera 360°, Impostazioni.
+- **In alto a destra**: indicatori di **Bluetooth**, **Wi-Fi** e rete **4G** della T-Box (con le tacche del segnale).
 - **App**: scorri la home verso sinistra per le app dell'auto e quelle che installi tu,
   con le icone tutte nello stesso stile; scorri verso destra per tornare. Con **Modifica** scegli quali app installate mostrare.
 - **Impostazioni** (tieni premuta l'auto): colore dell'auto, tetto nero, tema (automatico, notte, giorno), **lingua**,
@@ -90,7 +92,7 @@ Il firmware MG SW168 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.5.0.apk
+   adb install -r -f MG4Launcher-0.6.0.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -141,6 +143,16 @@ recenti e logcat del launcher — in `Android/data/com.mg4.launcher/files/mg4-la
 Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartella: basta aprirla dal computer o dal telefono.
 
 ### Versioni
+
+#### 0.6.0 — 13 ottobre 2026
+- **Orologio** nel riquadro della batteria, grande quanto l'autonomia; la percentuale passa accanto alla barra.
+- **Fendinebbia** nella barra in basso: retronebbia sempre, anteriori se l'auto li ha (stessi comandi della barra
+  di stato originale); icona verde / ambra quando sono accesi.
+- **Clima più grande e più comodo in guida**: temperatura e ventola con pulsanti grandi, nuovi pulsanti **A/C**,
+  **AUTO** e **sbrinamento parabrezza** con lo stato acceso/spento; mini-player più compatto.
+- **Indicatori in alto a destra**: Bluetooth (acceso / collegato), Wi-Fi (con intensità) e rete mobile della T-Box
+  (2G / 3G / 4G con le tacche), letti come la barra di stato originale.
+- Media: con il telefono collegato le sorgenti non scelte mostrano solo l'icona, per lasciare spazio agli indicatori.
 
 #### 0.5.0 — 13 ottobre 2026
 - **Multilingua**: italiano, inglese, spagnolo, tedesco, portoghese, francese e turco. Nuova voce **Lingua** nelle
@@ -260,7 +272,7 @@ It replaces the original home screen, keeping its features, with a new, clean de
 
 ### Features
 
-- **Car and battery** (left): range, percentage, battery bar with a charge-limit mark, charging and V2L status,
+- **Car and battery** (left): range and a large **clock**, battery bar with percentage and charge-limit mark, charging and V2L status,
   outside temperature (tap V2L for discharging). Your MG4, recolourable with the 8 factory colours, optional black roof.
   Tap the car → Energy management. Long-press it → launcher settings.
 - **Map / Media / CarPlay** (right):
@@ -272,9 +284,11 @@ It replaces the original home screen, keeping its features, with a new, clean de
     **FM / DAB** buttons to switch band, the **list of stations found** on the current band (on the right, tap to
     tune in) and FM/DAB favourites with logos.
   - **CarPlay / Android Auto**: the tab appears by itself when you connect a phone.
-- **Bottom bar**: temperature ‹ › (17 = LO … 33 = HI), fan ‹ › (OFF / 1…11 / A = auto;
-  tap the icon = Climate app, long-press = climate on/off), mini player, Phone, Radio,
-  360° camera, Settings.
+- **Bottom bar**: climate with large buttons for use while driving — temperature ‹ › (17 = LO … 33 = HI),
+  fan ‹ › (OFF / 1…11 / A = auto; tap the icon = Climate app, long-press = climate on/off), **A/C**, **AUTO** and
+  **windscreen defrost** —, compact mini player, **fog lights** (front if fitted, and rear: on the MG4 they can only be
+  switched from the screen), Phone, Radio, 360° camera, Settings.
+- **Top right**: **Bluetooth**, **Wi-Fi** and T-Box **4G** indicators (with signal bars).
 - **Apps**: swipe the home screen left for the car's apps and the ones you install,
   all with matching icons; swipe right to go back. Use **Modifica** (Edit) to choose which installed apps to show.
 - **Settings** (long-press the car): car colour, black roof, theme (auto, night, day), **language**,
@@ -294,7 +308,7 @@ The MG SW168 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.5.0.apk
+   adb install -r -f MG4Launcher-0.6.0.apk
    ```
 3. Make it the default home:
    ```bash
@@ -345,6 +359,16 @@ and the launcher's logcat — to `Android/data/com.mg4.launcher/files/mg4-launch
 With a USB stick plugged in, the file is written there too, in the same folder.
 
 ### Changelog
+
+#### 0.6.0 — 13 October 2026
+- **Clock** in the battery panel, as large as the range; the percentage moves next to the bar.
+- **Fog lights** in the bottom bar: rear always, front if the car has them (same commands as the original status bar);
+  green / amber icon when on.
+- **Bigger, easier climate controls while driving**: large temperature and fan buttons, new **A/C**, **AUTO** and
+  **windscreen defrost** buttons with on/off state; more compact mini player.
+- **Top-right indicators**: Bluetooth (on / connected), Wi-Fi (with strength) and T-Box mobile network
+  (2G / 3G / 4G with bars), read like the original status bar.
+- Media: with a phone connected, unselected sources show only their icon to make room for the indicators.
 
 #### 0.5.0 — 13 October 2026
 - **Multilingual**: Italian, English, Spanish, German, Portuguese, French and Turkish. New **Language** setting:

@@ -26,6 +26,11 @@
     <string name="v2l_done" formatted="false">V2L finalizado</string>
     <string name="ready" formatted="false">Lista</string>
     <string name="outside_temp">%s° exterior</string>
+    <string name="ac_desc" formatted="false">Aire acondicionado</string>
+    <string name="auto_desc" formatted="false">Climatización automática</string>
+    <string name="defrost_desc" formatted="false">Desempañado del parabrisas</string>
+    <string name="fog_front" formatted="false">Antiniebla delanteros</string>
+    <string name="fog_rear" formatted="false">Antiniebla trasero</string>
     <string name="climate" formatted="false">Climatización</string>
     <string name="tab_map" formatted="false">Mapa</string>
     <string name="tab_media" formatted="false">Multimedia</string>

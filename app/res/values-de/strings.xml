@@ -26,6 +26,11 @@
     <string name="v2l_done" formatted="false">V2L beendet</string>
     <string name="ready" formatted="false">Bereit</string>
     <string name="outside_temp">%s° außen</string>
+    <string name="ac_desc" formatted="false">Klimaanlage</string>
+    <string name="auto_desc" formatted="false">Klimaautomatik</string>
+    <string name="defrost_desc" formatted="false">Frontscheibe enteisen</string>
+    <string name="fog_front" formatted="false">Nebelscheinwerfer</string>
+    <string name="fog_rear" formatted="false">Nebelschlussleuchte</string>
     <string name="climate" formatted="false">Klima</string>
     <string name="tab_map" formatted="false">Karte</string>
     <string name="tab_media" formatted="false">Medien</string>

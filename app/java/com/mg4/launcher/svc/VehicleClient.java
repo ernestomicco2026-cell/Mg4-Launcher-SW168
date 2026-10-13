@@ -48,6 +48,15 @@ public final class VehicleClient {
     private static final int AC_GET_MIN_AIR_VOLUME = 61;
     private static final int AC_GET_DRV_TEMP = 81;
     private static final int AC_GET_OUT_TEMP = 88;    // float, -10000 = non disponibile
+    // pulsanti come l'app Clima originale: il valore 1 = "premuto" (commuta)
+    private static final int AC_SET_AUTO = 7, AC_SET_AC = 8, AC_GET_AUTO = 54, AC_GET_AC = 55;
+    private static final int AC_OPEN_FRONT_DEFROST = 48, AC_CLOSE_FRONT_DEFROST = 49, AC_GET_FRONT_DEFROST = 92;
+
+    // fendinebbia, come la barra di stato originale (SystemUI): set(1) = premuto, get 1 = acceso
+    private static final String SET = "com.saicmotor.sdk.vehiclesettings.IVehicleSettingService";
+    private static final int SET_GET_REAR_FOG = 178, SET_SET_REAR_FOG = 179, SET_GET_FRONT_FOG = 187, SET_SET_FRONT_FOG = 188;
+    private static final String COND = "com.saicmotor.sdk.vehiclesettings.IVehicleConditionService";
+    private static final int COND_FRONT_FOG_CONFIG = 45;   // 0 = fendinebbia anteriori presenti
 
     /** Livelli ventola come nell'originale (AcCardView): 1..11, 0 = spenta, 15 = automatico. */
     public static final int FAN_OFF = 0, FAN_AUTO = 15;
@@ -70,6 +79,9 @@ public final class VehicleClient {
         public int dischargeStatus = -1;
         public int acTemp = -1;           // °C, 17 = LO, 33 = HI
         public int hvacPower = -1;
+        public int acOn = -1, autoOn = -1, defrostOn = -1;   // 1 acceso, 0 spento, -1 sconosciuto
+        public int rearFog = -1, frontFog = -1;           // 1 acceso, 0 spento, -1 non disponibile
+        public boolean hasFrontFog;
         public int fanLevel = -1;         // 0 spenta, 1..max, 15 auto
         public int fanMin = 1, fanMax = 11;
         public float outsideTemp = -10000f;   // °C
@@ -282,11 +294,40 @@ public final class VehicleClient {
                     Diag.put("clima.tempGuidatore", readTemp + (s.acTemp != readTemp ? " (richiesta " + s.acTemp + ")" : ""));
                     Diag.put("clima.ventola", readFan + (s.fanLevel != readFan ? " (richiesta " + s.fanLevel + ")" : ""));
                     Diag.put("clima.accensione", s.hvacPower);
+                    s.acOn = held(AC_GET_AC, Rpc.callInt(a, AC, AC_GET_AC), now);
+                    s.autoOn = held(AC_GET_AUTO, Rpc.callInt(a, AC, AC_GET_AUTO), now);
+                    s.defrostOn = held(AC_GET_FRONT_DEFROST, Rpc.callInt(a, AC, AC_GET_FRONT_DEFROST), now);
+                    Diag.put("clima.ac/auto/sbrinamento", s.acOn + " / " + s.autoOn + " / " + s.defrostOn);
                 }
             } catch (Exception e) {
                 Diag.error("clima", e.toString());
                 synchronized (subs) {
                     subs.remove("aircondition");
+                }
+            }
+        }
+        if (s.connected) {
+            try {
+                if (frontFogConfig == Integer.MIN_VALUE) {
+                    IBinder cnd = sub("vehiclecondition");
+                    if (cnd != null) {
+                        frontFogConfig = Rpc.callInt(cnd, COND, COND_FRONT_FOG_CONFIG);
+                        Diag.put("luci.fendinebbiaAnterioriConfig", frontFogConfig);
+                    }
+                }
+                IBinder st = sub("vehiclesetting");
+                if (st != null) {
+                    long now = android.os.SystemClock.uptimeMillis();
+                    s.rearFog = held(SET_GET_REAR_FOG, Rpc.callInt(st, SET, SET_GET_REAR_FOG), now);
+                    s.hasFrontFog = frontFogConfig == 0;
+                    if (s.hasFrontFog) s.frontFog = held(SET_GET_FRONT_FOG, Rpc.callInt(st, SET, SET_GET_FRONT_FOG), now);
+                    Diag.put("luci.fendinebbia ant/post", s.frontFog + " / " + s.rearFog);
+                }
+            } catch (Exception e) {
+                Diag.error("luci", e.toString());
+                synchronized (subs) {
+                    subs.remove("vehiclesetting");
+                    subs.remove("vehiclecondition");
                 }
             }
         }
@@ -337,6 +378,76 @@ public final class VehicleClient {
                     subs.remove("aircondition");
                 }
             }
+        });
+    }
+
+    // ---- pulsanti a commutazione (A/C, AUTO, sbrinamento, fendinebbia) ------------------------
+
+    private int frontFogConfig = Integer.MIN_VALUE;
+    private final Map<Integer, long[]> holds = new HashMap<>();   // codice lettura -> {valore, scadenza}
+
+    /** Dopo un tocco mostra subito il nuovo stato per qualche secondo, finché l'auto non lo conferma. */
+    private int held(int getCode, int read, long now) {
+        synchronized (holds) {
+            long[] h = holds.get(getCode);
+            if (h == null) return read;
+            if (now < h[1] && read != h[0]) return (int) h[0];
+            holds.remove(getCode);
+            return read;
+        }
+    }
+
+    private void hold(int getCode, int value) {
+        synchronized (holds) {
+            holds.put(getCode, new long[]{value, android.os.SystemClock.uptimeMillis() + HOLD_MS});
+        }
+    }
+
+    private void press(String service, String desc, int setCode, int getCode, int current, String what) {
+        if (bg == null) return;
+        if (current == 0 || current == 1) hold(getCode, 1 - current);
+        bg.post(() -> {
+            try {
+                IBinder b = sub(service);
+                if (b != null) Rpc.call(b, desc, setCode, p -> p.writeInt(1));
+            } catch (Exception e) {
+                Diag.error(what, e.toString());
+                synchronized (subs) {
+                    subs.remove(service);
+                }
+            }
+            poll();
+        });
+    }
+
+    public void toggleAc() {
+        press("aircondition", AC, AC_SET_AC, AC_GET_AC, last.acOn, "clima.ac");
+    }
+
+    public void toggleAuto() {
+        press("aircondition", AC, AC_SET_AUTO, AC_GET_AUTO, last.autoOn, "clima.auto");
+    }
+
+    public void toggleRearFog() {
+        press("vehiclesetting", SET, SET_SET_REAR_FOG, SET_GET_REAR_FOG, last.rearFog, "luci.retronebbia");
+    }
+
+    public void toggleFrontFog() {
+        press("vehiclesetting", SET, SET_SET_FRONT_FOG, SET_GET_FRONT_FOG, last.frontFog, "luci.fendinebbia");
+    }
+
+    public void toggleFrontDefrost() {
+        if (bg == null) return;
+        boolean on = last.defrostOn == 1;
+        hold(AC_GET_FRONT_DEFROST, on ? 0 : 1);
+        bg.post(() -> {
+            try {
+                IBinder a = sub("aircondition");
+                if (a != null) Rpc.call(a, AC, on ? AC_CLOSE_FRONT_DEFROST : AC_OPEN_FRONT_DEFROST, Rpc.NONE);
+            } catch (Exception e) {
+                Diag.error("clima.sbrinamento", e.toString());
+            }
+            poll();
         });
     }
 

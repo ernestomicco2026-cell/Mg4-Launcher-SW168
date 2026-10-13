@@ -48,6 +48,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     private HomeView home;
     private AppsView apps;
     private Pager pager;
+    private com.mg4.launcher.svc.ConnClient conn;
     private SettingsView settings;
     private int lastUiMode;
 
@@ -58,6 +59,10 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         L.init(this, prefs.language());
         catalog = new AppCatalog(this);
         vehicle = new VehicleClient(this);
+        conn = new com.mg4.launcher.svc.ConnClient(this);
+        conn.setListener(st -> {
+            if (home != null) home.onConn(st);
+        });
         media = new MediaClient(this);
         nav = new NavClient(this);
         updater = new Updater(this);
@@ -86,6 +91,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
             if (home != null) home.onNav(s);
         });
         vehicle.start();
+        conn.start();
         media.start();
         nav.start();
 
@@ -98,6 +104,11 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         registerReceiver(packages, f);
         // all'avvio dell'auto le app utente compaiono solo dopo lo sblocco dell'utente Android
         registerReceiver(packages, new IntentFilter(Intent.ACTION_USER_UNLOCKED));
+        // orologio nel riquadro batteria: ogni minuto e al cambio di ora / fuso
+        IntentFilter tf = new IntentFilter(Intent.ACTION_TIME_TICK);
+        tf.addAction(Intent.ACTION_TIME_CHANGED);
+        tf.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+        registerReceiver(clockTick, tf);
         root.postDelayed(saveDiag, 15000);
     }
 
@@ -155,6 +166,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         settings = null;
         pager.show(keepPage, false);
         home.onVehicle(vehicle.last());
+        home.onConn(conn.last());
         home.onMedia(media.last());
         home.onNav(nav.last());
         getWindow().setStatusBarColor(theme.bg);
@@ -166,6 +178,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         super.onStart();
         // il collegamento ai servizi resta attivo; qui si riprendono solo le letture periodiche
         vehicle.resume();
+        conn.resume();
+        if (home != null) home.updateClock();
         media.resume();
         nav.resume();
     }
@@ -174,6 +188,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     protected void onStop() {
         super.onStop();
         vehicle.pause();
+        conn.pause();
         media.pause();
         nav.pause();
     }
@@ -183,6 +198,11 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         super.onDestroy();
         root.removeCallbacks(saveDiag);
         vehicle.stop();
+        conn.stop();
+        try {
+            unregisterReceiver(clockTick);
+        } catch (Exception ignored) {
+        }
         media.stop();
         nav.stop();
         try {
@@ -223,6 +243,13 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
             }
         }
     }
+
+    private final BroadcastReceiver clockTick = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context c, Intent i) {
+            if (home != null) home.updateClock();
+        }
+    };
 
     private final BroadcastReceiver packages = new BroadcastReceiver() {
         @Override

@@ -101,4 +101,40 @@ public final class Bars {
             if (h > 520 * k) c.drawLine(-20 * k, 600 * k, 1200 * k, 620 * k, minor);
         }
     }
+
+    /** Tacche del segnale (rete mobile): 4 barre crescenti, "level" piene. */
+    public static final class Signal extends View {
+        private final Paint on = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint off = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private int level;
+
+        public Signal(Context c) {
+            super(c);
+        }
+
+        public void setColors(int fg, int dim) {
+            on.setColor(fg);
+            off.setColor(dim);
+            invalidate();
+        }
+
+        public void setLevel(int l) {
+            if (l != level) {
+                level = l;
+                invalidate();
+            }
+        }
+
+        @Override
+        protected void onDraw(Canvas c) {
+            float w = getWidth(), h = getHeight();
+            int n = 4;
+            float gap = w * 0.08f, bw = (w - gap * (n - 1)) / n, r = bw / 3f;
+            for (int i = 0; i < n; i++) {
+                float bh = h * (0.35f + 0.65f * i / (n - 1));
+                float x = i * (bw + gap);
+                c.drawRoundRect(x, h - bh, x + bw, h, r, r, i < level ? on : off);
+            }
+        }
+    }
 }

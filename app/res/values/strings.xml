@@ -26,6 +26,11 @@
     <string name="v2l_done" formatted="false">V2L finished</string>
     <string name="ready" formatted="false">Ready</string>
     <string name="outside_temp">%s° outside</string>
+    <string name="ac_desc" formatted="false">Air conditioning</string>
+    <string name="auto_desc" formatted="false">Automatic climate</string>
+    <string name="defrost_desc" formatted="false">Windscreen defrost</string>
+    <string name="fog_front" formatted="false">Front fog lights</string>
+    <string name="fog_rear" formatted="false">Rear fog light</string>
     <string name="climate" formatted="false">Climate</string>
     <string name="tab_map" formatted="false">Map</string>
     <string name="tab_media" formatted="false">Media</string>
