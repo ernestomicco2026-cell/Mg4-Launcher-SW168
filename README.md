@@ -2,12 +2,12 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.6.0](releases/MG4Launcher-0.6.0.apk)**
+**Ultima versione / Latest version: [0.6.1](releases/MG4Launcher-0.6.1.apk)**
 
 > ⚠️ **Compatibilità / Compatibility:** solo infotainment **SWI68 SAIC 1.0+** · only **SWI68 SAIC 1.0+** infotainment.
 > Provato su **MG4 Luxury MY22 R69**; dovrebbe funzionare su tutte le versioni con radio SAIC 1.0+ ·
 > tested on **MG4 Luxury MY22 R69**; it should work on every version with the SAIC 1.0+ radio.
-> Per **SW169 Color Radio** usa [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169) · for **SW169 Color Radio** use [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169).
+> Per **SWI69 Color Radio** usa [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69) · for **SWI69 Color Radio** use [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69).
 
 > Progetto amatoriale e **non ufficiale**: non è affiliato né approvato da MG Motor o SAIC Motor.
 > I nomi MG / MG4 servono solo a indicare l'auto compatibile (infotainment SWI68). Installalo e usalo a tuo rischio.
@@ -29,16 +29,16 @@ nulla dall'auto ("Servizio veicolo non disponibile").
 | Software dell'auto | Repository | File APK |
 |---|---|---|
 | **SWI68 SAIC 1.0+** | **questo repository** | `MG4Launcher-X.Y.Z.apk` |
-| **SW169 Color Radio** | [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169) | `MG4Launcher-SW169-X.Y.Z.apk` |
+| **SWI69 Color Radio** | [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69) | `MG4Launcher-SWI69-X.Y.Z.apk` |
 
 **Come sapere quale software hai:** con il computer collegato all'auto
-`adb shell getprop ro.build.mt2712.version` → se inizia con `SWI69-` è la **SW169**, altrimenti (es. `SWI68-…`) è la **SWI68**.
+`adb shell getprop ro.build.mt2712.version` → se inizia con `SWI69-` è la **SWI69**, altrimenti (es. `SWI68-…`) è la **SWI68**.
 Se il launcher è già installato: impostazioni → riga **MG4 Launcher X.Y.Z · repository** sotto *Aggiornamenti*;
 il nome del repository dice quale versione hai. Se nella *Diagnostica* compaiono `veicolo.bind = fallito` e
-`media.usb.bind = fallito`, hai installato la versione SWI68 su un'auto SW169 (o viceversa).
+`media.usb.bind = fallito`, hai installato la versione SWI68 su un'auto SWI69 (o viceversa).
 
 There are **two different launchers**, one per MG4 infotainment software, and they are not interchangeable.
-Check your software with `adb shell getprop ro.build.mt2712.version` (starts with `SWI69-` = SW169, otherwise SWI68) and
+Check your software with `adb shell getprop ro.build.mt2712.version` (starts with `SWI69-` = SWI69, otherwise SWI68) and
 use the matching repository above.
 
 ---
@@ -51,7 +51,7 @@ Launcher in stile Tesla per l'infotainment della **MG4** con software **SWI68 SA
 i servizi dell'auto possono essere diversi e il launcher potrebbe non funzionare (o funzionare solo in parte): non installarlo.
 Al momento il funzionamento è garantito sulla **MG4 Luxury MY22 R69**. Il launcher usa però gli stessi servizi e dati
 dell'infotainment originale (FICM), quindi dovrebbe funzionare su tutte le versioni con la radio **SAIC 1.0+**.
-Per **SW169 Color Radio** c'è un launcher dedicato: [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169).
+Per **SWI69 Color Radio** c'è un launcher dedicato: [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69).
 Sostituisce la schermata home originale mantenendone le funzioni, con una grafica nuova e pulita.
 
 ### Cosa fa
@@ -92,7 +92,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.6.0.apk
+   adb install -r -f MG4Launcher-0.6.1.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -144,6 +144,10 @@ Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartell
 
 ### Versioni
 
+#### 0.6.1 — 13 ottobre 2026
+- Nome corretto del software: **SWI68** (non SW168). Repository rinominato in **Mg4-Launcher-SWI68**; il launcher
+  passa da solo al nuovo nome per gli aggiornamenti (anche da Mg4-Launcher-SW168 e mg4-launcher).
+
 #### 0.6.0 — 13 ottobre 2026
 - **Orologio** nel riquadro della batteria, grande quanto l'autonomia; la percentuale passa accanto alla barra.
 - **Fendinebbia** nella barra in basso: retronebbia sempre, anteriori se l'auto li ha (stessi comandi della barra
@@ -161,7 +165,7 @@ Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartell
   indicato sotto il titolo, riquadri **Casa** / **Lavoro** e riga **Apri con** più leggibile.
 - **Radio**: schermata riadattata (copertina e comandi proporzionati) ed **elenco delle stazioni trovate** sulla banda
   attuale, con loghi; la stazione in onda è evidenziata e resta in vista.
-- Repository rinominato in **Mg4-Launcher-SW168**: il launcher passa da solo al nuovo nome per gli aggiornamenti.
+- Repository rinominato in **Mg4-Launcher-SW168** (oggi **Mg4-Launcher-SWI68**): il launcher passa da solo al nuovo nome per gli aggiornamenti.
   Download degli aggiornamenti più robusto (segue lo spostamento del repository, riprova da raw.githubusercontent.com).
 - Chi ha la 0.4.x: installa questa versione con `adb install -r -f` (la 0.4.x cerca ancora il vecchio nome).
 
@@ -238,7 +242,7 @@ allega da sola `releases/MG4Launcher-X.Y.Z.apk` (e, se la descrizione è vuota, 
 
 ### Come comunica con l'auto
 
-Servizi del software **SWI68 SAIC 1.0+** (ricavati dall'analisi di questo firmware; sulla SW169 sono diversi, vedi [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169)).
+Servizi del software **SWI68 SAIC 1.0+** (ricavati dall'analisi di questo firmware; sulla SWI69 sono diversi, vedi [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69)).
 
 | Funzione | Servizio | Note |
 |---|---|---|
@@ -267,7 +271,7 @@ Tesla-style launcher for the **MG4** infotainment system running **SWI68 SAIC 1.
 car services and the launcher may not work (or only partly): do not install it.
 It is currently guaranteed on the **MG4 Luxury MY22 R69**. However, the launcher uses the same services and data as the
 original infotainment unit (FICM), so it should work on every version with the **SAIC 1.0+** radio.
-For **SW169 Color Radio** there is a dedicated launcher: [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169).
+For **SWI69 Color Radio** there is a dedicated launcher: [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69).
 It replaces the original home screen, keeping its features, with a new, clean design.
 
 ### Features
@@ -308,7 +312,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.6.0.apk
+   adb install -r -f MG4Launcher-0.6.1.apk
    ```
 3. Make it the default home:
    ```bash
@@ -360,6 +364,10 @@ With a USB stick plugged in, the file is written there too, in the same folder.
 
 ### Changelog
 
+#### 0.6.1 — 13 October 2026
+- Correct software name: **SWI68** (not SW168). Repository renamed to **Mg4-Launcher-SWI68**; the launcher switches
+  to the new name for updates by itself (also from Mg4-Launcher-SW168 and mg4-launcher).
+
 #### 0.6.0 — 13 October 2026
 - **Clock** in the battery panel, as large as the range; the percentage moves next to the bar.
 - **Fog lights** in the bottom bar: rear always, front if the car has them (same commands as the original status bar);
@@ -377,7 +385,7 @@ With a USB stick plugged in, the file is written there too, in the same folder.
   title, **Home** / **Work** tiles and a clearer **Open with** row.
 - **Radio**: re-proportioned screen (artwork and controls) and a **list of the stations found** on the current band,
   with logos; the station on air is highlighted and kept in view.
-- Repository renamed to **Mg4-Launcher-SW168**: the launcher switches to the new name for updates by itself.
+- Repository renamed to **Mg4-Launcher-SW168** (now **Mg4-Launcher-SWI68**): the launcher switches to the new name for updates by itself.
   Sturdier update download (follows the repository move, retries from raw.githubusercontent.com).
 - If you have 0.4.x: install this version with `adb install -r -f` (0.4.x still looks for the old name).
 
@@ -452,7 +460,7 @@ then commit and push. The launcher checks `releases/latest.json` and GitHub Rele
 
 ### How it talks to the car
 
-Services of the **SWI68 SAIC 1.0+** software (taken from analysing this firmware; they are different on SW169, see [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169)).
+Services of the **SWI68 SAIC 1.0+** software (taken from analysing this firmware; they are different on SWI69, see [Mg4-Launcher-SWI69](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SWI69)).
 
 | Feature | Service | Notes |
 |---|---|---|
