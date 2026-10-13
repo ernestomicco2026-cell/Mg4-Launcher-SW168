@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generato da tools/i18n.py: non modificare a mano -->
+<resources>
+    <string name="connecting_vehicle" formatted="false">Connecting to the car…</string>
+    <string name="vehicle_unavailable" formatted="false">Vehicle service unavailable</string>
+    <string name="chip_consumption" formatted="false">Avg. consumption</string>
+    <string name="chip_limit" formatted="false">Charge limit</string>
+    <string name="v2l_desc" formatted="false">V2L, open discharge management</string>
+    <string name="on" formatted="false">On</string>
+    <string name="off" formatted="false">Off</string>
+    <string name="full_at">full at %s</string>
+    <string name="charge_charging" formatted="false">Charging</string>
+    <string name="charge_fast" formatted="false">Fast charging</string>
+    <string name="charge_wireless" formatted="false">Wireless charging</string>
+    <string name="charge_done" formatted="false">Charging complete</string>
+    <string name="charge_balancing" formatted="false">Battery balancing</string>
+    <string name="charge_error" formatted="false">Charging error</string>
+    <string name="charge_connecting" formatted="false">Connecting…</string>
+    <string name="charge_not_recognized" formatted="false">Plugged in · not recognised</string>
+    <string name="charge_not_charging" formatted="false">Plugged in · not charging</string>
+    <string name="charge_stopped" formatted="false">Charging stopped</string>
+    <string name="charge_scheduled" formatted="false">Scheduled charging</string>
+    <string name="charge_multiple" formatted="false">Multiple charging</string>
+    <string name="v2l_active" formatted="false">V2L on · powering external devices</string>
+    <string name="v2l_stopped" formatted="false">V2L stopped</string>
+    <string name="v2l_done" formatted="false">V2L finished</string>
+    <string name="ready" formatted="false">Ready</string>
+    <string name="outside_temp">%s° outside</string>
+    <string name="climate" formatted="false">Climate</string>
+    <string name="tab_map" formatted="false">Map</string>
+    <string name="tab_media" formatted="false">Media</string>
+    <string name="where_to" formatted="false">Where to?</string>
+    <string name="search_destination" formatted="false">Search for a destination</string>
+    <string name="nav_default">Navigator: %s</string>
+    <string name="home_place" formatted="false">Home</string>
+    <string name="work_place" formatted="false">Work</string>
+    <string name="go_there" formatted="false">Start route</string>
+    <string name="open_with" formatted="false">Open with</string>
+    <string name="open_with_hint" formatted="false">long-press to make it the default</string>
+    <string name="nav_phone" formatted="false">Navigation from the phone</string>
+    <string name="next_maneuver" formatted="false">Next manoeuvre</string>
+    <string name="navigating" formatted="false">Navigating</string>
+    <string name="remaining">%s to go</string>
+    <string name="tap_open_nav" formatted="false">Tap to open the navigator</string>
+    <string name="arrival">arrival %s</string>
+    <string name="open_source_app" formatted="false">Open the source app</string>
+    <string name="src_radio" formatted="false">Radio</string>
+    <string name="src_online" formatted="false">Online</string>
+    <string name="media_generic" formatted="false">Media</string>
+    <string name="phone_connected" formatted="false">Phone connected</string>
+    <string name="projection_ready">%s ready. Tap to open full screen.</string>
+    <string name="open" formatted="false">Open</string>
+    <string name="stations_title">%s stations</string>
+    <string name="stations_empty" formatted="false">No stations found. Start a scan from the Radio app.</string>
+    <string name="open_radio_app" formatted="false">Open Radio</string>
+    <string name="previous" formatted="false">Previous</string>
+    <string name="next" formatted="false">Next</string>
+    <string name="play_pause" formatted="false">Play or pause</string>
+    <string name="temp_down" formatted="false">Lower temperature</string>
+    <string name="temp_up" formatted="false">Raise temperature</string>
+    <string name="fan_down" formatted="false">Fan down</string>
+    <string name="fan_up" formatted="false">Fan up</string>
+    <string name="no_track" formatted="false">No track</string>
+    <string name="plug_usb" formatted="false">Plug in a USB stick</string>
+    <string name="bt_music" formatted="false">Bluetooth music</string>
+    <string name="bt_start" formatted="false">Start playback on your phone</string>
+    <string name="online_music" formatted="false">Online music</string>
+    <string name="from_phone" formatted="false">from the phone</string>
+    <string name="apps_title" formatted="false">Apps</string>
+    <string name="edit" formatted="false">Edit</string>
+    <string name="done" formatted="false">Done</string>
+    <string name="edit_desc" formatted="false">Choose which installed apps to show</string>
+    <string name="section_car" formatted="false">CAR</string>
+    <string name="section_mine" formatted="false">INSTALLED BY YOU</string>
+    <string name="edit_note" formatted="false">tap to show or hide</string>
+    <string name="app_vehicle" formatted="false">Vehicle</string>
+    <string name="app_energy" formatted="false">Energy</string>
+    <string name="app_consumption" formatted="false">Consumption</string>
+    <string name="app_phone" formatted="false">Phone</string>
+    <string name="app_music" formatted="false">Music</string>
+    <string name="app_usb_video" formatted="false">USB video</string>
+    <string name="app_camera" formatted="false">360° camera</string>
+    <string name="app_settings" formatted="false">Settings</string>
+    <string name="app_navigator" formatted="false">Navigation</string>
+    <string name="app_weather" formatted="false">Weather</string>
+    <string name="app_manual" formatted="false">Manual</string>
+    <string name="app_account" formatted="false">Account</string>
+    <string name="app_sos" formatted="false">SOS call</string>
+    <string name="settings_title" formatted="false">Launcher settings</string>
+    <string name="settings_desc" formatted="false">Launcher settings</string>
+    <string name="car_color" formatted="false">CAR COLOUR</string>
+    <string name="black_roof" formatted="false">Black roof</string>
+    <string name="theme" formatted="false">THEME</string>
+    <string name="language" formatted="false">LANGUAGE</string>
+    <string name="lang_auto">Automatic (%s)</string>
+    <string name="lang_auto_hint" formatted="false">Automatic follows the car\'s system language.</string>
+    <string name="default_nav" formatted="false">DEFAULT NAVIGATOR</string>
+    <string name="nav_auto_hint" formatted="false">Automatic: the phone\'s when CarPlay or Android Auto is connected, otherwise MG.</string>
+    <string name="auto" formatted="false">Automatic</string>
+    <string name="night" formatted="false">Night</string>
+    <string name="day" formatted="false">Day</string>
+    <string name="open_original_home" formatted="false">Open the original MG home</string>
+    <string name="diag_title" formatted="false">CAR SERVICES DIAGNOSTICS</string>
+    <string name="save_log" formatted="false">Save log</string>
+    <string name="save_log_hint" formatted="false">Save log: with a USB stick plugged in, the file is saved there too.</string>
+    <string name="close" formatted="false">Close</string>
+    <string name="updates" formatted="false">UPDATES</string>
+    <string name="check_updates" formatted="false">Check for updates</string>
+    <string name="download_install" formatted="false">Download and install</string>
+    <string name="download_install_v">Download and install %s</string>
+    <string name="busy" formatted="false">Working…</string>
+    <string name="press_check" formatted="false">Tap Check to look for a new version</string>
+    <string name="saving_log" formatted="false">Saving the log…</string>
+    <string name="log_failed" formatted="false">Could not save the log to any folder.</string>
+    <string name="log_saved_usb" formatted="false">Log saved, also to the USB stick:</string>
+    <string name="log_saved" formatted="false">Log saved:</string>
+    <string name="log_usb_hint" formatted="false">To get it on a USB stick, plug one in and tap Save log again.</string>
+    <string name="waiting_services" formatted="false">Waiting for the car services…</string>
+    <string name="upd_checking" formatted="false">Checking GitHub…</string>
+    <string name="upd_no_apk">The latest release (%s) has no APK</string>
+    <string name="upd_available">New version available: %s</string>
+    <string name="upd_latest">You\'re up to date (%1$s, latest release %2$s)</string>
+    <string name="upd_no_connection">No connection to GitHub (%s)</string>
+    <string name="upd_downloading">Downloading %s…</string>
+    <string name="upd_download_pct">Downloading %d%%…</string>
+    <string name="upd_download_failed">Download failed: %s</string>
+    <string name="upd_invalid_apk">The downloaded file is not a valid APK (%d bytes)</string>
+    <string name="upd_wrong_package" formatted="false">The downloaded file is not a launcher update</string>
+    <string name="upd_installing">Installing %s… the launcher will restart by itself</string>
+    <string name="upd_install_failed">Installation failed: %s</string>
+    <string name="upd_new_version" formatted="false">new version</string>
+    <string name="upd_not_found">No version found on %s</string>
+    <string name="upd_token_invalid" formatted="false">GitHub token invalid or expired</string>
+    <string name="upd_refused" formatted="false">GitHub refused the request (rate limit or permissions)</string>
+    <string name="upd_unexpected">Unexpected GitHub response: %d</string>
+    <string name="upd_confirm" formatted="false">Confirm the installation on screen</string>
+    <string name="upd_installed" formatted="false">Update installed</string>
+    <string name="upd_error_code">error %d</string>
+</resources>

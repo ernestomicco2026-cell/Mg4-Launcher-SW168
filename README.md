@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.4.1](releases/MG4Launcher-0.4.1.apk)**
+**Ultima versione / Latest version: [0.5.0](releases/MG4Launcher-0.5.0.apk)**
 
 > ⚠️ **Compatibilità / Compatibility:** solo infotainment **SW168 SAIC 1.0+** · only **SW168 SAIC 1.0+** infotainment.
 > Per **SW169 Color Radio** usa [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169) · for **SW169 Color Radio** use [Mg4-Launcher-SW169](https://github.com/ernestomicco2026-cell/Mg4-Launcher-SW169).
@@ -56,23 +56,27 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
   stato di ricarica e V2L (tocca V2L per la scarica), temperatura esterna. La tua MG4 ricolorabile con gli 8 colori della gamma, tetto nero opzionale.
   Tocca l'auto → Gestione energia. Tienila premuta → impostazioni del launcher.
 - **Mappa / Media / CarPlay** (a destra):
-  - **Mappa**: indicazioni del navigatore (prossima manovra, via, arrivo). Senza guida: Navigatore, Casa, Lavoro
-    e la riga **Apri con** (MG, CarPlay/Android Auto se il telefono è collegato, Waze/Google Maps se installati sull'auto).
+  - **Mappa**: indicazioni del navigatore (prossima manovra, via, arrivo). Senza guida: **Dove andiamo?** con la barra
+    *Cerca una destinazione*, i riquadri **Casa** e **Lavoro** (se impostati nel navigatore) e la riga **Apri con** (MG, CarPlay/Android Auto se il telefono è collegato, Waze/Google Maps se installati sull'auto).
     Tieni premuto un pulsante della riga per renderlo il navigatore predefinito.
   - **Media**: parte sempre dalla radio; in alto un pulsante per ogni sorgente
     (Radio, USB, Bluetooth, Online, e CarPlay/Android Auto se il telefono è collegato). Per la radio: logo della stazione,
-    pulsanti **FM / DAB** per cambiare banda e preferiti FM/DAB con i loghi, da toccare per cambiare stazione.
+    pulsanti **FM / DAB** per cambiare banda, **elenco delle stazioni trovate** sulla banda attuale (a destra, tocca per
+    sintonizzare) e preferiti FM/DAB con i loghi.
   - **CarPlay / Android Auto**: la scheda compare da sola quando colleghi il telefono.
 - **Barra in basso**: temperatura ‹ › (17 = LO … 33 = HI), ventola ‹ › (OFF / 1…11 / A = automatico;
   tocca l'icona = app Clima, tieni premuto = accendi/spegni), mini-player, Telefono, Radio,
   Telecamera 360°, Impostazioni.
 - **App**: scorri la home verso sinistra per le app dell'auto e quelle che installi tu,
   con le icone tutte nello stesso stile; scorri verso destra per tornare. Con **Modifica** scegli quali app installate mostrare.
-- **Impostazioni** (tieni premuta l'auto): colore dell'auto, tetto nero, tema (automatico, notte, giorno),
+- **Impostazioni** (tieni premuta l'auto): colore dell'auto, tetto nero, tema (automatico, notte, giorno), **lingua**,
   navigatore predefinito (Automatico, MG, Telefono), aggiornamenti, diagnostica con **Salva log**.
   Si aprono anche dall'ingranaggio in alto a destra nella pagina App.
 - **Schermo intero**: barra di stato e dock MG nascosti (trascina dal bordo per richiamarli).
 - **Aggiornamenti**: le nuove versioni si scaricano e si installano dalle impostazioni, senza computer.
+- **Lingue**: italiano, inglese, spagnolo, tedesco, portoghese, francese e turco. Con **Automatica** (predefinita)
+  il launcher segue la lingua di sistema dell'auto e cambia da solo quando la cambi; altrimenti scegli la lingua
+  nelle impostazioni del launcher. Con una lingua di sistema non tradotta usa l'inglese.
 
 ### Installazione
 
@@ -82,7 +86,7 @@ Il firmware MG SW168 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.4.1.apk
+   adb install -r -f MG4Launcher-0.5.0.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -133,6 +137,17 @@ recenti e logcat del launcher — in `Android/data/com.mg4.launcher/files/mg4-la
 Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartella: basta aprirla dal computer o dal telefono.
 
 ### Versioni
+
+#### 0.5.0 — 13 ottobre 2026
+- **Multilingua**: italiano, inglese, spagnolo, tedesco, portoghese, francese e turco. Nuova voce **Lingua** nelle
+  impostazioni: *Automatica* segue la lingua di sistema dell'auto (e si aggiorna da sola), oppure una lingua a scelta.
+- **Mappa**: riquadro *Dove andiamo?* ridisegnato, con barra *Cerca una destinazione*, navigatore predefinito
+  indicato sotto il titolo, riquadri **Casa** / **Lavoro** e riga **Apri con** più leggibile.
+- **Radio**: schermata riadattata (copertina e comandi proporzionati) ed **elenco delle stazioni trovate** sulla banda
+  attuale, con loghi; la stazione in onda è evidenziata e resta in vista.
+- Repository rinominato in **Mg4-Launcher-SW168**: il launcher passa da solo al nuovo nome per gli aggiornamenti.
+  Download degli aggiornamenti più robusto (segue lo spostamento del repository, riprova da raw.githubusercontent.com).
+- Chi ha la 0.4.x: installa questa versione con `adb install -r -f` (la 0.4.x cerca ancora il vecchio nome).
 
 #### 0.4.1 — 12 ottobre 2026
 - "Ricarica fino a" corretto: l'auto restituisce un codice (5 = 80%), ora convertito in percentuale; anche la tacca
@@ -189,6 +204,9 @@ Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartell
 Nessun Gradle: `./build.sh` usa aapt2, javac (bytecode 8), D8 e firma v1+v2 con la chiave platform AOSP
 (la stessa del sistema dell'auto, build test-keys). L'APK esce in `build/`. La versione è in `version.properties`.
 
+**Testi e traduzioni:** stanno tutti in `tools/i18n.py` (una riga per testo, 7 lingue). Dopo una modifica:
+`python3 tools/i18n.py` rigenera `app/res/values*/strings.xml`, poi `./build.sh`.
+
 Prima di compilare metti in `tools/` i due file non inclusi nel repository:
 - `android.jar` (API 28) da [Sable/android-platforms](https://github.com/Sable/android-platforms);
 - `d8.jar`: è `lib/jadx-1.5.1-all.jar` di [jadx 1.5.1](https://github.com/skylot/jadx/releases/tag/v1.5.1), rinominato.
@@ -240,25 +258,27 @@ It replaces the original home screen, keeping its features, with a new, clean de
   outside temperature (tap V2L for discharging). Your MG4, recolourable with the 8 factory colours, optional black roof.
   Tap the car → Energy management. Long-press it → launcher settings.
 - **Map / Media / CarPlay** (right):
-  - **Map**: navigation guidance (next manoeuvre, street, arrival). When not navigating: Navigator, Home, Work
-    and the **Open with** row (MG, CarPlay/Android Auto when a phone is connected, Waze/Google Maps if installed on the car).
+  - **Map**: navigation guidance (next manoeuvre, street, arrival). When not navigating: **Where to?** with the
+    *Search for a destination* bar, **Home** and **Work** tiles (if set in the navigator) and the **Open with** row (MG, CarPlay/Android Auto when a phone is connected, Waze/Google Maps if installed on the car).
     Long-press a button in that row to make it the default navigator.
   - **Media**: always starts on the radio; one button per source at the top
     (Radio, USB, Bluetooth, Online, plus CarPlay/Android Auto when a phone is connected). For the radio: station logo,
-    **FM / DAB** buttons to switch band and FM/DAB favourites with logos, tap one to tune in.
+    **FM / DAB** buttons to switch band, the **list of stations found** on the current band (on the right, tap to
+    tune in) and FM/DAB favourites with logos.
   - **CarPlay / Android Auto**: the tab appears by itself when you connect a phone.
 - **Bottom bar**: temperature ‹ › (17 = LO … 33 = HI), fan ‹ › (OFF / 1…11 / A = auto;
   tap the icon = Climate app, long-press = climate on/off), mini player, Phone, Radio,
   360° camera, Settings.
 - **Apps**: swipe the home screen left for the car's apps and the ones you install,
   all with matching icons; swipe right to go back. Use **Modifica** (Edit) to choose which installed apps to show.
-- **Settings** (long-press the car): car colour, black roof, theme (auto, night, day),
+- **Settings** (long-press the car): car colour, black roof, theme (auto, night, day), **language**,
   default navigator (Auto, MG, Phone), updates, diagnostics with **Salva log** (save log).
   Also available from the gear at the top right of the Apps page.
 - **Full screen**: status bar and MG dock hidden (swipe from the edge to bring them back).
 - **Updates**: new versions download and install from the settings, no computer needed.
-
-The app's interface is in Italian.
+- **Languages**: Italian, English, Spanish, German, Portuguese, French and Turkish. **Automatic** (the default)
+  follows the car's system language and switches by itself when you change it; otherwise pick a language in the
+  launcher settings. If the system language is not translated, English is used.
 
 ### Installation
 
@@ -268,7 +288,7 @@ The MG SW168 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.4.1.apk
+   adb install -r -f MG4Launcher-0.5.0.apk
    ```
 3. Make it the default home:
    ```bash
@@ -319,6 +339,17 @@ and the launcher's logcat — to `Android/data/com.mg4.launcher/files/mg4-launch
 With a USB stick plugged in, the file is written there too, in the same folder.
 
 ### Changelog
+
+#### 0.5.0 — 13 October 2026
+- **Multilingual**: Italian, English, Spanish, German, Portuguese, French and Turkish. New **Language** setting:
+  *Automatic* follows the car's system language (and updates by itself), or pick a language.
+- **Map**: redesigned *Where to?* panel with a *Search for a destination* bar, the default navigator shown under the
+  title, **Home** / **Work** tiles and a clearer **Open with** row.
+- **Radio**: re-proportioned screen (artwork and controls) and a **list of the stations found** on the current band,
+  with logos; the station on air is highlighted and kept in view.
+- Repository renamed to **Mg4-Launcher-SW168**: the launcher switches to the new name for updates by itself.
+  Sturdier update download (follows the repository move, retries from raw.githubusercontent.com).
+- If you have 0.4.x: install this version with `adb install -r -f` (0.4.x still looks for the old name).
 
 #### 0.4.1 — 12 October 2026
 - "Ricarica fino a" (charge limit) fixed: the car returns a code (5 = 80%), now converted to a percentage; the
@@ -374,6 +405,9 @@ With a USB stick plugged in, the file is written there too, in the same folder.
 
 No Gradle: `./build.sh` uses aapt2, javac (bytecode 8), D8 and v1+v2 signing with the AOSP platform key
 (the same as the car's system, test-keys build). The APK ends up in `build/`. The version is in `version.properties`.
+
+**Texts and translations:** all in `tools/i18n.py` (one line per text, 7 languages). After a change,
+`python3 tools/i18n.py` regenerates `app/res/values*/strings.xml`, then run `./build.sh`.
 
 Before building, put the two files not included in the repository into `tools/`:
 - `android.jar` (API 28) from [Sable/android-platforms](https://github.com/Sable/android-platforms);

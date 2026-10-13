@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.mg4.launcher.L;
 import com.mg4.launcher.R;
 import com.mg4.launcher.apps.AppCatalog;
 import com.mg4.launcher.apps.IconStyler;
@@ -56,16 +57,16 @@ public final class AppsView extends LinearLayout {
         LinearLayout head = Ui.row(c);
         head.setPadding(dp(8), dp(4), dp(8), dp(4));
         // si torna alla home scorrendo verso destra (o con il tasto Home)
-        head.addView(Ui.text(c, "App", 32, t.text, Ui.MEDIUM), Ui.margins(Ui.lp(-2, -2), dp(12), 0, 0, 0));
+        head.addView(Ui.text(c, L.s(R.string.apps_title), 32, t.text, Ui.MEDIUM), Ui.margins(Ui.lp(-2, -2), dp(12), 0, 0, 0));
         head.addView(Ui.spacer(c));
-        editBtn = Ui.text(c, "Modifica", 19, t.text, Ui.MEDIUM);
+        editBtn = Ui.text(c, L.s(R.string.edit), 19, t.text, Ui.MEDIUM);
         editBtn.setGravity(Gravity.CENTER);
         editBtn.setPadding(dp(26), 0, dp(26), 0);
         editBtn.setClickable(true);
-        editBtn.setContentDescription("Scegli quali app installate mostrare");
+        editBtn.setContentDescription(L.s(R.string.edit_desc));
         editBtn.setOnClickListener(v -> setEditing(!editing));
         head.addView(editBtn, Ui.margins(Ui.lp(-2, dp(60)), 0, 0, dp(12), 0));
-        head.addView(Ui.iconButton(c, t, R.drawable.ic_gear, t.text, t.panel, 60, 28, 18, "Impostazioni del launcher",
+        head.addView(Ui.iconButton(c, t, R.drawable.ic_gear, t.text, t.panel, 60, 28, 18, L.s(R.string.settings_desc),
                 v -> host.openSettings()));
         addView(head);
 
@@ -82,7 +83,7 @@ public final class AppsView extends LinearLayout {
 
     private void setEditing(boolean on) {
         editing = on;
-        editBtn.setText(on ? "Fine" : "Modifica");
+        editBtn.setText(L.s(on ? R.string.done : R.string.edit));
         editBtn.setTextColor(on ? t.onAccent : t.text);
         editBtn.setBackground(Ui.pressable(getContext(), on ? t.accent : t.panel, 30, t));
         reload();
@@ -100,7 +101,7 @@ public final class AppsView extends LinearLayout {
     public void reload() {
         Context c = getContext();
         content.removeAllViews();
-        content.addView(section(c, "AUTO", null));
+        content.addView(section(c, L.s(R.string.section_car), null));
         addGrid(c, catalog.carApps(host.navPackageHint()), null);
         List<AppCatalog.App> all = catalog.userApps();
         Set<String> hidden = prefs.hiddenApps();
@@ -108,8 +109,8 @@ public final class AppsView extends LinearLayout {
         for (AppCatalog.App a : all) {
             if (editing || !hidden.contains(key(a))) mine.add(a);
         }
-        String note = editing ? "tocca per mostrare o nascondere" : null;
-        content.addView(section(c, "INSTALLATE DA TE", note), Ui.margins(new LayoutParams(-1, -2), 0, dp(10), 0, 0));
+        String note = editing ? L.s(R.string.edit_note) : null;
+        content.addView(section(c, L.s(R.string.section_mine), note), Ui.margins(new LayoutParams(-1, -2), 0, dp(10), 0, 0));
         if (!mine.isEmpty()) addGrid(c, mine, hidden);
     }
 

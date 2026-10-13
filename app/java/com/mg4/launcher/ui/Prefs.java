@@ -69,10 +69,19 @@ public final class Prefs {
     }
 
     // --- aggiornamenti da GitHub ---
-    public static final String DEFAULT_REPO = "ernestomicco2026-cell/mg4-launcher";
+    public static final String DEFAULT_REPO = "ernestomicco2026-cell/Mg4-Launcher-SW168";
+    /** Nomi precedenti del repository (rinominato): si passa da soli al nuovo. */
+    private static final String[] OLD_REPOS = {"ernestomicco2026-cell/mg4-launcher"};
 
     public String updateRepo() {
-        return sp.getString("ghRepo", DEFAULT_REPO);
+        String r = sp.getString("ghRepo", DEFAULT_REPO);
+        for (String old : OLD_REPOS) {
+            if (old.equalsIgnoreCase(r)) {
+                sp.edit().putString("ghRepo", DEFAULT_REPO).apply();
+                return DEFAULT_REPO;
+            }
+        }
+        return r;
     }
 
     public void setUpdateRepo(String r) {
@@ -97,5 +106,14 @@ public final class Prefs {
 
     public void setNavApp(String v) {
         sp.edit().putString("navApp", v).apply();
+    }
+
+    // --- lingua: "auto" (lingua di sistema) o codice (it, en, es, de, pt, fr, tr) ---
+    public String language() {
+        return sp.getString("language", com.mg4.launcher.L.AUTO);
+    }
+
+    public void setLanguage(String code) {
+        sp.edit().putString("language", code).apply();
     }
 }

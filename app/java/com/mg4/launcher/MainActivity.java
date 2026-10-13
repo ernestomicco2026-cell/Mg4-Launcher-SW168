@@ -55,6 +55,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         prefs = new Prefs(this);
+        L.init(this, prefs.language());
         catalog = new AppCatalog(this);
         vehicle = new VehicleClient(this);
         media = new MediaClient(this);
@@ -208,6 +209,12 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     public void onConfigurationChanged(Configuration cfg) {
         super.onConfigurationChanged(cfg);
+        // lingua di sistema cambiata: con "Automatica" il launcher la segue subito
+        if (L.init(this, prefs.language())) {
+            catalog.refreshLabels();
+            build();
+            return;
+        }
         if (cfg.uiMode != lastUiMode) {
             lastUiMode = cfg.uiMode;
             if (Prefs.THEME_AUTO.equals(prefs.themeMode())) {
@@ -335,6 +342,15 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
             home.applyCarLook();
             home.refreshNav();
         }
+    }
+
+    @Override
+    public void languageChanged() {
+        L.init(this, prefs.language());
+        catalog.refreshLabels();
+        IconStyler.clearCache();
+        build();
+        openSettings();
     }
 
     @Override

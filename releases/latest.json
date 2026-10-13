@@ -1,6 +1,6 @@
 {
-  "version": "0.4.1",
-  "apk": "releases/MG4Launcher-0.4.1.apk",
-  "size": 339704,
-  "notes": "Ricarica fino a corretto (codice auto convertito in %), consumo medio degli ultimi 50 km, V2L cliccabile (apre la scarica), log più leggibile."
+  "version": "0.5.0",
+  "apk": "releases/MG4Launcher-0.5.0.apk",
+  "size": 393024,
+  "notes": "Multilingua (IT, EN, ES, DE, PT, FR, TR) con lingua automatica di sistema, nuovo riquadro Dove andiamo?, radio con elenco delle stazioni trovate, repository rinominato in Mg4-Launcher-SW168."
 }

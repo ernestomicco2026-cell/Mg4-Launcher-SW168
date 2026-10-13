@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generato da tools/i18n.py: non modificare a mano -->
+<resources>
+    <string name="connecting_vehicle" formatted="false">Verbindung zum Fahrzeug…</string>
+    <string name="vehicle_unavailable" formatted="false">Fahrzeugdienst nicht verfügbar</string>
+    <string name="chip_consumption" formatted="false">Ø Verbrauch</string>
+    <string name="chip_limit" formatted="false">Laden bis</string>
+    <string name="v2l_desc" formatted="false">V2L, Entladeverwaltung öffnen</string>
+    <string name="on" formatted="false">Aktiv</string>
+    <string name="off" formatted="false">Aus</string>
+    <string name="full_at">voll um %s</string>
+    <string name="charge_charging" formatted="false">Lädt</string>
+    <string name="charge_fast" formatted="false">Schnellladen</string>
+    <string name="charge_wireless" formatted="false">Kabelloses Laden</string>
+    <string name="charge_done" formatted="false">Laden abgeschlossen</string>
+    <string name="charge_balancing" formatted="false">Batterieausgleich</string>
+    <string name="charge_error" formatted="false">Ladefehler</string>
+    <string name="charge_connecting" formatted="false">Verbinde…</string>
+    <string name="charge_not_recognized" formatted="false">Angeschlossen · nicht erkannt</string>
+    <string name="charge_not_charging" formatted="false">Angeschlossen · lädt nicht</string>
+    <string name="charge_stopped" formatted="false">Laden unterbrochen</string>
+    <string name="charge_scheduled" formatted="false">Geplantes Laden</string>
+    <string name="charge_multiple" formatted="false">Mehrfachladen</string>
+    <string name="v2l_active" formatted="false">V2L aktiv · externe Versorgung</string>
+    <string name="v2l_stopped" formatted="false">V2L unterbrochen</string>
+    <string name="v2l_done" formatted="false">V2L beendet</string>
+    <string name="ready" formatted="false">Bereit</string>
+    <string name="outside_temp">%s° außen</string>
+    <string name="climate" formatted="false">Klima</string>
+    <string name="tab_map" formatted="false">Karte</string>
+    <string name="tab_media" formatted="false">Medien</string>
+    <string name="where_to" formatted="false">Wohin geht\'s?</string>
+    <string name="search_destination" formatted="false">Ziel suchen</string>
+    <string name="nav_default">Navigation: %s</string>
+    <string name="home_place" formatted="false">Zuhause</string>
+    <string name="work_place" formatted="false">Arbeit</string>
+    <string name="go_there" formatted="false">Route starten</string>
+    <string name="open_with" formatted="false">Öffnen mit</string>
+    <string name="open_with_hint" formatted="false">lange drücken für Standard</string>
+    <string name="nav_phone" formatted="false">Navigation vom Telefon</string>
+    <string name="next_maneuver" formatted="false">Nächstes Manöver</string>
+    <string name="navigating" formatted="false">Navigation läuft</string>
+    <string name="remaining">Noch %s</string>
+    <string name="tap_open_nav" formatted="false">Tippen, um die Navigation zu öffnen</string>
+    <string name="arrival">Ankunft %s</string>
+    <string name="open_source_app" formatted="false">App der Quelle öffnen</string>
+    <string name="src_radio" formatted="false">Radio</string>
+    <string name="src_online" formatted="false">Online</string>
+    <string name="media_generic" formatted="false">Medien</string>
+    <string name="phone_connected" formatted="false">Telefon verbunden</string>
+    <string name="projection_ready">%s bereit. Tippen für Vollbild.</string>
+    <string name="open" formatted="false">Öffnen</string>
+    <string name="stations_title">%s-Sender</string>
+    <string name="stations_empty" formatted="false">Keine Sender gefunden. Starte einen Suchlauf in der Radio-App.</string>
+    <string name="open_radio_app" formatted="false">Radio öffnen</string>
+    <string name="previous" formatted="false">Zurück</string>
+    <string name="next" formatted="false">Weiter</string>
+    <string name="play_pause" formatted="false">Wiedergabe oder Pause</string>
+    <string name="temp_down" formatted="false">Temperatur senken</string>
+    <string name="temp_up" formatted="false">Temperatur erhöhen</string>
+    <string name="fan_down" formatted="false">Gebläse weniger</string>
+    <string name="fan_up" formatted="false">Gebläse mehr</string>
+    <string name="no_track" formatted="false">Kein Titel</string>
+    <string name="plug_usb" formatted="false">USB-Stick anschließen</string>
+    <string name="bt_music" formatted="false">Bluetooth-Musik</string>
+    <string name="bt_start" formatted="false">Wiedergabe am Telefon starten</string>
+    <string name="online_music" formatted="false">Online-Musik</string>
+    <string name="from_phone" formatted="false">vom Telefon</string>
+    <string name="apps_title" formatted="false">Apps</string>
+    <string name="edit" formatted="false">Bearbeiten</string>
+    <string name="done" formatted="false">Fertig</string>
+    <string name="edit_desc" formatted="false">Wähle, welche installierten Apps angezeigt werden</string>
+    <string name="section_car" formatted="false">FAHRZEUG</string>
+    <string name="section_mine" formatted="false">VON DIR INSTALLIERT</string>
+    <string name="edit_note" formatted="false">tippen zum Ein- oder Ausblenden</string>
+    <string name="app_vehicle" formatted="false">Fahrzeug</string>
+    <string name="app_energy" formatted="false">Energie</string>
+    <string name="app_consumption" formatted="false">Verbrauch</string>
+    <string name="app_phone" formatted="false">Telefon</string>
+    <string name="app_music" formatted="false">Musik</string>
+    <string name="app_usb_video" formatted="false">USB-Video</string>
+    <string name="app_camera" formatted="false">360°-Kamera</string>
+    <string name="app_settings" formatted="false">Einstellungen</string>
+    <string name="app_navigator" formatted="false">Navigation</string>
+    <string name="app_weather" formatted="false">Wetter</string>
+    <string name="app_manual" formatted="false">Handbuch</string>
+    <string name="app_account" formatted="false">Konto</string>
+    <string name="app_sos" formatted="false">SOS-Notruf</string>
+    <string name="settings_title" formatted="false">Launcher-Einstellungen</string>
+    <string name="settings_desc" formatted="false">Launcher-Einstellungen</string>
+    <string name="car_color" formatted="false">FAHRZEUGFARBE</string>
+    <string name="black_roof" formatted="false">Schwarzes Dach</string>
+    <string name="theme" formatted="false">DESIGN</string>
+    <string name="language" formatted="false">SPRACHE</string>
+    <string name="lang_auto">Automatisch (%s)</string>
+    <string name="lang_auto_hint" formatted="false">Automatisch folgt der Systemsprache des Fahrzeugs.</string>
+    <string name="default_nav" formatted="false">STANDARD-NAVIGATION</string>
+    <string name="nav_auto_hint" formatted="false">Automatisch: die des Telefons, wenn CarPlay oder Android Auto verbunden ist, sonst MG.</string>
+    <string name="auto" formatted="false">Automatisch</string>
+    <string name="night" formatted="false">Nacht</string>
+    <string name="day" formatted="false">Tag</string>
+    <string name="open_original_home" formatted="false">Original-MG-Startseite öffnen</string>
+    <string name="diag_title" formatted="false">DIAGNOSE FAHRZEUGDIENSTE</string>
+    <string name="save_log" formatted="false">Log speichern</string>
+    <string name="save_log_hint" formatted="false">Log speichern: Ist ein USB-Stick eingesteckt, wird die Datei auch dort gespeichert.</string>
+    <string name="close" formatted="false">Schließen</string>
+    <string name="updates" formatted="false">UPDATES</string>
+    <string name="check_updates" formatted="false">Nach Updates suchen</string>
+    <string name="download_install" formatted="false">Herunterladen und installieren</string>
+    <string name="download_install_v">%s herunterladen und installieren</string>
+    <string name="busy" formatted="false">Wird ausgeführt…</string>
+    <string name="press_check" formatted="false">Tippe auf „Suchen“, um nach einer neuen Version zu suchen</string>
+    <string name="saving_log" formatted="false">Log wird gespeichert…</string>
+    <string name="log_failed" formatted="false">Das Log konnte in keinem Ordner gespeichert werden.</string>
+    <string name="log_saved_usb" formatted="false">Log gespeichert, auch auf dem USB-Stick:</string>
+    <string name="log_saved" formatted="false">Log gespeichert:</string>
+    <string name="log_usb_hint" formatted="false">Für den USB-Stick: einstecken und erneut auf „Log speichern“ tippen.</string>
+    <string name="waiting_services" formatted="false">Warte auf die Fahrzeugdienste…</string>
+    <string name="upd_checking" formatted="false">Prüfe GitHub…</string>
+    <string name="upd_no_apk">Die neueste Version (%s) enthält keine APK</string>
+    <string name="upd_available">Neue Version verfügbar: %s</string>
+    <string name="upd_latest">Du bist auf dem neuesten Stand (%1$s, neueste Version %2$s)</string>
+    <string name="upd_no_connection">Keine Verbindung zu GitHub (%s)</string>
+    <string name="upd_downloading">Lade %s herunter…</string>
+    <string name="upd_download_pct">Download %d%%…</string>
+    <string name="upd_download_failed">Download fehlgeschlagen: %s</string>
+    <string name="upd_invalid_apk">Die heruntergeladene Datei ist keine gültige APK (%d Byte)</string>
+    <string name="upd_wrong_package" formatted="false">Die heruntergeladene Datei ist kein Launcher-Update</string>
+    <string name="upd_installing">Installiere %s… der Launcher startet von selbst neu</string>
+    <string name="upd_install_failed">Installation fehlgeschlagen: %s</string>
+    <string name="upd_new_version" formatted="false">neue Version</string>
+    <string name="upd_not_found">Keine Version auf %s gefunden</string>
+    <string name="upd_token_invalid" formatted="false">GitHub-Token ungültig oder abgelaufen</string>
+    <string name="upd_refused" formatted="false">GitHub hat die Anfrage abgelehnt (Limit oder Berechtigungen)</string>
+    <string name="upd_unexpected">Unerwartete GitHub-Antwort: %d</string>
+    <string name="upd_confirm" formatted="false">Installation auf dem Bildschirm bestätigen</string>
+    <string name="upd_installed" formatted="false">Update installiert</string>
+    <string name="upd_error_code">Fehler %d</string>
+</resources>
