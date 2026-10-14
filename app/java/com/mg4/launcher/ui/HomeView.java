@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-/** Home in stile Tesla: auto + energia a sinistra, pannello Mappa/Media/CarPlay a destra, barra in basso. */
+/** Home in stile Tesla (MG4, SWI68): auto + energia a sinistra, pannello Mappa/Media/CarPlay a destra, barra in basso. */
 public final class HomeView extends LinearLayout {
 
     /** Azioni che la home chiede all'activity. */

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Compila MG4 Launcher senza Gradle: aapt2 -> javac -> D8 -> firma (v1+v2).
+# Compila MG4 Launcher (SWI68) senza Gradle: aapt2 -> javac -> D8 -> firma (v1+v2).
 # Uso: ./build.sh            (versione da version.properties)
 #      DEMO=1 ./build.sh     versione demo: dati simulati, pacchetto com.mg4.launcher.demo, non diventa la home
 set -euo pipefail

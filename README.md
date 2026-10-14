@@ -17,7 +17,7 @@
 
 ---
 ![MG4 Launcher 0.6.2 — home (simulazione / mock-up)](docs/home-0.6.2.png)
-*Home 0.6.2: orologio, batteria con decimali, TPMS, temperatura interna, sedili e volante riscaldati · 0.6.2 home: clock, battery decimals, TPMS, interior temperature, heated seats and wheel (mock-up).*
+*Home 0.6.2 — orologio, batteria con decimali, TPMS, temperatura interna, sedili e volante riscaldati · 0.6.2 home: clock, battery decimals, TPMS, interior temperature, heated seats and wheel (mock-up).*
 
 ---
 

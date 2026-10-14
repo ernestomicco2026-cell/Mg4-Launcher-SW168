@@ -2,7 +2,7 @@
 """Genera app/res/values*/strings.xml con i testi del launcher in 7 lingue.
 
 Ogni voce: chiave -> (it, en, es, de, pt, fr, tr). L'inglese è la lingua di riserva (cartella values/).
-Uso: python3 tools/i18n.py   (poi ./build.sh)
+Uso: python3 tools/i18n.py   (poi ./build.sh per compilare)
 """
 import os
 import re
