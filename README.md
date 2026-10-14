@@ -150,7 +150,6 @@ Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartell
 - **Riscaldamento sedili** sinistro e destro (3 livelli, con tacche) e **volante riscaldato**, dopo A/C e AUTO.
 - **Pressione pneumatici (TPMS)** sotto l'auto, anteriori e posteriori (ambra sotto 2,0 bar); si può nascondere.
 - **Temperatura interna** sotto quella esterna.
-- Versione **DEMO** (`DEMO=1 ./build.sh`): app separata con dati simulati, per provare la grafica senza l'auto.
 
 #### 0.6.1 — 13 ottobre 2026
 - Nome corretto del software: **SWI68** (non SW168). Repository rinominato in **Mg4-Launcher-SWI68**; il launcher
@@ -377,7 +376,6 @@ With a USB stick plugged in, the file is written there too, in the same folder.
 - Left and right **heated seats** (3 levels, with level marks) and **heated steering wheel**, after A/C and AUTO.
 - **Tyre pressure (TPMS)** under the car, front and rear (amber below 2.0 bar); can be hidden.
 - **Interior temperature** under the outside one.
-- **DEMO** build (`DEMO=1 ./build.sh`): separate app with simulated data, to try the design without the car.
 
 #### 0.6.1 — 13 October 2026
 - Correct software name: **SWI68** (not SW168). Repository renamed to **Mg4-Launcher-SWI68**; the launcher switches
