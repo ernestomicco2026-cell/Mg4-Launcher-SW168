@@ -40,6 +40,16 @@
     <string name="display" formatted="false">GÖRÜNÜM</string>
     <string name="soc_decimals" formatted="false">Ondalıklı batarya yüzdesi</string>
     <string name="show_tpms" formatted="false">Aracın altında lastik basıncı</string>
+    <string name="set_ui_size" formatted="false">KONTROL BOYUTU</string>
+    <string name="ui_size_normal" formatted="false">Normal</string>
+    <string name="ui_size_large" formatted="false">Büyük</string>
+    <string name="ui_size_xlarge" formatted="false">Çok büyük</string>
+    <string name="set_drive_side" formatted="false">DİREKSİYON KONUMU</string>
+    <string name="drive_auto" formatted="false">Araç gibi</string>
+    <string name="drive_left" formatted="false">Soldan direksiyon</string>
+    <string name="drive_right" formatted="false">Sağdan direksiyon</string>
+    <string name="left" formatted="false">Sol</string>
+    <string name="right" formatted="false">Sağ</string>
     <string name="demo_no_updates" formatted="false">Demo sürümü: güncellemeler kapalı</string>
     <string name="climate" formatted="false">Klima</string>
     <string name="tab_map" formatted="false">Harita</string>

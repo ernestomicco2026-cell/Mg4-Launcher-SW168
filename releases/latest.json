@@ -1,6 +1,6 @@
 {
-  "version": "0.6.3",
-  "apk": "releases/MG4Launcher-0.6.3.apk",
-  "size": 422210,
-  "notes": "Pressione pneumatici (TPMS) corretta, avviso discreto per i nuovi aggiornamenti."
+  "version": "0.7.0",
+  "apk": "releases/MG4Launcher-0.7.0.apk",
+  "size": 430402,
+  "notes": "Dimensione comandi (Normale, Grande, Molto grande), posizione di guida destra/sinistra, spazio per la spia luci del sistema."
 }

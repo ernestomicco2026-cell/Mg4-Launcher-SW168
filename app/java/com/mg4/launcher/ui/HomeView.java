@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.mg4.launcher.L;
 import com.mg4.launcher.R;
+import com.mg4.launcher.svc.CarFeatures;
 import com.mg4.launcher.svc.MediaClient;
 import com.mg4.launcher.svc.NavClient;
 import com.mg4.launcher.svc.VehicleClient;
@@ -111,6 +112,11 @@ public final class HomeView extends LinearLayout {
     private FrameLayout seatLeftBtn, seatRightBtn, wheelBtn;
     private ImageView outIcon;
 
+    /** Spazio lasciato libero in alto a sinistra quando la barra di sistema disegna la spia luci. */
+    private static final int SYSTEM_LIGHT_INSET = 64;
+    /** Home specchiata (guida a destra) e spia luci di sistema presente. */
+    private final boolean rhd, sysIndicator;
+
     public HomeView(Context c, Theme t, Prefs prefs, Host host, VehicleClient vehicle, MediaClient media, NavClient nav) {
         super(c);
         this.t = t;
@@ -124,13 +130,26 @@ public final class HomeView extends LinearLayout {
         int pad = dp(20);
         setPadding(pad, pad, pad, pad);
 
+        // guida a destra: dall'impostazione, oppure come l'auto
+        boolean carRhd = CarFeatures.isRightHandDrive(c);
+        String side = prefs.driveSide();
+        rhd = Prefs.DRIVE_RIGHT.equals(side) || (Prefs.DRIVE_AUTO.equals(side) && carRhd);
+        sysIndicator = CarFeatures.hasSystemLightIndicator(c) || carRhd;
+
         LinearLayout top = Ui.row(c);
         top.setGravity(Gravity.FILL_VERTICAL);
         addView(top, Ui.lpWeight(LayoutParams.MATCH_PARENT, 0, 1f));
-        top.addView(buildCarPanel(c), new LayoutParams(dp(720), LayoutParams.MATCH_PARENT));
+        View carPanel = buildCarPanel(c);
         right = buildRightPanel(c);
-        top.addView(right, Ui.margins(Ui.lpWeight(0, LayoutParams.MATCH_PARENT, 1f), dp(16), 0, 0, 0));
-        addView(buildBottomBar(c), Ui.margins(new LayoutParams(LayoutParams.MATCH_PARENT, dp(100)), 0, dp(14), 0, 0));
+        if (!rhd) {
+            top.addView(carPanel, new LayoutParams(dp(720), LayoutParams.MATCH_PARENT));
+            top.addView(right, Ui.margins(Ui.lpWeight(0, LayoutParams.MATCH_PARENT, 1f), dp(16), 0, 0, 0));
+        } else {
+            // auto e clima dal lato del guidatore
+            top.addView(right, Ui.lpWeight(0, LayoutParams.MATCH_PARENT, 1f));
+            top.addView(carPanel, Ui.margins(new LayoutParams(dp(720), LayoutParams.MATCH_PARENT), dp(16), 0, 0, 0));
+        }
+        addView(buildBottomBar(c), Ui.margins(new LayoutParams(LayoutParams.MATCH_PARENT, tp(100)), 0, dp(14), 0, 0));
 
         applyCarLook();
         selectTab(TAB_MEDIA, false);
@@ -138,6 +157,21 @@ public final class HomeView extends LinearLayout {
 
     private int dp(float v) {
         return Ui.dp(getContext(), v);
+    }
+
+    /** Misura di un comando toccabile (cresce con la dimensione comandi). */
+    private int tp(float v) {
+        return Ui.tp(getContext(), v);
+    }
+
+    /** Testo di un comando toccabile. */
+    private static float ts(float sp) {
+        return Ui.ts(sp);
+    }
+
+    /** True se la home è specchiata per la guida a destra. */
+    public boolean isRightHand() {
+        return rhd;
     }
 
     public void refreshNav() {
@@ -175,6 +209,8 @@ public final class HomeView extends LinearLayout {
         clockTv = Ui.text(c, "", 76, t.text, Ui.LIGHT);
         clockTv.setLetterSpacing(-0.03f);
         head.addView(clockTv);
+        // spia luci del sistema in alto a sinistra: l'autonomia parte più a destra
+        if (sysIndicator && !rhd) head.setPadding(dp(SYSTEM_LIGHT_INSET), 0, 0, 0);
         p.addView(head);
 
         LinearLayout batRow = Ui.row(c);
@@ -397,7 +433,7 @@ public final class HomeView extends LinearLayout {
         connBars.setColors(t.text, t.track);
         connRow.addView(connBars, Ui.margins(new LayoutParams(dp(22), dp(18)), dp(5), 0, 0, dp(2)));
         connRow.setVisibility(GONE);
-        topRight.addView(connRow, Ui.margins(new LayoutParams(-2, dp(60)), 0, 0, dp(10), 0));
+        topRight.addView(connRow, Ui.margins(new LayoutParams(-2, tp(48) + dp(12)), 0, 0, dp(10), 0));
         topRight.addView(tabs);
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.END);
         lp.setMargins(0, dp(20), dp(20), 0);
@@ -406,13 +442,13 @@ public final class HomeView extends LinearLayout {
     }
 
     private TextView addTab(Context c, LinearLayout parent, String label, int which) {
-        TextView tv = Ui.text(c, label, 18, t.sub, Ui.MEDIUM);
+        TextView tv = Ui.text(c, label, ts(18), t.sub, Ui.MEDIUM);
         tv.setGravity(Gravity.CENTER);
-        tv.setPadding(dp(22), 0, dp(22), 0);
-        tv.setMinHeight(dp(48));
+        tv.setPadding(tp(22), 0, tp(22), 0);
+        tv.setMinHeight(tp(48));
         tv.setClickable(true);
         tv.setOnClickListener(v -> selectTab(which, true));
-        parent.addView(tv, Ui.margins(Ui.lp(-2, dp(48)), which == 0 ? 0 : dp(6), 0, 0, 0));
+        parent.addView(tv, Ui.margins(Ui.lp(-2, tp(48)), which == 0 ? 0 : dp(6), 0, 0, 0));
         return tv;
     }
 
@@ -465,20 +501,20 @@ public final class HomeView extends LinearLayout {
         search.setClickable(true);
         search.setContentDescription(L.s(R.string.search_destination));
         search.setOnClickListener(v -> host.launchNavigator());
-        search.addView(Ui.icon(c, R.drawable.ic_search, t.sub, 28), new LayoutParams(dp(28), dp(28)));
-        search.addView(Ui.oneLine(Ui.text(c, L.s(R.string.search_destination), 22, t.sub, Ui.REGULAR)),
+        search.addView(Ui.icon(c, R.drawable.ic_search, t.sub, 28), new LayoutParams(tp(28), tp(28)));
+        search.addView(Ui.oneLine(Ui.text(c, L.s(R.string.search_destination), ts(22), t.sub, Ui.REGULAR)),
                 Ui.margins(Ui.lpWeight(0, -2, 1), dp(16), 0, dp(12), 0));
         FrameLayout go = new FrameLayout(c);
-        go.setBackground(Ui.round(t.accent, dp(26)));
-        go.addView(Ui.icon(c, R.drawable.ic_nav, t.onAccent, 26), new FrameLayout.LayoutParams(dp(26), dp(26), Gravity.CENTER));
-        search.addView(go, new LayoutParams(dp(52), dp(52)));
-        navIdle.addView(search, Ui.margins(new LayoutParams(dp(640), dp(76)), 0, dp(22), 0, 0));
+        go.setBackground(Ui.round(t.accent, tp(26)));
+        go.addView(Ui.icon(c, R.drawable.ic_nav, t.onAccent, 26), new FrameLayout.LayoutParams(tp(26), tp(26), Gravity.CENTER));
+        search.addView(go, new LayoutParams(tp(52), tp(52)));
+        navIdle.addView(search, Ui.margins(new LayoutParams(dp(640), tp(76)), 0, dp(22), 0, 0));
 
         navPlaces = Ui.row(c);
         navHomeBtn = placeTile(c, R.drawable.ic_home, L.s(R.string.home_place), v -> nav.goHome());
         navOfficeBtn = placeTile(c, R.drawable.ic_work, L.s(R.string.work_place), v -> nav.goOffice());
-        navPlaces.addView(navHomeBtn, Ui.margins(new LayoutParams(dp(312), dp(88)), 0, 0, dp(16), 0));
-        navPlaces.addView(navOfficeBtn, new LayoutParams(dp(312), dp(88)));
+        navPlaces.addView(navHomeBtn, Ui.margins(new LayoutParams(dp(312), tp(88)), 0, 0, dp(16), 0));
+        navPlaces.addView(navOfficeBtn, new LayoutParams(dp(312), tp(88)));
         navIdle.addView(navPlaces, Ui.margins(new LayoutParams(-2, -2), 0, dp(16), 0, 0));
 
         // apri con: MG / telefono (CarPlay, Android Auto) / navigatori installati (Waze, Google Maps...)
@@ -511,7 +547,7 @@ public final class HomeView extends LinearLayout {
         navCard.setClickable(true);
         navCard.setOnClickListener(v -> openNavigation());
         FrameLayout.LayoutParams cl = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START);
-        cl.setMargins(dp(20), dp(20), dp(20), 0);
+        cl.setMargins(dp(20 + (rhd && sysIndicator ? SYSTEM_LIGHT_INSET : 0)), dp(20), dp(20), 0);
         f.addView(navCard, cl);
 
         navEta = Ui.row(c);
@@ -546,11 +582,11 @@ public final class HomeView extends LinearLayout {
         tile.setOnClickListener(l);
         FrameLayout ic = new FrameLayout(c);
         ic.setBackground(Ui.round(t.overlay, dp(28)));
-        ic.addView(Ui.icon(c, icon, t.text, 26), new FrameLayout.LayoutParams(dp(26), dp(26), Gravity.CENTER));
-        tile.addView(ic, new LayoutParams(dp(56), dp(56)));
+        ic.addView(Ui.icon(c, icon, t.text, 26), new FrameLayout.LayoutParams(tp(26), tp(26), Gravity.CENTER));
+        tile.addView(ic, new LayoutParams(tp(56), tp(56)));
         LinearLayout tx = Ui.column(c);
-        tx.addView(Ui.oneLine(Ui.text(c, label, 21, t.text, Ui.MEDIUM)));
-        tx.addView(Ui.oneLine(Ui.text(c, L.s(R.string.go_there), 15, t.sub, Ui.REGULAR)), Ui.margins(new LayoutParams(-2, -2), 0, dp(2), 0, 0));
+        tx.addView(Ui.oneLine(Ui.text(c, label, ts(21), t.text, Ui.MEDIUM)));
+        tx.addView(Ui.oneLine(Ui.text(c, L.s(R.string.go_there), ts(15), t.sub, Ui.REGULAR)), Ui.margins(new LayoutParams(-2, -2), 0, dp(2), 0, 0));
         tile.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), dp(16), 0, 0, 0));
         tile.addView(Ui.icon(c, R.drawable.ic_chev_right, t.sub, 22), new LayoutParams(dp(22), dp(22)));
         return tile;
@@ -579,10 +615,10 @@ public final class HomeView extends LinearLayout {
 
     private void addNavChip(Context c, String label, String value, String pref) {
         boolean def = value.equals(pref) || (Prefs.NAV_AUTO.equals(pref) && value.equals(navWithPhone ? Prefs.NAV_PHONE : Prefs.NAV_MG));
-        TextView chip = Ui.text(c, label, 16, def ? t.text : t.sub, Ui.MEDIUM);
+        TextView chip = Ui.text(c, label, ts(16), def ? t.text : t.sub, Ui.MEDIUM);
         chip.setGravity(Gravity.CENTER);
-        chip.setPadding(dp(18), 0, dp(18), 0);
-        chip.setMinHeight(dp(44));
+        chip.setPadding(tp(18), 0, tp(18), 0);
+        chip.setMinHeight(tp(44));
         chip.setBackground(Ui.pressable(c, def ? t.chip : t.overlay, 22, t));
         chip.setClickable(true);
         chip.setOnClickListener(v -> host.launchNavigator(value));
@@ -591,7 +627,7 @@ public final class HomeView extends LinearLayout {
             buildNavWith(getContext(), navWithPhone);
             return true;
         });
-        navWith.addView(chip, Ui.margins(Ui.lp(-2, dp(44)), dp(5), 0, dp(5), 0));
+        navWith.addView(chip, Ui.margins(Ui.lp(-2, tp(44)), dp(5), 0, dp(5), 0));
         chip.setBackground(Ui.pressable(c, def ? t.text : t.chip, 22, t));
         chip.setTextColor(def ? t.panel : t.text);
     }
@@ -655,7 +691,8 @@ public final class HomeView extends LinearLayout {
         srcRow = Ui.row(c);
         srcRow.setBackground(Ui.round(t.overlay, dp(16)));
         srcRow.setPadding(dp(6), dp(6), dp(6), dp(6));
-        col.addView(srcRow, new LayoutParams(-2, dp(60)));
+        // guida a destra con la spia luci: la riga sorgenti parte più a destra
+        col.addView(srcRow, Ui.margins(new LayoutParams(-2, tp(48) + dp(12)), rhd && sysIndicator ? dp(SYSTEM_LIGHT_INSET) : 0, 0, 0, 0));
 
         // corpo: a sinistra copertina + comandi + preferiti, a destra (solo radio) l'elenco delle stazioni trovate
         LinearLayout body = Ui.row(c);
@@ -693,7 +730,9 @@ public final class HomeView extends LinearLayout {
         artRadio.addView(artUnit, new LayoutParams(-1, -2));
         artRadio.setPadding(dp(12), 0, dp(12), 0);
         art.addView(artRadio, new FrameLayout.LayoutParams(-1, -1));
-        main.addView(art, new LayoutParams(dp(208), dp(208)));
+        // con i comandi più grandi la copertina si restringe un po' per lasciare spazio ai pulsanti
+        int artSize = dp(Math.round(208 - 110 * (Ui.K - 1)));
+        main.addView(art, new LayoutParams(artSize, artSize));
 
         LinearLayout info = Ui.column(c);
         main.addView(info, Ui.margins(Ui.lpWeight(0, -2, 1), dp(28), 0, 0, 0));
@@ -725,7 +764,8 @@ public final class HomeView extends LinearLayout {
         ctr.addView(Ui.iconButton(c, t, R.drawable.ic_prev, t.text, t.chip, 64, 28, 32, L.s(R.string.previous), v -> media.skip(false)));
         FrameLayout play = Ui.iconButton(c, t, R.drawable.ic_pause, t.panel, t.text, 84, 36, 42, L.s(R.string.play_pause), v -> media.playPause());
         playIcon = (ImageView) play.getChildAt(0);
-        ctr.addView(play, Ui.margins(Ui.lp(dp(84), dp(84)), dp(16), 0, dp(16), 0));
+        int gap = dp(Ui.K > 1 ? 12 : 16);
+        ctr.addView(play, Ui.margins(Ui.lp(tp(84), tp(84)), gap, 0, gap, 0));
         ctr.addView(Ui.iconButton(c, t, R.drawable.ic_next, t.text, t.chip, 64, 28, 32, L.s(R.string.next), v -> media.skip(true)));
         bandRow = Ui.row(c);
         bandRow.setBackground(Ui.round(t.chip, dp(16)));
@@ -735,10 +775,10 @@ public final class HomeView extends LinearLayout {
         int[] bandIds = {MediaClient.BAND_FM, MediaClient.BAND_DAB};
         for (int i = 0; i < 2; i++) {
             final int band = bandIds[i];
-            TextView b = Ui.text(c, bands[i], 18, t.sub, Ui.MEDIUM);
+            TextView b = Ui.text(c, bands[i], ts(18), t.sub, Ui.MEDIUM);
             b.setGravity(Gravity.CENTER);
-            b.setMinWidth(dp(64));
-            b.setPadding(dp(16), 0, dp(16), 0);
+            b.setMinWidth(tp(64));
+            b.setPadding(tp(16), 0, tp(16), 0);
             b.setClickable(true);
             b.setContentDescription(L.s(R.string.src_radio) + " " + bands[i]);
             b.setOnClickListener(v -> {
@@ -747,10 +787,10 @@ public final class HomeView extends LinearLayout {
                 styleBands(band);
                 media.switchBand(band);
             });
-            bandRow.addView(b, Ui.margins(Ui.lp(-2, dp(54)), i == 0 ? 0 : dp(4), 0, 0, 0));
+            bandRow.addView(b, Ui.margins(Ui.lp(-2, tp(54)), i == 0 ? 0 : dp(4), 0, 0, 0));
             bandChips[i] = b;
         }
-        ctr.addView(bandRow, Ui.margins(Ui.lp(-2, dp(64)), dp(24), 0, 0, 0));
+        ctr.addView(bandRow, Ui.margins(Ui.lp(-2, tp(64)), dp(Ui.K > 1 ? 16 : 24), 0, 0, 0));
         info.addView(ctr, Ui.margins(new LayoutParams(-1, -2), 0, dp(20), 0, 0));
 
         // preferiti radio con i loghi (FM e DAB)
@@ -788,13 +828,13 @@ public final class HomeView extends LinearLayout {
         TextView et = Ui.text(c, L.s(R.string.stations_empty), 16, t.sub, Ui.REGULAR);
         et.setGravity(Gravity.CENTER);
         stationEmpty.addView(et);
-        TextView eb = Ui.text(c, L.s(R.string.open_radio_app), 17, t.text, Ui.MEDIUM);
+        TextView eb = Ui.text(c, L.s(R.string.open_radio_app), ts(17), t.text, Ui.MEDIUM);
         eb.setGravity(Gravity.CENTER);
-        eb.setPadding(dp(22), 0, dp(22), 0);
+        eb.setPadding(tp(22), 0, tp(22), 0);
         eb.setBackground(Ui.pressable(c, t.chip, 14, t));
         eb.setClickable(true);
         eb.setOnClickListener(v -> host.launch("com.saicmotor.hmi.radio", "com.saicmotor.hmi.radio.app.RadioHomeActivity"));
-        stationEmpty.addView(eb, Ui.margins(new LayoutParams(-2, dp(52)), 0, dp(16), 0, 0));
+        stationEmpty.addView(eb, Ui.margins(new LayoutParams(-2, tp(52)), 0, dp(16), 0, 0));
         stationPanel.addView(stationEmpty, Ui.lpWeight(-1, 0, 1));
         body.addView(stationPanel, Ui.margins(new LayoutParams(dp(330), -1), dp(18), 0, 0, 0));
         return col;
@@ -831,9 +871,9 @@ public final class HomeView extends LinearLayout {
             boolean compact = m.sources.size() > 4;
             for (int i = 0; i < m.sources.size(); i++) {
                 final int src = m.sources.get(i);
-                TextView b = Ui.text(c, sourceLabel(src), 17, t.sub, Ui.MEDIUM);
+                TextView b = Ui.text(c, sourceLabel(src), ts(17), t.sub, Ui.MEDIUM);
                 b.setGravity(Gravity.CENTER_VERTICAL);
-                b.setPadding(dp(compact ? 14 : 18), 0, dp(compact ? 16 : 22), 0);
+                b.setPadding(tp(compact ? 14 : 18), 0, tp(compact ? 16 : 22), 0);
                 b.setCompoundDrawablePadding(dp(10));
                 b.setClickable(true);
                 b.setTag(src);
@@ -863,7 +903,7 @@ public final class HomeView extends LinearLayout {
             b.setCompoundDrawablePadding(compact && !on ? 0 : dp(10));
             android.graphics.drawable.Drawable d = getContext().getDrawable(sourceIcon(src)).mutate();
             d.setTint(on ? t.panel : t.sub);
-            d.setBounds(0, 0, dp(22), dp(22));
+            d.setBounds(0, 0, tp(22), tp(22));
             b.setCompoundDrawables(d, null, null, null);
         }
     }
@@ -935,15 +975,15 @@ public final class HomeView extends LinearLayout {
             iv.setPadding(dp(4), dp(4), dp(4), dp(4));
             box.addView(iv, new FrameLayout.LayoutParams(-1, -1));
         } else {
-            TextView ini = Ui.text(c, initials(st), 13, t.text, Ui.MEDIUM);
+            TextView ini = Ui.text(c, initials(st), ts(13), t.text, Ui.MEDIUM);
             ini.setGravity(Gravity.CENTER);
             box.addView(ini, new FrameLayout.LayoutParams(-1, -1));
         }
-        row.addView(box, new LayoutParams(dp(44), dp(44)));
+        row.addView(box, new LayoutParams(tp(44), tp(44)));
         LinearLayout tx = Ui.column(c);
-        tx.addView(Ui.oneLine(Ui.text(c, st.label(), 18, t.text, current ? Ui.MEDIUM : Ui.REGULAR)));
+        tx.addView(Ui.oneLine(Ui.text(c, st.label(), ts(18), t.text, current ? Ui.MEDIUM : Ui.REGULAR)));
         String sub = st.band == MediaClient.BAND_DAB ? "DAB+" : String.format(L.locale(), "FM %.1f MHz", st.khz / 1000f);
-        tx.addView(Ui.oneLine(Ui.text(c, sub, 14, t.sub, Ui.REGULAR)));
+        tx.addView(Ui.oneLine(Ui.text(c, sub, ts(14), t.sub, Ui.REGULAR)));
         row.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), dp(12), 0, 0, 0));
         if (current) row.addView(Ui.icon(c, R.drawable.ic_wave, t.text, 20), new LayoutParams(dp(20), dp(20)));
         return row;
@@ -969,7 +1009,7 @@ public final class HomeView extends LinearLayout {
             MediaClient.Station st = m.stations.get(i);
             boolean cur = st.key.equals(m.stationKey);
             if (cur) currentIndex = i;
-            stationList.addView(stationRow(c, st, cur), Ui.margins(new LayoutParams(-1, dp(62)), 0, 0, 0, dp(2)));
+            stationList.addView(stationRow(c, st, cur), Ui.margins(new LayoutParams(-1, tp(62)), 0, 0, 0, dp(2)));
         }
         // porta in vista la stazione in onda
         if (currentIndex >= 0) {
@@ -1105,14 +1145,14 @@ public final class HomeView extends LinearLayout {
         phoneSub = Ui.text(c, "", 20, t.sub, Ui.REGULAR);
         phoneSub.setGravity(Gravity.CENTER);
         col.addView(phoneSub, Ui.margins(new LayoutParams(-2, -2), 0, dp(12), 0, 0));
-        TextView open = Ui.text(c, L.s(R.string.open), 20, t.onAccent, Ui.MEDIUM);
+        TextView open = Ui.text(c, L.s(R.string.open), ts(20), t.onAccent, Ui.MEDIUM);
         open.setGravity(Gravity.CENTER);
-        open.setPadding(dp(40), 0, dp(40), 0);
-        open.setMinHeight(dp(60));
-        open.setBackground(Ui.pressable(c, t.accent, 30, t));
+        open.setPadding(tp(40), 0, tp(40), 0);
+        open.setMinHeight(tp(60));
+        open.setBackground(Ui.pressable(c, t.accent, 30 * Ui.K, t));
         open.setClickable(true);
         open.setOnClickListener(v -> media.openProjection());
-        col.addView(open, Ui.margins(new LayoutParams(-2, dp(60)), 0, dp(26), 0, 0));
+        col.addView(open, Ui.margins(new LayoutParams(-2, tp(60)), 0, dp(26), 0, 0));
         return col;
     }
 
@@ -1132,12 +1172,12 @@ public final class HomeView extends LinearLayout {
         tempBox.setBackground(Ui.round(t.chip, dp(20)));
         tempBox.addView(Ui.iconButton(c, t, R.drawable.ic_chev_left, t.text, 0, 68, 30, 20, L.s(R.string.temp_down),
                 v -> changeTemp(-1)));
-        tempTv = Ui.text(c, "—", 40, t.text, Ui.REGULAR);
+        tempTv = Ui.text(c, "—", ts(40), t.text, Ui.REGULAR);
         tempTv.setGravity(Gravity.CENTER);
-        tempBox.addView(tempTv, new LayoutParams(dp(112), -2));
+        tempBox.addView(tempTv, new LayoutParams(tp(112), -2));
         tempBox.addView(Ui.iconButton(c, t, R.drawable.ic_chev_right, t.text, 0, 68, 30, 20, L.s(R.string.temp_up),
                 v -> changeTemp(1)));
-        bar.addView(tempBox, new LayoutParams(-2, dp(76)));
+        bar.addView(tempBox, new LayoutParams(-2, tp(76)));
 
         // ventola: ‹ livello ›, tocca l'icona = app Clima, tieni premuto = accendi/spegni il clima
         LinearLayout fanGroup = Ui.row(c);
@@ -1148,11 +1188,11 @@ public final class HomeView extends LinearLayout {
         LinearLayout fanBox = Ui.row(c);
         fanBox.setGravity(Gravity.CENTER);
         ImageView fanIc = Ui.icon(c, R.drawable.ic_fan, t.accent, 30);
-        fanBox.addView(fanIc, new LayoutParams(dp(30), dp(30)));
-        fanTv = Ui.text(c, "—", 34, t.text, Ui.REGULAR);
+        fanBox.addView(fanIc, new LayoutParams(tp(30), tp(30)));
+        fanTv = Ui.text(c, "—", ts(34), t.text, Ui.REGULAR);
         fanTv.setGravity(Gravity.CENTER);
         fanBox.addView(fanTv, Ui.margins(new LayoutParams(-2, -2), dp(10), 0, 0, 0));
-        fanBox.setMinimumWidth(dp(118));
+        fanBox.setMinimumWidth(tp(118));
         fanBox.setClickable(true);
         fanBox.setContentDescription(L.s(R.string.climate));
         fanBox.setBackground(Ui.pressable(c, 0, 16, t));
@@ -1161,38 +1201,42 @@ public final class HomeView extends LinearLayout {
             vehicle.setHvacPower(vehicle.last().hvacPower != 1);
             return true;
         });
-        fanGroup.addView(fanBox, new LayoutParams(-2, dp(68)));
+        fanGroup.addView(fanBox, new LayoutParams(-2, tp(68)));
         fanGroup.addView(Ui.iconButton(c, t, R.drawable.ic_chev_right, t.text, 0, 68, 30, 20, L.s(R.string.fan_up),
                 v -> changeFan(1)));
-        bar.addView(fanGroup, Ui.margins(new LayoutParams(-2, dp(76)), dp(10), 0, 0, 0));
+        bar.addView(fanGroup, Ui.margins(new LayoutParams(-2, tp(76)), dp(10), 0, 0, 0));
 
         // A/C e AUTO (lo sbrinamento ha il tasto fisico)
         acBtn = toggleText(c, "A/C", L.s(R.string.ac_desc), v -> vehicle.toggleAc());
-        bar.addView(acBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(10), 0, 0, 0));
+        bar.addView(acBtn, Ui.margins(new LayoutParams(tp(76), tp(76)), dp(10), 0, 0, 0));
         autoBtn = toggleText(c, "AUTO", L.s(R.string.auto_desc), v -> vehicle.toggleAuto());
-        bar.addView(autoBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(8), 0, 0, 0));
+        bar.addView(autoBtn, Ui.margins(new LayoutParams(tp(76), tp(76)), dp(8), 0, 0, 0));
         // riscaldamento: sedile sinistro, volante, sedile destro
+        // in un gruppo unico, così con la guida a destra il sedile sinistro resta a sinistra
+        LinearLayout heat = Ui.row(c);
         seatLeftBtn = heatButton(c, R.drawable.ic_seat_heat, false, L.s(R.string.seat_left), v -> vehicle.pressSeatLeft());
-        bar.addView(seatLeftBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(8), 0, 0, 0));
+        heat.addView(seatLeftBtn, new LayoutParams(tp(76), tp(76)));
         wheelBtn = toggleIcon(c, R.drawable.ic_wheel_heat, L.s(R.string.wheel_heat), v -> vehicle.toggleWheelHeat());
-        bar.addView(wheelBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(8), 0, 0, 0));
+        heat.addView(wheelBtn, Ui.margins(new LayoutParams(tp(76), tp(76)), dp(8), 0, 0, 0));
         seatRightBtn = heatButton(c, R.drawable.ic_seat_heat, true, L.s(R.string.seat_right), v -> vehicle.pressSeatRight());
-        bar.addView(seatRightBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(8), 0, 0, 0));
+        heat.addView(seatRightBtn, Ui.margins(new LayoutParams(tp(76), tp(76)), dp(8), 0, 0, 0));
+        bar.addView(heat, Ui.margins(new LayoutParams(-2, -2), dp(8), 0, 0, 0));
 
-        bar.addView(Ui.divider(c, t.track, 48));
-
-        // mini-player compatto
+        // mini-player compatto (unico elemento elastico; con i comandi molto grandi lascia il posto ai pulsanti,
+        // i comandi della musica restano nel pannello Media)
+        boolean showMini = Ui.K < 1.25f;
+        if (showMini) bar.addView(Ui.divider(c, t.track, 48));
         LinearLayout mini = Ui.row(c);
         mini.setGravity(Gravity.CENTER_VERTICAL);
         mini.setPadding(dp(6), 0, dp(4), 0);
         miniArt = Ui.icon(c, R.drawable.ic_radio, t.sub, 26);
         FrameLayout artBox = new FrameLayout(c);
-        artBox.setBackground(Ui.round(t.chip, dp(12)));
-        artBox.addView(miniArt, new FrameLayout.LayoutParams(dp(26), dp(26), Gravity.CENTER));
-        mini.addView(artBox, new LayoutParams(dp(48), dp(48)));
+        artBox.setBackground(Ui.round(t.chip, tp(12)));
+        artBox.addView(miniArt, new FrameLayout.LayoutParams(tp(26), tp(26), Gravity.CENTER));
+        mini.addView(artBox, new LayoutParams(tp(48), tp(48)));
         LinearLayout mt = Ui.column(c);
-        miniTitle = Ui.oneLine(Ui.text(c, "", 17, t.text, Ui.MEDIUM));
-        miniSub = Ui.oneLine(Ui.text(c, "", 14, t.sub, Ui.REGULAR));
+        miniTitle = Ui.oneLine(Ui.text(c, "", ts(17), t.text, Ui.MEDIUM));
+        miniSub = Ui.oneLine(Ui.text(c, "", ts(14), t.sub, Ui.REGULAR));
         mt.addView(miniTitle);
         mt.addView(miniSub, Ui.margins(new LayoutParams(-2, -2), 0, dp(2), 0, 0));
         mini.addView(mt, Ui.margins(Ui.lpWeight(0, -2, 1), dp(12), 0, dp(4), 0));
@@ -1202,16 +1246,17 @@ public final class HomeView extends LinearLayout {
         miniPlayIcon = (ImageView) mp.getChildAt(0);
         mini.addView(mp);
         mini.addView(Ui.iconButton(c, t, R.drawable.ic_next, t.text, 0, 52, 24, 26, L.s(R.string.next), v -> media.skip(true)));
-        bar.addView(mini, Ui.lpWeight(0, -1, 1));
+        if (showMini) bar.addView(mini, Ui.lpWeight(0, -1, 1));
+        else bar.addView(Ui.spacer(c));
 
         bar.addView(Ui.divider(c, t.track, 48));
 
         // fendinebbia (sulla MG4 si accendono solo dallo schermo)
         frontFogBtn = toggleIcon(c, R.drawable.ic_fog_front, L.s(R.string.fog_front), v -> vehicle.toggleFrontFog());
         frontFogBtn.setVisibility(GONE);
-        bar.addView(frontFogBtn, Ui.margins(new LayoutParams(dp(68), dp(68)), 0, 0, dp(8), 0));
+        bar.addView(frontFogBtn, Ui.margins(new LayoutParams(tp(68), tp(68)), 0, 0, dp(8), 0));
         rearFogBtn = toggleIcon(c, R.drawable.ic_fog_rear, L.s(R.string.fog_rear), v -> vehicle.toggleRearFog());
-        bar.addView(rearFogBtn, new LayoutParams(dp(68), dp(68)));
+        bar.addView(rearFogBtn, new LayoutParams(tp(68), tp(68)));
 
         bar.addView(Ui.divider(c, t.track, 48));
 
@@ -1220,7 +1265,26 @@ public final class HomeView extends LinearLayout {
         bar.addView(shortcut(c, R.drawable.ic_cam360, L.s(R.string.app_camera), v -> host.launch("com.saicmotor.hmi.aroundview", "com.saicmotor.hmi.aroundview.AVMActivity")));
         bar.addView(shortcut(c, R.drawable.ic_gear, L.s(R.string.app_settings), v -> host.launch("com.saicmotor.hmi.systemsettings", "com.saicmotor.hmi.systemsettings.SettingsActivity")));
         // le app si aprono scorrendo la home verso sinistra: niente pulsante dedicato
+        if (rhd) mirrorRow(bar);
         return bar;
+    }
+
+    /**
+     * Guida a destra: ordine degli elementi invertito (la temperatura finisce all'estremo destro, vicino al
+     * guidatore), mentre dentro ogni elemento tutto resta da sinistra a destra (frecce ‹ › comprese).
+     */
+    private static void mirrorRow(LinearLayout row) {
+        row.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        for (int i = 0; i < row.getChildCount(); i++) {
+            View v = row.getChildAt(i);
+            v.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            if (v.getLayoutParams() instanceof MarginLayoutParams) {
+                MarginLayoutParams lp = (MarginLayoutParams) v.getLayoutParams();
+                lp.setMarginStart(lp.leftMargin);
+                lp.setMarginEnd(lp.rightMargin);
+                v.setLayoutParams(lp);
+            }
+        }
     }
 
     /** Blocco TPMS: titolo piccolo (Anteriori / Posteriori) + "2,5 · 2,5 bar" (sinistra · destra). */
@@ -1263,16 +1327,16 @@ public final class HomeView extends LinearLayout {
         f.setOnClickListener(l);
         ImageView iv = Ui.icon(c, icon, t.text, 32);
         if (mirror) iv.setScaleX(-1f);
-        f.addView(iv, new FrameLayout.LayoutParams(dp(32), dp(32), Gravity.CENTER_HORIZONTAL | Gravity.TOP));
-        ((FrameLayout.LayoutParams) iv.getLayoutParams()).topMargin = dp(14);
+        f.addView(iv, new FrameLayout.LayoutParams(tp(32), tp(32), Gravity.CENTER_HORIZONTAL | Gravity.TOP));
+        ((FrameLayout.LayoutParams) iv.getLayoutParams()).topMargin = tp(14);
         LinearLayout dots = Ui.row(c);
         for (int i = 0; i < 3; i++) {
             View d = new View(c);
             d.setBackground(Ui.round(t.track, dp(3)));
-            dots.addView(d, Ui.margins(new LayoutParams(dp(12), dp(5)), i == 0 ? 0 : dp(4), 0, 0, 0));
+            dots.addView(d, Ui.margins(new LayoutParams(tp(12), tp(5)), i == 0 ? 0 : tp(4), 0, 0, 0));
         }
         FrameLayout.LayoutParams dl = new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
-        dl.bottomMargin = dp(14);
+        dl.bottomMargin = tp(14);
         f.addView(dots, dl);
         styleHeat(f, -1);
         return f;
@@ -1284,7 +1348,7 @@ public final class HomeView extends LinearLayout {
         if (prev != null && prev == level) return;
         f.setTag(level);
         f.setAlpha(level < 0 ? 0.45f : 1f);
-        f.setBackground(Ui.pressable(getContext(), t.chip, 20, t));
+        f.setBackground(Ui.pressable(getContext(), t.chip, 20 * Ui.K, t));
         int heat = 0xFFFF7A3D;
         ((ImageView) f.getChildAt(0)).setColorFilter(level > 0 ? heat : t.text);
         LinearLayout dots = (LinearLayout) f.getChildAt(1);
@@ -1293,7 +1357,7 @@ public final class HomeView extends LinearLayout {
 
     /** Pulsante a commutazione con testo (A/C, AUTO): acceso = colori invertiti. */
     private TextView toggleText(Context c, String label, String desc, View.OnClickListener l) {
-        TextView b = Ui.text(c, label, label.length() > 3 ? 17 : 20, t.text, Ui.MEDIUM);
+        TextView b = Ui.text(c, label, ts(label.length() > 3 ? 17 : 20), t.text, Ui.MEDIUM);
         b.setGravity(Gravity.CENTER);
         b.setContentDescription(desc);
         b.setClickable(true);
@@ -1321,18 +1385,18 @@ public final class HomeView extends LinearLayout {
         v.setAlpha(state < 0 ? 0.45f : 1f);
         if (onColor != 0) {
             // fendinebbia: icona colorata come la spia del quadro (verde anteriori, ambra posteriori)
-            v.setBackground(Ui.pressable(getContext(), t.chip, 20, t));
+            v.setBackground(Ui.pressable(getContext(), t.chip, 20 * Ui.K, t));
             ((ImageView) ((FrameLayout) v).getChildAt(0)).setColorFilter(on ? onColor : t.text);
             return;
         }
-        v.setBackground(on ? Ui.round(t.text, dp(20)) : Ui.pressable(getContext(), t.chip, 20, t));
+        v.setBackground(on ? Ui.round(t.text, tp(20)) : Ui.pressable(getContext(), t.chip, 20 * Ui.K, t));
         if (v instanceof TextView) ((TextView) v).setTextColor(on ? t.panel : t.text);
         else ((ImageView) ((FrameLayout) v).getChildAt(0)).setColorFilter(on ? t.panel : t.text);
     }
 
     private View shortcut(Context c, int icon, String desc, View.OnClickListener l) {
         FrameLayout f = Ui.iconButton(c, t, icon, t.text, 0, 64, 30, 18, desc, l);
-        f.setLayoutParams(Ui.margins(Ui.lp(dp(64), dp(64)), dp(6), 0, 0, 0));
+        f.setLayoutParams(Ui.margins(Ui.lp(tp(64), tp(64)), dp(6), 0, 0, 0));
         return f;
     }
 

@@ -87,6 +87,15 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
 
         vehicle.setListener(s -> {
             if (home != null) home.onVehicle(s);
+            // lato di guida letto dall'auto solo dopo l'avvio del CarService: se cambia, si ricostruisce la home
+            if (home != null && Prefs.DRIVE_AUTO.equals(prefs.driveSide())) {
+                Boolean known = com.mg4.launcher.svc.CarFeatures.knownRhd(this);
+                if (known != null && known != home.isRightHand()) {
+                    boolean wasSettings = settings != null;
+                    build();
+                    if (wasSettings) openSettings();
+                }
+            }
         });
         media.setListener(s -> {
             if (home != null) home.onMedia(s);
@@ -234,6 +243,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
 
     private void build() {
         theme = Theme.resolve(this, prefs);
+        Ui.K = prefs.uiScaleFactor();
         root.setBackgroundColor(theme.bg);
         root.removeAllViews();
         root.removeCallbacks(hidePopup);

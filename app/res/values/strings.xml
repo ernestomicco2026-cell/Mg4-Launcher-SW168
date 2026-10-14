@@ -40,6 +40,16 @@
     <string name="display" formatted="false">DISPLAY</string>
     <string name="soc_decimals" formatted="false">Battery percentage with decimals</string>
     <string name="show_tpms" formatted="false">Tyre pressure under the car</string>
+    <string name="set_ui_size" formatted="false">CONTROL SIZE</string>
+    <string name="ui_size_normal" formatted="false">Normal</string>
+    <string name="ui_size_large" formatted="false">Large</string>
+    <string name="ui_size_xlarge" formatted="false">Extra large</string>
+    <string name="set_drive_side" formatted="false">DRIVING SIDE</string>
+    <string name="drive_auto" formatted="false">Same as car</string>
+    <string name="drive_left" formatted="false">Left-hand drive</string>
+    <string name="drive_right" formatted="false">Right-hand drive</string>
+    <string name="left" formatted="false">Left</string>
+    <string name="right" formatted="false">Right</string>
     <string name="demo_no_updates" formatted="false">Demo version: updates disabled</string>
     <string name="climate" formatted="false">Climate</string>
     <string name="tab_map" formatted="false">Map</string>

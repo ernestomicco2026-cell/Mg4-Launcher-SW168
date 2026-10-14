@@ -411,6 +411,12 @@ public final class VehicleClient {
     // ---- TPMS e temperatura interna dal CarService ----------------------------------------------
 
     private CarProps props;
+    private static volatile CarProps shared;
+
+    /** Lettore del CarService condiviso (null finché il servizio veicolo non l'ha creato). */
+    public static CarProps carProps() {
+        return shared;
+    }
     private long propsAt;
     private final float[] tireCache = {Float.NaN, Float.NaN, Float.NaN, Float.NaN};
     private float insideCache = Float.NaN;
@@ -419,6 +425,7 @@ public final class VehicleClient {
         if (props == null) {
             props = new CarProps(ctx);
             props.connect();
+            shared = props;
         }
         long now = android.os.SystemClock.uptimeMillis();
         if (props.ready() && now - propsAt > 5000) {

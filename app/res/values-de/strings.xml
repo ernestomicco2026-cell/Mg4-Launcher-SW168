@@ -40,6 +40,16 @@
     <string name="display" formatted="false">ANZEIGE</string>
     <string name="soc_decimals" formatted="false">Akkustand mit Nachkommastelle</string>
     <string name="show_tpms" formatted="false">Reifendruck unter dem Fahrzeug</string>
+    <string name="set_ui_size" formatted="false">GRÖSSE DER BEDIENELEMENTE</string>
+    <string name="ui_size_normal" formatted="false">Normal</string>
+    <string name="ui_size_large" formatted="false">Groß</string>
+    <string name="ui_size_xlarge" formatted="false">Sehr groß</string>
+    <string name="set_drive_side" formatted="false">LENKRADPOSITION</string>
+    <string name="drive_auto" formatted="false">Wie im Auto</string>
+    <string name="drive_left" formatted="false">Linkslenker</string>
+    <string name="drive_right" formatted="false">Rechtslenker</string>
+    <string name="left" formatted="false">Links</string>
+    <string name="right" formatted="false">Rechts</string>
     <string name="demo_no_updates" formatted="false">Demo-Version: Updates deaktiviert</string>
     <string name="climate" formatted="false">Klima</string>
     <string name="tab_map" formatted="false">Karte</string>

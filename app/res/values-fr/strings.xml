@@ -40,6 +40,16 @@
     <string name="display" formatted="false">AFFICHAGE</string>
     <string name="soc_decimals" formatted="false">Pourcentage de batterie avec décimales</string>
     <string name="show_tpms" formatted="false">Pression des pneus sous le véhicule</string>
+    <string name="set_ui_size" formatted="false">TAILLE DES COMMANDES</string>
+    <string name="ui_size_normal" formatted="false">Normale</string>
+    <string name="ui_size_large" formatted="false">Grande</string>
+    <string name="ui_size_xlarge" formatted="false">Très grande</string>
+    <string name="set_drive_side" formatted="false">POSITION DE CONDUITE</string>
+    <string name="drive_auto" formatted="false">Comme la voiture</string>
+    <string name="drive_left" formatted="false">Conduite à gauche</string>
+    <string name="drive_right" formatted="false">Conduite à droite</string>
+    <string name="left" formatted="false">Gauche</string>
+    <string name="right" formatted="false">Droite</string>
     <string name="demo_no_updates" formatted="false">Version démo : mises à jour désactivées</string>
     <string name="climate" formatted="false">Climatisation</string>
     <string name="tab_map" formatted="false">Carte</string>

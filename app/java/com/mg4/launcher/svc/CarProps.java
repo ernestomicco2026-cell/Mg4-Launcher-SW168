@@ -107,6 +107,20 @@ public final class CarProps {
         }
     }
 
+    /** Come getInt, ma senza scrivere errori nella diagnostica (proprietà che potrebbero non esistere). */
+    public int getIntQuiet(int prop) {
+        try {
+            Object p = pm();
+            if (p == null) return Integer.MIN_VALUE;
+            area(prop);
+            if (!areas.containsKey(prop)) return Integer.MIN_VALUE;
+            Method m = p.getClass().getMethod("getIntProperty", int.class, int.class);
+            return (Integer) m.invoke(p, prop, area(prop));
+        } catch (Throwable e) {
+            return Integer.MIN_VALUE;
+        }
+    }
+
     /** Decimale o NaN se non leggibile. */
     public float getFloat(int prop) {
         try {

@@ -102,6 +102,36 @@ public final class SettingsView extends FrameLayout {
         themeRow = Ui.row(c);
         col.addView(themeRow, top(10));
 
+        // dimensione dei comandi toccabili della home
+        col.addView(label(c, L.s(R.string.set_ui_size)), top(24));
+        LinearLayout sizeRow = Ui.row(c);
+        int[] sizeNames = {R.string.ui_size_normal, R.string.ui_size_large, R.string.ui_size_xlarge};
+        for (int i = 0; i < 3; i++) {
+            final int idx = i;
+            sizeRow.addView(choice(c, L.s(sizeNames[i]), prefs.uiScale() == i, v -> {
+                if (prefs.uiScale() == idx) return;
+                prefs.setUiScale(idx);
+                host.settingsChanged(true);
+            }), Ui.margins(Ui.lp(-2, dp(52)), 0, 0, dp(10), 0));
+        }
+        col.addView(sizeRow, top(10));
+
+        // posizione di guida: come l'auto, sinistra, destra
+        col.addView(label(c, L.s(R.string.set_drive_side)), top(24));
+        LinearLayout sideRow = Ui.row(c);
+        boolean carRhd = com.mg4.launcher.svc.CarFeatures.isRightHandDrive(c);
+        String carSide = L.s(carRhd ? R.string.right : R.string.left);
+        String[][] sides = {{Prefs.DRIVE_AUTO, L.s(R.string.drive_auto) + " · " + carSide},
+                {Prefs.DRIVE_LEFT, L.s(R.string.drive_left)}, {Prefs.DRIVE_RIGHT, L.s(R.string.drive_right)}};
+        for (String[] sd : sides) {
+            sideRow.addView(choice(c, sd[1], sd[0].equals(prefs.driveSide()), v -> {
+                if (sd[0].equals(prefs.driveSide())) return;
+                prefs.setDriveSide(sd[0]);
+                host.settingsChanged(true);
+            }), Ui.margins(Ui.lp(-2, dp(52)), 0, 0, dp(10), 0));
+        }
+        col.addView(sideRow, top(10));
+
         col.addView(label(c, L.s(R.string.language)), top(24));
         langRow1 = Ui.row(c);
         col.addView(langRow1, top(10));
@@ -331,6 +361,18 @@ public final class SettingsView extends FrameLayout {
             });
             themeRow.addView(b, Ui.margins(Ui.lp(-2, dp(52)), 0, 0, dp(10), 0));
         }
+    }
+
+    /** Pulsante di scelta come quelli del tema: selezionato = sfondo colore testo, scritta colore pannello. */
+    private TextView choice(Context c, String text, boolean on, View.OnClickListener l) {
+        TextView b = Ui.text(c, text, 18, on ? t.panel : t.text, Ui.MEDIUM);
+        b.setGravity(Gravity.CENTER);
+        b.setPadding(dp(22), 0, dp(22), 0);
+        b.setMinHeight(dp(52));
+        b.setBackground(on ? Ui.round(t.text, dp(14)) : Ui.pressable(c, t.chip, 14, t));
+        b.setClickable(true);
+        b.setOnClickListener(l);
+        return b;
     }
 
     private View swatch(Context c, int color, boolean selected, String desc, View.OnClickListener l) {

@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.6.3](releases/MG4Launcher-0.6.3.apk)**
+**Ultima versione / Latest version: [0.7.0](releases/MG4Launcher-0.7.0.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -18,8 +18,14 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
-![MG4 Launcher 0.6.2 — home (simulazione / mock-up)](docs/home-0.6.2.png)
-*Home 0.6.2 — orologio, batteria con decimali, TPMS, temperatura interna, sedili e volante riscaldati · 0.6.2 home: clock, battery decimals, TPMS, interior temperature, heated seats and wheel (mock-up).*
+![MG4 Launcher 0.7.0 — home (simulazione / mock-up)](docs/home-0.7.0.png)
+*Home 0.7.0 — comandi normali, guida a sinistra · 0.7.0 home: normal controls, left-hand drive (mock-up).*
+
+![MG4 Launcher 0.7.0 — comandi molto grandi (simulazione / mock-up)](docs/home-0.7.0-comandi-grandi.png)
+*Dimensione comandi "Molto grande" · "Extra large" control size (mock-up).*
+
+![MG4 Launcher 0.7.0 — guida a destra (simulazione / mock-up)](docs/home-0.7.0-guida-destra.png)
+*Guida a destra: home specchiata, auto e clima dal lato del guidatore · Right-hand drive: mirrored home, car and climate on the driver's side (mock-up).*
 
 ---
 
@@ -78,7 +84,9 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
 - **In alto a destra**: indicatori di **Bluetooth**, **Wi-Fi** e rete **4G** della T-Box (con le tacche del segnale).
 - **App**: scorri la home verso sinistra per le app dell'auto e quelle che installi tu,
   con le icone tutte nello stesso stile; scorri verso destra per tornare. Con **Modifica** scegli quali app installate mostrare.
-- **Impostazioni** (tieni premuta l'auto): colore dell'auto, tetto nero, tema (automatico, notte, giorno), **lingua**, percentuale batteria con decimali, pressione pneumatici sì/no,
+- **Impostazioni** (tieni premuta l'auto): colore dell'auto, tetto nero, tema (automatico, notte, giorno),
+  **dimensione dei comandi** (Normale, Grande, Molto grande), **posizione di guida** (come l'auto, sinistra, destra: con la
+  guida a destra la home si specchia e auto e clima passano dal lato del guidatore), **lingua**, percentuale batteria con decimali, pressione pneumatici sì/no,
   navigatore predefinito (Automatico, MG, Telefono), aggiornamenti, diagnostica con **Salva log**.
   Si aprono anche dall'ingranaggio in alto a destra nella pagina App.
 - **Schermo intero**: barra di stato e dock MG nascosti (trascina dal bordo per richiamarli).
@@ -95,7 +103,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.6.3.apk
+   adb install -r -f MG4Launcher-0.7.0.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -154,6 +162,15 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.7.0 — 14 ottobre 2026
+- **Dimensione comandi** in Impostazioni: Normale, Grande o Molto grande. Si ingrandiscono solo i pulsanti da toccare
+  (clima, A/C, AUTO, sedili, fendinebbia, scorciatoie, sorgenti, FM/DAB, stazioni, schede); testi e pannelli restano
+  uguali. Con *Molto grande* il mini-player lascia il posto ai pulsanti (i comandi della musica restano nel pannello Media).
+- **Posizione di guida**: come l'auto, guida a sinistra o guida a destra. Con la guida a destra la home si specchia:
+  auto e clima dal lato del guidatore, temperatura all'estremo destro della barra.
+- **Spazio per la spia luci del sistema**: sulle auto dove la barra di sistema mostra sempre la spia in alto a sinistra,
+  il launcher lascia libero quell'angolo.
 
 #### 0.6.3 — 14 ottobre 2026
 - **Pressione pneumatici (TPMS)** ora visibile: il launcher chiede alla radio il permesso necessario per leggere i sensori.
@@ -317,7 +334,9 @@ It replaces the original home screen, keeping its features, with a new, clean de
 - **Top right**: **Bluetooth**, **Wi-Fi** and T-Box **4G** indicators (with signal bars).
 - **Apps**: swipe the home screen left for the car's apps and the ones you install,
   all with matching icons; swipe right to go back. Use **Modifica** (Edit) to choose which installed apps to show.
-- **Settings** (long-press the car): car colour, black roof, theme (auto, night, day), **language**, battery percentage with decimals, tyre pressure on/off,
+- **Settings** (long-press the car): car colour, black roof, theme (auto, night, day), **control size** (Normal, Large,
+  Extra large), **driving side** (same as car, left, right: with right-hand drive the home is mirrored so the car and
+  climate are on the driver's side), **language**, battery percentage with decimals, tyre pressure on/off,
   default navigator (Auto, MG, Phone), updates, diagnostics with **Salva log** (save log).
   Also available from the gear at the top right of the Apps page.
 - **Full screen**: status bar and MG dock hidden (swipe from the edge to bring them back).
@@ -334,7 +353,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.6.3.apk
+   adb install -r -f MG4Launcher-0.7.0.apk
    ```
 3. Make it the default home:
    ```bash
@@ -393,6 +412,15 @@ the repository or a bug report help a lot too. Thank you!
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.7.0 — 14 October 2026
+- **Control size** in Settings: Normal, Large or Extra large. Only the buttons you touch get bigger (climate, A/C,
+  AUTO, seats, fog lights, shortcuts, sources, FM/DAB, stations, tabs); texts and panels stay the same. With
+  *Extra large* the mini-player makes room for the buttons (music controls stay in the Media panel).
+- **Driving side**: same as car, left-hand drive or right-hand drive. With right-hand drive the home is mirrored:
+  car and climate on the driver's side, temperature at the right end of the bar.
+- **Room for the system light indicator**: on cars where the system bar always shows the indicator at the top left,
+  the launcher keeps that corner free.
 
 #### 0.6.3 — 14 October 2026
 - **Tyre pressure (TPMS)** now shown: the launcher requests the permission the radio needs to read the sensors.

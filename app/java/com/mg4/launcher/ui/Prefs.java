@@ -151,4 +151,31 @@ public final class Prefs {
     public void setDismissedUpdate(String tag) {
         sp.edit().putString("dismissedUpdate", tag == null ? "" : tag).apply();
     }
+
+    /** Dimensione dei comandi: 0 Normale, 1 Grande, 2 Molto grande. */
+    public static final float[] UI_SCALES = {1f, 1.15f, 1.3f};
+
+    public int uiScale() {
+        return Math.max(0, Math.min(2, sp.getInt("dimensioneComandi", 0)));
+    }
+
+    public void setUiScale(int i) {
+        sp.edit().putInt("dimensioneComandi", i).apply();
+    }
+
+    public float uiScaleFactor() {
+        return UI_SCALES[uiScale()];
+    }
+
+    /** Posizione di guida: "auto" (come l'auto), "left", "right". */
+    public static final String DRIVE_AUTO = "auto", DRIVE_LEFT = "left", DRIVE_RIGHT = "right";
+
+    public String driveSide() {
+        String v = sp.getString("posizioneGuida", DRIVE_AUTO);
+        return DRIVE_LEFT.equals(v) || DRIVE_RIGHT.equals(v) ? v : DRIVE_AUTO;
+    }
+
+    public void setDriveSide(String v) {
+        sp.edit().putString("posizioneGuida", v).apply();
+    }
 }
