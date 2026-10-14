@@ -16,8 +16,7 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
-<img width="1920" height="720" alt="home" src="https://github.com/user-attachments/assets/8203ad98-edb2-4a32-a596-4ed198426cd3" />
-
+<img width="1920" height="720" alt="mg4-0 6 0-home" src="https://github.com/user-attachments/assets/1ac6aa31-220f-4dbd-b31f-ce9b77eb6480" />
 ---
 
 ## Quale versione installare? / Which version should I install?
