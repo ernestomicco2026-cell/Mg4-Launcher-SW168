@@ -4,6 +4,8 @@
 
 **Ultima versione / Latest version: [0.6.3](releases/MG4Launcher-0.6.3.apk)**
 
+[![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
+
 > ⚠️ **Compatibilità / Compatibility:** solo infotainment **SWI68 SAIC 1.0+** · only **SWI68 SAIC 1.0+** infotainment.
 > Provato su **MG4 Luxury MY22 R69**; dovrebbe funzionare su tutte le versioni con radio SAIC 1.0+ ·
 > tested on **MG4 Luxury MY22 R69**; it should work on every version with the SAIC 1.0+ radio.
@@ -142,6 +144,14 @@ o il file `diagnostica.txt` bastano per capire cosa succede.
 Con **Salva log** (in alto nella colonna Diagnostica) il launcher scrive un log completo — valori, errori, eventi
 recenti e logcat del launcher — in `Android/data/com.mg4.launcher/files/mg4-launcher-log-….txt`.
 Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartella: basta aprirla dal computer o dal telefono.
+
+### Sostieni il progetto
+
+MG4 Launcher è e resterà **gratuito**. Se ti è utile e ti va di contribuire alle ore passate a svilupparlo e provarlo
+in auto, puoi lasciare una piccola offerta: è del tutto **facoltativa**, e anche una stella al repository o una
+segnalazione di un problema sono un aiuto prezioso. Grazie!
+
+[![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
 
@@ -373,6 +383,14 @@ or the `diagnostica.txt` file is enough to understand what is going on.
 **Salva log** (save log, at the top of the Diagnostics column) writes a full log — values, errors, recent events
 and the launcher's logcat — to `Android/data/com.mg4.launcher/files/mg4-launcher-log-….txt`.
 With a USB stick plugged in, the file is written there too, in the same folder.
+
+### Support the project
+
+MG4 Launcher is and will stay **free**. If you find it useful and would like to contribute to the hours spent
+developing it and testing it in the car, you can leave a small donation: it's completely **optional**, and a star on
+the repository or a bug report help a lot too. Thank you!
+
+[![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
 
