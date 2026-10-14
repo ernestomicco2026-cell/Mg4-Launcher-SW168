@@ -1,6 +1,6 @@
 {
-  "version": "0.6.1",
-  "apk": "releases/MG4Launcher-0.6.1.apk",
-  "size": 405675,
-  "notes": "Nome corretto del software (SWI68) e del repository (Mg4-Launcher-SWI68)."
+  "version": "0.6.2",
+  "apk": "releases/MG4Launcher-0.6.2.apk",
+  "size": 418114,
+  "notes": "Batteria con decimali, riscaldamento sedili e volante, pressione pneumatici (TPMS), temperatura interna."
 }

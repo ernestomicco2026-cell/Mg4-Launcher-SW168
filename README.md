@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.6.1](releases/MG4Launcher-0.6.1.apk)**
+**Ultima versione / Latest version: [0.6.2](releases/MG4Launcher-0.6.2.apk)**
 
 > ⚠️ **Compatibilità / Compatibility:** solo infotainment **SWI68 SAIC 1.0+** · only **SWI68 SAIC 1.0+** infotainment.
 > Provato su **MG4 Luxury MY22 R69**; dovrebbe funzionare su tutte le versioni con radio SAIC 1.0+ ·
@@ -56,7 +56,7 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
 ### Cosa fa
 
 - **Auto e batteria** (a sinistra): autonomia e **orologio** in grande, barra batteria con percentuale e tacca del limite di ricarica,
-  stato di ricarica e V2L (tocca V2L per la scarica), temperatura esterna. La tua MG4 ricolorabile con gli 8 colori della gamma, tetto nero opzionale.
+  stato di ricarica e V2L (tocca V2L per la scarica), temperatura esterna e interna; sotto l'auto la **pressione degli pneumatici** (TPMS). La tua MG4 ricolorabile con gli 8 colori della gamma, tetto nero opzionale.
   Tocca l'auto → Gestione energia. Tienila premuta → impostazioni del launcher.
 - **Mappa / Media / CarPlay** (a destra):
   - **Mappa**: indicazioni del navigatore (prossima manovra, via, arrivo). Senza guida: **Dove andiamo?** con la barra
@@ -69,12 +69,12 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
   - **CarPlay / Android Auto**: la scheda compare da sola quando colleghi il telefono.
 - **Barra in basso**: clima con pulsanti grandi da usare in guida — temperatura ‹ › (17 = LO … 33 = HI),
   ventola ‹ › (OFF / 1…11 / A = automatico; tocca l'icona = app Clima, tieni premuto = accendi/spegni),
-  **A/C** e **AUTO** —, mini-player compatto, **fendinebbia** (anteriori se presenti
+  **A/C**, **AUTO**, **sedili riscaldati** sinistro/destro (3 livelli) e **volante riscaldato** —, mini-player compatto, **fendinebbia** (anteriori se presenti
   e retronebbia: sulla MG4 si accendono solo dallo schermo), Telefono, Radio, Telecamera 360°, Impostazioni.
 - **In alto a destra**: indicatori di **Bluetooth**, **Wi-Fi** e rete **4G** della T-Box (con le tacche del segnale).
 - **App**: scorri la home verso sinistra per le app dell'auto e quelle che installi tu,
   con le icone tutte nello stesso stile; scorri verso destra per tornare. Con **Modifica** scegli quali app installate mostrare.
-- **Impostazioni** (tieni premuta l'auto): colore dell'auto, tetto nero, tema (automatico, notte, giorno), **lingua**,
+- **Impostazioni** (tieni premuta l'auto): colore dell'auto, tetto nero, tema (automatico, notte, giorno), **lingua**, percentuale batteria con decimali, pressione pneumatici sì/no,
   navigatore predefinito (Automatico, MG, Telefono), aggiornamenti, diagnostica con **Salva log**.
   Si aprono anche dall'ingranaggio in alto a destra nella pagina App.
 - **Schermo intero**: barra di stato e dock MG nascosti (trascina dal bordo per richiamarli).
@@ -91,7 +91,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.6.1.apk
+   adb install -r -f MG4Launcher-0.6.2.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -142,6 +142,13 @@ recenti e logcat del launcher — in `Android/data/com.mg4.launcher/files/mg4-la
 Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartella: basta aprirla dal computer o dal telefono.
 
 ### Versioni
+
+#### 0.6.2 — 14 ottobre 2026
+- Percentuale della batteria **con decimali** (es. 76,6%), da attivare in Impostazioni → Visualizzazione.
+- **Riscaldamento sedili** sinistro e destro (3 livelli, con tacche) e **volante riscaldato**, dopo A/C e AUTO.
+- **Pressione pneumatici (TPMS)** sotto l'auto, anteriori e posteriori (ambra sotto 2,0 bar); si può nascondere.
+- **Temperatura interna** sotto quella esterna.
+- Versione **DEMO** (`DEMO=1 ./build.sh`): app separata con dati simulati, per provare la grafica senza l'auto.
 
 #### 0.6.1 — 13 ottobre 2026
 - Nome corretto del software: **SWI68** (non SW168). Repository rinominato in **Mg4-Launcher-SWI68**; il launcher
@@ -276,7 +283,7 @@ It replaces the original home screen, keeping its features, with a new, clean de
 ### Features
 
 - **Car and battery** (left): range and a large **clock**, battery bar with percentage and charge-limit mark, charging and V2L status,
-  outside temperature (tap V2L for discharging). Your MG4, recolourable with the 8 factory colours, optional black roof.
+  outside and interior temperature (tap V2L for discharging), **tyre pressure** (TPMS) under the car. Your MG4, recolourable with the 8 factory colours, optional black roof.
   Tap the car → Energy management. Long-press it → launcher settings.
 - **Map / Media / CarPlay** (right):
   - **Map**: navigation guidance (next manoeuvre, street, arrival). When not navigating: **Where to?** with the
@@ -288,13 +295,13 @@ It replaces the original home screen, keeping its features, with a new, clean de
     tune in) and FM/DAB favourites with logos.
   - **CarPlay / Android Auto**: the tab appears by itself when you connect a phone.
 - **Bottom bar**: climate with large buttons for use while driving — temperature ‹ › (17 = LO … 33 = HI),
-  fan ‹ › (OFF / 1…11 / A = auto; tap the icon = Climate app, long-press = climate on/off), **A/C** and **AUTO** —,
+  fan ‹ › (OFF / 1…11 / A = auto; tap the icon = Climate app, long-press = climate on/off), **A/C**, **AUTO**, left/right **heated seats** (3 levels) and **heated steering wheel** —,
   compact mini player, **fog lights** (front if fitted, and rear: on the MG4 they can only be
   switched from the screen), Phone, Radio, 360° camera, Settings.
 - **Top right**: **Bluetooth**, **Wi-Fi** and T-Box **4G** indicators (with signal bars).
 - **Apps**: swipe the home screen left for the car's apps and the ones you install,
   all with matching icons; swipe right to go back. Use **Modifica** (Edit) to choose which installed apps to show.
-- **Settings** (long-press the car): car colour, black roof, theme (auto, night, day), **language**,
+- **Settings** (long-press the car): car colour, black roof, theme (auto, night, day), **language**, battery percentage with decimals, tyre pressure on/off,
   default navigator (Auto, MG, Phone), updates, diagnostics with **Salva log** (save log).
   Also available from the gear at the top right of the Apps page.
 - **Full screen**: status bar and MG dock hidden (swipe from the edge to bring them back).
@@ -311,7 +318,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.6.1.apk
+   adb install -r -f MG4Launcher-0.6.2.apk
    ```
 3. Make it the default home:
    ```bash
@@ -362,6 +369,13 @@ and the launcher's logcat — to `Android/data/com.mg4.launcher/files/mg4-launch
 With a USB stick plugged in, the file is written there too, in the same folder.
 
 ### Changelog
+
+#### 0.6.2 — 14 October 2026
+- Battery percentage **with decimals** (e.g. 76.6%), enabled in Settings → Display.
+- Left and right **heated seats** (3 levels, with level marks) and **heated steering wheel**, after A/C and AUTO.
+- **Tyre pressure (TPMS)** under the car, front and rear (amber below 2.0 bar); can be hidden.
+- **Interior temperature** under the outside one.
+- **DEMO** build (`DEMO=1 ./build.sh`): separate app with simulated data, to try the design without the car.
 
 #### 0.6.1 — 13 October 2026
 - Correct software name: **SWI68** (not SW168). Repository renamed to **Mg4-Launcher-SWI68**; the launcher switches
