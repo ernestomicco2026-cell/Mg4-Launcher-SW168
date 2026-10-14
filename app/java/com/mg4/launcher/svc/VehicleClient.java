@@ -217,14 +217,6 @@ public final class VehicleClient {
     }
 
     private void poll() {
-        if (com.mg4.launcher.Flavor.DEMO) {
-            State d = Demo.vehicle();
-            last = d;
-            main.post(() -> {
-                if (listener != null) listener.onVehicleState(d);
-            });
-            return;
-        }
         State s = new State();
         s.connected = hub.isConnected();
         if (s.connected) {
@@ -364,7 +356,6 @@ public final class VehicleClient {
 
     /** Imposta la temperatura lato guida (17..33). Il valore richiesto resta visibile per qualche secondo. */
     public void setDriverTemp(int celsius) {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.setTemp(Math.max(TEMP_MIN, Math.min(TEMP_MAX, celsius))); demoRefresh(); return; }
         int t = Math.max(TEMP_MIN, Math.min(TEMP_MAX, celsius));
         heldTemp = t;
         tempHoldUntil = android.os.SystemClock.uptimeMillis() + HOLD_MS;
@@ -374,7 +365,6 @@ public final class VehicleClient {
 
     /** Livello ventola: 0 = spenta, fanMin..fanMax, 15 = automatico. */
     public void setFanLevel(int level) {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.setFan(level); demoRefresh(); return; }
         int l = level == FAN_AUTO || level == FAN_OFF ? level : Math.max(fanMin, Math.min(fanMax, level));
         heldFan = l;
         fanHoldUntil = android.os.SystemClock.uptimeMillis() + HOLD_MS;
@@ -491,28 +481,23 @@ public final class VehicleClient {
     }
 
     public void toggleAc() {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.toggleAc(); demoRefresh(); return; }
         press("aircondition", AC, AC_SET_AC, AC_GET_AC, last.acOn, "clima.ac");
     }
 
     public void toggleAuto() {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.toggleAuto(); demoRefresh(); return; }
         press("aircondition", AC, AC_SET_AUTO, AC_GET_AUTO, last.autoOn, "clima.auto");
     }
 
     /** Sedile: ogni tocco passa al livello successivo (0 → 1 → 2 → 3 → 0), come il tasto dell'app Clima. */
     public void pressSeatLeft() {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.seatLeft(); demoRefresh(); return; }
         pressLevel(AC_SET_DRV_SEAT_HEAT, AC_GET_DRV_SEAT_HEAT, last.seatLeft, "clima.sedileSx");
     }
 
     public void pressSeatRight() {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.seatRight(); demoRefresh(); return; }
         pressLevel(AC_SET_PSG_SEAT_HEAT, AC_GET_PSG_SEAT_HEAT, last.seatRight, "clima.sedileDx");
     }
 
     public void toggleWheelHeat() {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.wheel(); demoRefresh(); return; }
         if (last.wheelHeat == 0 || last.wheelHeat == 1) hold(AC_GET_WHEEL_HEAT, 1 - last.wheelHeat);
         sendPress(AC_SET_WHEEL_HEAT, "clima.volante");
     }
@@ -536,12 +521,10 @@ public final class VehicleClient {
     }
 
     public void toggleRearFog() {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.rearFog(); demoRefresh(); return; }
         press("vehiclesetting", SET, SET_SET_REAR_FOG, SET_GET_REAR_FOG, last.rearFog, "luci.retronebbia");
     }
 
     public void toggleFrontFog() {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.frontFog(); demoRefresh(); return; }
         press("vehiclesetting", SET, SET_SET_FRONT_FOG, SET_GET_FRONT_FOG, last.frontFog, "luci.fendinebbia");
     }
 
@@ -560,13 +543,7 @@ public final class VehicleClient {
         });
     }
 
-    /** Versione demo: ridisegna subito con il nuovo stato simulato. */
-    private void demoRefresh() {
-        if (bg != null) bg.post(this::poll);
-    }
-
     public void setHvacPower(boolean on) {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.hvacPower(on); demoRefresh(); return; }
         if (bg == null) return;
         bg.post(() -> {
             try {

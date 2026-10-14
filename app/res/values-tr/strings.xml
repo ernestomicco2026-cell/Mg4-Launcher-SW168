@@ -50,7 +50,6 @@
     <string name="drive_right" formatted="false">Sağdan direksiyon</string>
     <string name="left" formatted="false">Sol</string>
     <string name="right" formatted="false">Sağ</string>
-    <string name="demo_no_updates" formatted="false">Demo sürümü: güncellemeler kapalı</string>
     <string name="climate" formatted="false">Klima</string>
     <string name="tab_map" formatted="false">Harita</string>
     <string name="tab_media" formatted="false">Medya</string>

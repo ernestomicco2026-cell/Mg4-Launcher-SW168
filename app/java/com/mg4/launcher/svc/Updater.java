@@ -91,10 +91,6 @@ public final class Updater {
 
     /** Controlla l'ultima release del repository. */
     public void check(String repo, String token) {
-        if (com.mg4.launcher.Flavor.DEMO) {
-            status(L.s(R.string.demo_no_updates), null, false);
-            return;
-        }
         if (busy) return;
         status(L.s(R.string.upd_checking), null, true);
         bg.post(() -> {
@@ -125,14 +121,6 @@ public final class Updater {
      * chiama {@code cb} sul thread principale solo se c'è una versione più nuova con l'APK.
      */
     public void checkQuiet(String repo, String token, Found cb) {
-        if (com.mg4.launcher.Flavor.DEMO) {
-            Release r = new Release();
-            r.tag = "0.9.9";
-            r.name = "MG4 Launcher " + r.tag;
-            r.newer = true;
-            main.post(() -> cb.found(r));
-            return;
-        }
         if (busy) return;
         bg.post(() -> {
             try {

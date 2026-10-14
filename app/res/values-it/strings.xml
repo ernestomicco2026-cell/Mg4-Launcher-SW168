@@ -50,7 +50,6 @@
     <string name="drive_right" formatted="false">Guida a destra</string>
     <string name="left" formatted="false">Sinistra</string>
     <string name="right" formatted="false">Destra</string>
-    <string name="demo_no_updates" formatted="false">Versione demo: aggiornamenti disattivati</string>
     <string name="climate" formatted="false">Clima</string>
     <string name="tab_map" formatted="false">Mappa</string>
     <string name="tab_media" formatted="false">Media</string>

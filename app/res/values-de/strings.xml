@@ -50,7 +50,6 @@
     <string name="drive_right" formatted="false">Rechtslenker</string>
     <string name="left" formatted="false">Links</string>
     <string name="right" formatted="false">Rechts</string>
-    <string name="demo_no_updates" formatted="false">Demo-Version: Updates deaktiviert</string>
     <string name="climate" formatted="false">Klima</string>
     <string name="tab_map" formatted="false">Karte</string>
     <string name="tab_media" formatted="false">Medien</string>

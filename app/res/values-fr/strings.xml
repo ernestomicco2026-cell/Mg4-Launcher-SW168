@@ -50,7 +50,6 @@
     <string name="drive_right" formatted="false">Conduite à droite</string>
     <string name="left" formatted="false">Gauche</string>
     <string name="right" formatted="false">Droite</string>
-    <string name="demo_no_updates" formatted="false">Version démo : mises à jour désactivées</string>
     <string name="climate" formatted="false">Climatisation</string>
     <string name="tab_map" formatted="false">Carte</string>
     <string name="tab_media" formatted="false">Médias</string>

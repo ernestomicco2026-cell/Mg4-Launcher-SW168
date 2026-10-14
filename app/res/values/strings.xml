@@ -50,7 +50,6 @@
     <string name="drive_right" formatted="false">Right-hand drive</string>
     <string name="left" formatted="false">Left</string>
     <string name="right" formatted="false">Right</string>
-    <string name="demo_no_updates" formatted="false">Demo version: updates disabled</string>
     <string name="climate" formatted="false">Climate</string>
     <string name="tab_map" formatted="false">Map</string>
     <string name="tab_media" formatted="false">Media</string>

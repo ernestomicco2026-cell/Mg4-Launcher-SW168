@@ -124,7 +124,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         registerReceiver(clockTick, tf);
         root.postDelayed(saveDiag, 15000);
         // primo controllo aggiornamenti dopo l'avvio, quando la radio ha finito di caricare
-        root.postDelayed(autoCheck, com.mg4.launcher.Flavor.DEMO ? 8000 : 90_000);
+        root.postDelayed(autoCheck, 90_000);
     }
 
     // ---- popup discreto per i nuovi aggiornamenti ----------------------------------------------
@@ -137,7 +137,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         @Override
         public void run() {
             if (prefs.updatePopup()) updater.checkQuiet(prefs.updateRepo(), prefs.githubToken(), r -> showUpdatePopup(r));
-            if (!com.mg4.launcher.Flavor.DEMO) root.postDelayed(this, CHECK_EVERY);
+            root.postDelayed(this, CHECK_EVERY);
         }
     };
 

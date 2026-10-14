@@ -31,7 +31,7 @@
         android:directBootAware="true"
         android:defaultToDeviceProtectedStorage="true">
 
-        <!-- libreria del CarService (presente sull'auto; facoltativa altrove, es. versione demo) -->
+        <!-- libreria del CarService (presente sull'auto; facoltativa altrove) -->
         <uses-library android:name="android.car" android:required="false" />
 
         <activity

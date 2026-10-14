@@ -272,14 +272,6 @@ public final class MediaClient {
     }
 
     private void poll() {
-        if (com.mg4.launcher.Flavor.DEMO) {
-            State d = Demo.media();
-            last = d;
-            main.post(() -> {
-                if (listener != null) listener.onMediaState(d);
-            });
-            return;
-        }
         State s = new State();
 
         // CarPlay / Android Auto collegato?
@@ -536,7 +528,6 @@ public final class MediaClient {
     }
 
     public void selectSource(int src) {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.selectSource(src); post(this::poll); return; }
         chosen = src;
         post(() -> {
             try {
@@ -742,7 +733,6 @@ public final class MediaClient {
      * (getLastRadioInfo), altrimenti il primo preferito o la prima stazione trovata.
      */
     public void switchBand(int band) {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.switchBand(band); post(this::poll); return; }
         chosen = SRC_RADIO;
         post(() -> {
             try {
@@ -806,7 +796,6 @@ public final class MediaClient {
 
     /** Sintonizza una stazione dei preferiti e passa alla radio. */
     public void tune(Station st) {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.tune(st); post(this::poll); return; }
         chosen = SRC_RADIO;
         post(() -> {
             try {
@@ -827,7 +816,6 @@ public final class MediaClient {
     }
 
     public void playPause() {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.playPause(); post(this::poll); return; }
         post(() -> {
             State s = last;
             try {
@@ -860,7 +848,6 @@ public final class MediaClient {
     }
 
     public void skip(boolean forward) {
-        if (com.mg4.launcher.Flavor.DEMO) { Demo.skip(forward); post(this::poll); return; }
         post(() -> {
             State s = last;
             try {

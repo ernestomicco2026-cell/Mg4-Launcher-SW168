@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Compila MG4 Launcher (SWI68) senza Gradle: aapt2 -> javac -> D8 -> firma (v1+v2).
 # Uso: ./build.sh            (versione da version.properties)
-#      DEMO=1 ./build.sh     versione demo: dati simulati, pacchetto com.mg4.launcher.demo, non diventa la home
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -14,27 +13,14 @@ KEY_PASS="${KEY_PASS:-android}"
 KEY_ALIAS="${KEY_ALIAS:-platform}"
 
 source "$ROOT/version.properties"   # VERSION_CODE, VERSION_NAME
-DEMO="${DEMO:-0}"
 OUT_NAME="MG4Launcher-$VERSION_NAME.apk"
-[ "$DEMO" = "1" ] && OUT_NAME="MG4Launcher-$VERSION_NAME-DEMO.apk"
 
 rm -rf "$OUT"
 mkdir -p "$OUT/res" "$OUT/gen" "$OUT/classes" "$OUT/dex" "$OUT/tools"
 
-# demo: sorgenti con Flavor.DEMO = true; manifest senza HOME (si apre dall'elenco app) e con nome "DEMO"
 SRC="$APP/java"
 MANIFEST="$APP/AndroidManifest.xml"
 RENAME=()
-if [ "$DEMO" = "1" ]; then
-  echo "==> versione DEMO"
-  cp -r "$APP/java" "$OUT/src"
-  sed -i 's/DEMO = false/DEMO = true/' "$OUT/src/com/mg4/launcher/Flavor.java"
-  SRC="$OUT/src"
-  sed -e '/android.intent.category.HOME/d' -e '/android.intent.category.DEFAULT/d' \
-      -e 's#android:label="@string/app_name"#android:label="MG4 Launcher DEMO"#' "$APP/AndroidManifest.xml" > "$OUT/AndroidManifest.xml"
-  MANIFEST="$OUT/AndroidManifest.xml"
-  RENAME=(--rename-manifest-package com.mg4.launcher.demo)
-fi
 
 echo "==> risorse (aapt2)"
 "$T/aapt2" compile --dir "$APP/res" -o "$OUT/res/compiled.zip"

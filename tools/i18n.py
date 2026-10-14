@@ -61,7 +61,6 @@ S = {
     "drive_right": ("Guida a destra", "Right-hand drive", "Volante a la derecha", "Rechtslenker", "Volante à direita", "Conduite à droite", "Sağdan direksiyon"),
     "left": ("Sinistra", "Left", "Izquierda", "Links", "Esquerda", "Gauche", "Sol"),
     "right": ("Destra", "Right", "Derecha", "Rechts", "Direita", "Droite", "Sağ"),
-    "demo_no_updates": ("Versione demo: aggiornamenti disattivati", "Demo version: updates disabled", "Versión demo: actualizaciones desactivadas", "Demo-Version: Updates deaktiviert", "Versão demo: atualizações desativadas", "Version démo : mises à jour désactivées", "Demo sürümü: güncellemeler kapalı"),
     "climate": ("Clima", "Climate", "Climatización", "Klima", "Climatização", "Climatisation", "Klima"),
 
     # --- pannello destro ---
