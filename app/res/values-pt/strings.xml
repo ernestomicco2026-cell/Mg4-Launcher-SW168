@@ -40,6 +40,14 @@
     <string name="display" formatted="false">VISUALIZAÇÃO</string>
     <string name="soc_decimals" formatted="false">Percentagem da bateria com decimais</string>
     <string name="show_tpms" formatted="false">Pressão dos pneus por baixo do carro</string>
+    <string name="log_upload_label" formatted="false">ENVIO DE REGISTOS</string>
+    <string name="log_upload_on" formatted="false">Enviar registos automaticamente</string>
+    <string name="log_upload_last">Último envio às %1$s</string>
+    <string name="log_upload_never" formatted="false">Ainda nenhum registo enviado (o primeiro sai 90 s após o arranque)</string>
+    <string name="log_upload_error">Falha no envio (%1$s): nova tentativa mais tarde</string>
+    <string name="log_upload_off" formatted="false">Envio de registos desativado</string>
+    <string name="log_upload_nokey" formatted="false">Envio de registos indisponível nesta versão</string>
+    <string name="show_inside_temp" formatted="false">Temperatura interior</string>
     <string name="set_ui_size" formatted="false">TAMANHO DOS COMANDOS</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Grande</string>

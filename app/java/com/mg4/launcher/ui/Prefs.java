@@ -178,4 +178,13 @@ public final class Prefs {
     public void setDriveSide(String v) {
         sp.edit().putString("posizioneGuida", v).apply();
     }
+
+    /** Temperatura interna sotto quella esterna (spenta di default: molte auto non la forniscono). */
+    public boolean showInsideTemp() {
+        return sp.getBoolean("showInsideTemp", false);
+    }
+
+    public void setShowInsideTemp(boolean b) {
+        sp.edit().putBoolean("showInsideTemp", b).apply();
+    }
 }

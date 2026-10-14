@@ -121,6 +121,25 @@ public final class Diag {
         return sb.toString();
     }
 
+    /** Testo completo del log: versione, valori attuali, eventi recenti, logcat del launcher (stesso formato della SWI69). */
+    public static String buildLog(Context c) {
+        StringBuilder sb = new StringBuilder();
+        String version = "?";
+        try {
+            PackageInfo pi = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
+            version = pi.versionName + " (" + pi.versionCode + ")";
+        } catch (Exception ignored) {
+        }
+        sb.append("MG4 Launcher ").append(version).append('\n');
+        sb.append(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY).format(new Date())).append('\n');
+        sb.append("Android ").append(Build.VERSION.RELEASE).append(" (API ").append(Build.VERSION.SDK_INT).append(") · ")
+                .append(Build.MANUFACTURER).append(' ').append(Build.MODEL).append(" · ").append(Build.DISPLAY).append("\n\n");
+        sb.append("===== VALORI ATTUALI =====\n").append(dump()).append('\n');
+        sb.append("===== EVENTI RECENTI =====\n").append(events()).append('\n');
+        sb.append("===== LOGCAT DEL LAUNCHER =====\n").append(logcat());
+        return sb.toString();
+    }
+
     /** Risultato del salvataggio del log: percorsi scritti e testo da mostrare. */
     public static final class Saved {
         public final List<String> paths = new ArrayList<>();
@@ -136,26 +155,14 @@ public final class Diag {
         Saved out = new Saved();
         String stamp = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.ITALY).format(new Date());
         String name = "mg4-launcher-log-" + stamp + ".txt";
-        StringBuilder sb = new StringBuilder();
-        String version = "?";
-        try {
-            PackageInfo pi = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
-            version = pi.versionName + " (" + pi.versionCode + ")";
-        } catch (Exception ignored) {
-        }
-        sb.append("MG4 Launcher ").append(version).append('\n');
-        sb.append(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY).format(new Date())).append('\n');
-        sb.append("Android ").append(Build.VERSION.RELEASE).append(" (API ").append(Build.VERSION.SDK_INT).append(") · ")
-                .append(Build.MANUFACTURER).append(' ').append(Build.MODEL).append(" · ").append(Build.DISPLAY).append("\n\n");
-        sb.append("===== VALORI ATTUALI =====\n").append(dump()).append('\n');
-        sb.append("===== EVENTI RECENTI =====\n").append(events()).append('\n');
-        sb.append("===== LOGCAT DEL LAUNCHER =====\n").append(logcat());
+        String text = buildLog(c);
         byte[] data;
         try {
-            data = sb.toString().getBytes("UTF-8");
+            data = text.getBytes("UTF-8");
         } catch (Exception e) {
-            data = sb.toString().getBytes();
+            data = text.getBytes();
         }
+        LogUploader.requestNow();   // con l'invio automatico attivo, il log va anche nel repository dei log
 
         List<File> dirs = new ArrayList<>();
         try {

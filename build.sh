@@ -33,6 +33,26 @@ echo "==> risorse (aapt2)"
   -o "$OUT/base.apk" \
   "$OUT/res/compiled.zip"
 
+echo "==> configurazione invio log"
+# Il token del repository privato dei log NON è nel repository: sta in tools/log-token.txt (escluso da git).
+# Qui diventa una classe generata, offuscata con XOR (solo per non lasciarlo in chiaro nell'APK).
+python3 - "$T/log-token.txt" "$OUT/gen/com/mg4/launcher/svc/LogConfig.java" <<'PY'
+import os, random, sys
+src, dst = sys.argv[1], sys.argv[2]
+tok = open(src).read().strip() if os.path.exists(src) else ""
+key = [random.randrange(1, 255) for _ in tok] or [0]
+enc = [ord(ch) ^ key[i] for i, ch in enumerate(tok)]
+os.makedirs(os.path.dirname(dst), exist_ok=True)
+open(dst, "w").write(
+    "package com.mg4.launcher.svc;\n\n/** Generato da build.sh: non modificare, non salvare in git. */\n"
+    "final class LogConfig {\n    private LogConfig() {}\n"
+    "    private static final int[] A = {%s};\n    private static final int[] B = {%s};\n"
+    "    static String token() {\n        char[] c = new char[A.length];\n"
+    "        for (int i = 0; i < A.length; i++) c[i] = (char) (A[i] ^ B[i]);\n        return new String(c);\n    }\n}\n"
+    % (",".join(map(str, enc)), ",".join(map(str, key[:len(enc)]))))
+print("    token:", "presente" if tok else "ASSENTE (invio log disattivato in questo APK)")
+PY
+
 echo "==> java (javac, bytecode 8)"
 find "$SRC" "$OUT/gen" -name '*.java' > "$OUT/sources.txt"
 # API Java 8 dal JDK (lambda), API Android da android.jar

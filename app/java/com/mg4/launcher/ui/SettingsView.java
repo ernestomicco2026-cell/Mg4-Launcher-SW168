@@ -30,6 +30,8 @@ public final class SettingsView extends FrameLayout {
 
         Updater updater();
 
+        com.mg4.launcher.svc.LogUploader logs();
+
         /** La lingua è cambiata: ricostruire tutta l'interfaccia. */
         void languageChanged();
     }

@@ -40,6 +40,14 @@
     <string name="display" formatted="false">VISUALIZZAZIONE</string>
     <string name="soc_decimals" formatted="false">Percentuale batteria con decimali</string>
     <string name="show_tpms" formatted="false">Pressione pneumatici sotto l\'auto</string>
+    <string name="log_upload_label" formatted="false">INVIO LOG</string>
+    <string name="log_upload_on" formatted="false">Invio automatico dei log</string>
+    <string name="log_upload_last">Ultimo invio alle %1$s</string>
+    <string name="log_upload_never" formatted="false">Nessun log inviato ancora (il primo parte 90 s dopo l\'avvio)</string>
+    <string name="log_upload_error">Invio non riuscito (%1$s): riprovo più tardi</string>
+    <string name="log_upload_off" formatted="false">Invio dei log disattivato</string>
+    <string name="log_upload_nokey" formatted="false">Invio dei log non disponibile in questa versione</string>
+    <string name="show_inside_temp" formatted="false">Temperatura interna</string>
     <string name="set_ui_size" formatted="false">DIMENSIONE COMANDI</string>
     <string name="ui_size_normal" formatted="false">Normale</string>
     <string name="ui_size_large" formatted="false">Grande</string>

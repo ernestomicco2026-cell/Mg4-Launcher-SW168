@@ -428,10 +428,17 @@ public final class VehicleClient {
                 raw.append(i == 0 ? "" : " / ").append(v == Integer.MIN_VALUE ? "?" : String.valueOf(v));
             }
             Diag.put("pneumatici (grezzo AS/AD/PS/PD)", raw);
-            float in = props.getFloat(CarProps.HVAC_TEMPERATURE_CURRENT);
-            float amb = props.getFloat(CarProps.HVAC_AMBIENT_TEMPERATURE);
-            Diag.put("clima.tempInterna (corrente / ambient)", in + " / " + amb);
-            insideCache = valid(in) ? in : valid(amb) ? amb : Float.NaN;
+            // temperatura interna: si legge solo se l'opzione è accesa nelle impostazioni (spesso l'auto non la fornisce)
+            boolean wantInside = ctx.getSharedPreferences("mg4launcher", Context.MODE_PRIVATE).getBoolean("showInsideTemp", false);
+            if (wantInside) {
+                float in = props.getFloat(CarProps.HVAC_TEMPERATURE_CURRENT);
+                float amb = props.getFloat(CarProps.HVAC_AMBIENT_TEMPERATURE);
+                Diag.put("clima.tempInterna (corrente / ambient)", in + " / " + amb);
+                insideCache = valid(in) ? in : valid(amb) ? amb : Float.NaN;
+            } else {
+                Diag.put("clima.tempInterna (corrente / ambient)", "non letta (opzione spenta)");
+                insideCache = Float.NaN;
+            }
         }
         System.arraycopy(tireCache, 0, s.tireBar, 0, 4);
         s.insideTemp = insideCache;

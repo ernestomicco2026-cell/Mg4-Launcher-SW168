@@ -46,6 +46,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     private MediaClient media;
     private NavClient nav;
     private Updater updater;
+    private com.mg4.launcher.svc.LogUploader logs;
 
     private FrameLayout root;
     private Theme theme;
@@ -70,6 +71,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         media = new MediaClient(this);
         nav = new NavClient(this);
         updater = new Updater(this);
+        logs = new com.mg4.launcher.svc.LogUploader(this);
         lastUiMode = getResources().getConfiguration().uiMode;
 
         root = new FrameLayout(this);
@@ -107,6 +109,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         conn.start();
         media.start();
         nav.start();
+        logs.start();
 
         IntentFilter f = new IntentFilter();
         f.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -292,6 +295,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     protected void onDestroy() {
         super.onDestroy();
         root.removeCallbacks(saveDiag);
+        logs.stop();
         root.removeCallbacks(autoCheck);
         root.removeCallbacks(hidePopup);
         vehicle.stop();
@@ -482,6 +486,11 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     public Updater updater() {
         return updater;
+    }
+
+    @Override
+    public com.mg4.launcher.svc.LogUploader logs() {
+        return logs;
     }
 
     @Override

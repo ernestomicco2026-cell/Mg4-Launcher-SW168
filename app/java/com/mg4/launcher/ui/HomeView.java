@@ -314,10 +314,12 @@ public final class HomeView extends LinearLayout {
         boolean outOk = s.outsideTemp > -60 && s.outsideTemp < 70;
         outIcon.setVisibility(outOk ? VISIBLE : GONE);
         outTv.setText(outOk ? L.f(R.string.outside_temp, String.valueOf(Math.round(s.outsideTemp))) : "");
-        boolean inOk = !Float.isNaN(s.insideTemp);
-        inTv.setVisibility(inOk ? VISIBLE : GONE);
-        if (inOk) inTv.setText(L.f(R.string.inside_temp, String.valueOf(Math.round(s.insideTemp))));
-        if (inOk && !outOk) outIcon.setVisibility(VISIBLE);
+        // temperatura interna (opzione): "—°" se l'auto non fornisce il dato, mai 0°
+        boolean inShow = prefs.showInsideTemp();
+        boolean inOk = !Float.isNaN(s.insideTemp) && Math.round(s.insideTemp) != 0;
+        inTv.setVisibility(inShow ? VISIBLE : GONE);
+        if (inShow) inTv.setText(L.f(R.string.inside_temp, inOk ? String.valueOf(Math.round(s.insideTemp)) : "—"));
+        if (inShow && !outOk) outIcon.setVisibility(VISIBLE);
         showTpms(s.tireBar);
         if (s.fanLevel >= 0 && SystemClock.uptimeMillis() > localFanUntil) {
             fanLevel = s.fanLevel;

@@ -40,6 +40,14 @@
     <string name="display" formatted="false">ANZEIGE</string>
     <string name="soc_decimals" formatted="false">Akkustand mit Nachkommastelle</string>
     <string name="show_tpms" formatted="false">Reifendruck unter dem Fahrzeug</string>
+    <string name="log_upload_label" formatted="false">LOG-UPLOAD</string>
+    <string name="log_upload_on" formatted="false">Logs automatisch senden</string>
+    <string name="log_upload_last">Zuletzt gesendet um %1$s</string>
+    <string name="log_upload_never" formatted="false">Noch kein Log gesendet (das erste 90 s nach dem Start)</string>
+    <string name="log_upload_error">Senden fehlgeschlagen (%1$s): neuer Versuch später</string>
+    <string name="log_upload_off" formatted="false">Log-Upload ausgeschaltet</string>
+    <string name="log_upload_nokey" formatted="false">Log-Upload in dieser Version nicht verfügbar</string>
+    <string name="show_inside_temp" formatted="false">Innentemperatur</string>
     <string name="set_ui_size" formatted="false">GRÖSSE DER BEDIENELEMENTE</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Groß</string>

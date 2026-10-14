@@ -40,6 +40,14 @@
     <string name="display" formatted="false">GÖRÜNÜM</string>
     <string name="soc_decimals" formatted="false">Ondalıklı batarya yüzdesi</string>
     <string name="show_tpms" formatted="false">Aracın altında lastik basıncı</string>
+    <string name="log_upload_label" formatted="false">GÜNLÜK GÖNDERİMİ</string>
+    <string name="log_upload_on" formatted="false">Günlükleri otomatik gönder</string>
+    <string name="log_upload_last">Son gönderim %1$s</string>
+    <string name="log_upload_never" formatted="false">Henüz günlük gönderilmedi (ilki başlangıçtan 90 sn sonra)</string>
+    <string name="log_upload_error">Gönderilemedi (%1$s): daha sonra yeniden denenecek</string>
+    <string name="log_upload_off" formatted="false">Günlük gönderimi kapalı</string>
+    <string name="log_upload_nokey" formatted="false">Bu sürümde günlük gönderimi yok</string>
+    <string name="show_inside_temp" formatted="false">İç sıcaklık</string>
     <string name="set_ui_size" formatted="false">KONTROL BOYUTU</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Büyük</string>

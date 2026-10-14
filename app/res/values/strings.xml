@@ -40,6 +40,14 @@
     <string name="display" formatted="false">DISPLAY</string>
     <string name="soc_decimals" formatted="false">Battery percentage with decimals</string>
     <string name="show_tpms" formatted="false">Tyre pressure under the car</string>
+    <string name="log_upload_label" formatted="false">LOG UPLOAD</string>
+    <string name="log_upload_on" formatted="false">Send logs automatically</string>
+    <string name="log_upload_last">Last sent at %1$s</string>
+    <string name="log_upload_never" formatted="false">No log sent yet (the first one goes 90 s after start)</string>
+    <string name="log_upload_error">Upload failed (%1$s): will retry later</string>
+    <string name="log_upload_off" formatted="false">Log upload turned off</string>
+    <string name="log_upload_nokey" formatted="false">Log upload not available in this version</string>
+    <string name="show_inside_temp" formatted="false">Interior temperature</string>
     <string name="set_ui_size" formatted="false">CONTROL SIZE</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Large</string>

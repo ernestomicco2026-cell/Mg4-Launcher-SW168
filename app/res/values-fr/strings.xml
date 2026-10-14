@@ -40,6 +40,14 @@
     <string name="display" formatted="false">AFFICHAGE</string>
     <string name="soc_decimals" formatted="false">Pourcentage de batterie avec décimales</string>
     <string name="show_tpms" formatted="false">Pression des pneus sous le véhicule</string>
+    <string name="log_upload_label" formatted="false">ENVOI DES JOURNAUX</string>
+    <string name="log_upload_on" formatted="false">Envoyer les journaux automatiquement</string>
+    <string name="log_upload_last">Dernier envoi à %1$s</string>
+    <string name="log_upload_never" formatted="false">Aucun journal envoyé (le premier part 90 s après le démarrage)</string>
+    <string name="log_upload_error">Échec de l\'envoi (%1$s) : nouvel essai plus tard</string>
+    <string name="log_upload_off" formatted="false">Envoi des journaux désactivé</string>
+    <string name="log_upload_nokey" formatted="false">Envoi des journaux indisponible dans cette version</string>
+    <string name="show_inside_temp" formatted="false">Température intérieure</string>
     <string name="set_ui_size" formatted="false">TAILLE DES COMMANDES</string>
     <string name="ui_size_normal" formatted="false">Normale</string>
     <string name="ui_size_large" formatted="false">Grande</string>
