@@ -1,6 +1,6 @@
 {
-  "version": "0.6.2",
-  "apk": "releases/MG4Launcher-0.6.2.apk",
-  "size": 418114,
-  "notes": "Batteria con decimali, riscaldamento sedili e volante, pressione pneumatici (TPMS), temperatura interna."
+  "version": "0.6.3",
+  "apk": "releases/MG4Launcher-0.6.3.apk",
+  "size": 422210,
+  "notes": "Pressione pneumatici (TPMS) corretta, avviso discreto per i nuovi aggiornamenti."
 }

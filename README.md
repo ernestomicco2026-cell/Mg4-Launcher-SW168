@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.6.2](releases/MG4Launcher-0.6.2.apk)**
+**Ultima versione / Latest version: [0.6.3](releases/MG4Launcher-0.6.3.apk)**
 
 > ⚠️ **Compatibilità / Compatibility:** solo infotainment **SWI68 SAIC 1.0+** · only **SWI68 SAIC 1.0+** infotainment.
 > Provato su **MG4 Luxury MY22 R69**; dovrebbe funzionare su tutte le versioni con radio SAIC 1.0+ ·
@@ -93,7 +93,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.6.2.apk
+   adb install -r -f MG4Launcher-0.6.3.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -144,6 +144,11 @@ recenti e logcat del launcher — in `Android/data/com.mg4.launcher/files/mg4-la
 Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartella: basta aprirla dal computer o dal telefono.
 
 ### Versioni
+
+#### 0.6.3 — 14 ottobre 2026
+- **Pressione pneumatici (TPMS)** ora visibile: il launcher chiede alla radio il permesso necessario per leggere i sensori.
+- **Avviso discreto per i nuovi aggiornamenti**: quando su GitHub c'è una versione nuova compare in alto una piccola
+  scheda con **Aggiorna** e **Più tardi**; si disattiva in Impostazioni → Aggiornamenti.
 
 #### 0.6.2 — 14 ottobre 2026
 - Percentuale della batteria **con decimali** (es. 76,6%), da attivare in Impostazioni → Visualizzazione.
@@ -319,7 +324,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.6.2.apk
+   adb install -r -f MG4Launcher-0.6.3.apk
    ```
 3. Make it the default home:
    ```bash
@@ -370,6 +375,11 @@ and the launcher's logcat — to `Android/data/com.mg4.launcher/files/mg4-launch
 With a USB stick plugged in, the file is written there too, in the same folder.
 
 ### Changelog
+
+#### 0.6.3 — 14 October 2026
+- **Tyre pressure (TPMS)** now shown: the launcher requests the permission the radio needs to read the sensors.
+- **Discreet notice for new updates**: when a new version is on GitHub, a small card appears at the top with
+  **Update** and **Later**; it can be turned off in Settings → Updates.
 
 #### 0.6.2 — 14 October 2026
 - Battery percentage **with decimals** (e.g. 76.6%), enabled in Settings → Display.
