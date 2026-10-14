@@ -106,7 +106,9 @@ public final class HomeView extends LinearLayout {
     private int acTemp = -1;
     private int fanLevel = -1, fanMin = 1, fanMax = 11;
     private long localTempUntil, localFanUntil;
-    private TextView fanTv, outTv;
+    private TextView fanTv, outTv, inTv;
+    private LinearLayout tpmsRow, tpmsFront, tpmsRear;
+    private FrameLayout seatLeftBtn, seatRightBtn, wheelBtn;
     private ImageView outIcon;
 
     public HomeView(Context c, Theme t, Prefs prefs, Host host, VehicleClient vehicle, MediaClient media, NavClient nav) {
@@ -190,16 +192,35 @@ public final class HomeView extends LinearLayout {
         status.addView(statusIcon);
         statusTv = Ui.oneLine(Ui.text(c, L.s(R.string.connecting_vehicle), 20, t.sub, Ui.REGULAR));
         status.addView(statusTv, Ui.margins(Ui.lpWeight(0, -2, 1), dp(10), 0, 0, 0));
-        // temperatura esterna
+        // temperatura esterna e, sotto, quella interna
         outIcon = Ui.icon(c, R.drawable.ic_thermo, t.sub, 22);
         outIcon.setVisibility(GONE);
         status.addView(outIcon);
+        LinearLayout temps = Ui.column(c);
+        temps.setGravity(Gravity.END);
         outTv = Ui.text(c, "", 20, t.sub, Ui.REGULAR);
-        status.addView(outTv, Ui.margins(Ui.lp(-2, -2), dp(6), 0, 0, 0));
+        temps.addView(outTv);
+        inTv = Ui.text(c, "", 17, t.sub, Ui.REGULAR);
+        inTv.setVisibility(GONE);
+        temps.addView(inTv);
+        status.addView(temps, Ui.margins(Ui.lp(-2, -2), dp(6), 0, 0, 0));
+        status.setGravity(Gravity.TOP);
         p.addView(status, Ui.margins(new LayoutParams(-1, -2), 0, dp(14), 0, 0));
 
         car = new CarView(c);
         p.addView(car, Ui.margins(Ui.lpWeight(-1, 0, 1), 0, dp(4), 0, dp(4)));
+
+        // pressione pneumatici sotto le ruote dell'auto (anteriori a sinistra, posteriori a destra)
+        tpmsRow = Ui.row(c);
+        tpmsRow.addView(new View(c), Ui.lpWeight(0, 1, 0.09f));
+        tpmsFront = tpmsBlock(c, L.s(R.string.tpms_front));
+        tpmsRow.addView(tpmsFront, Ui.lpWeight(0, -2, 0.32f));
+        tpmsRow.addView(new View(c), Ui.lpWeight(0, 1, 0.20f));
+        tpmsRear = tpmsBlock(c, L.s(R.string.tpms_rear));
+        tpmsRow.addView(tpmsRear, Ui.lpWeight(0, -2, 0.32f));
+        tpmsRow.addView(new View(c), Ui.lpWeight(0, 1, 0.07f));
+        tpmsRow.setVisibility(GONE);
+        p.addView(tpmsRow, Ui.margins(new LayoutParams(-1, -2), 0, 0, 0, dp(10)));
 
         LinearLayout chips = Ui.row(c);
         chipConsumo = addChip(c, chips, L.s(R.string.chip_consumption), true);
@@ -238,7 +259,7 @@ public final class HomeView extends LinearLayout {
         }
         rangeTv.setText(s.rangeKm > 0 && s.rangeKm < 2000 ? String.valueOf(s.rangeKm) : "—");
         if (s.soc >= 0 && s.soc <= 100) {
-            socTv.setText(Math.round(s.soc) + "%");
+            socTv.setText(prefs.socDecimals() ? String.format(L.locale(), "%.1f%%", s.soc) : Math.round(s.soc) + "%");
             battery.setValue(s.soc / 100f);
         }
         battery.setLimit(s.chargeLimit > 0 && s.chargeLimit < 100 ? s.chargeLimit / 100f : -1);
@@ -257,6 +278,11 @@ public final class HomeView extends LinearLayout {
         boolean outOk = s.outsideTemp > -60 && s.outsideTemp < 70;
         outIcon.setVisibility(outOk ? VISIBLE : GONE);
         outTv.setText(outOk ? L.f(R.string.outside_temp, String.valueOf(Math.round(s.outsideTemp))) : "");
+        boolean inOk = !Float.isNaN(s.insideTemp);
+        inTv.setVisibility(inOk ? VISIBLE : GONE);
+        if (inOk) inTv.setText(L.f(R.string.inside_temp, String.valueOf(Math.round(s.insideTemp))));
+        if (inOk && !outOk) outIcon.setVisibility(VISIBLE);
+        showTpms(s.tireBar);
         if (s.fanLevel >= 0 && SystemClock.uptimeMillis() > localFanUntil) {
             fanLevel = s.fanLevel;
             fanTv.setText(fanLabel(fanLevel));
@@ -265,6 +291,9 @@ public final class HomeView extends LinearLayout {
         fanMax = s.fanMax;
         styleToggle(acBtn, s.acOn);
         styleToggle(autoBtn, s.autoOn);
+        styleHeat(seatLeftBtn, s.seatLeft);
+        styleHeat(seatRightBtn, s.seatRight);
+        styleToggle(wheelBtn, s.wheelHeat, 0xFFFF7A3D);
         frontFogBtn.setVisibility(s.hasFrontFog ? VISIBLE : GONE);
         styleToggle(frontFogBtn, s.frontFog, 0xFF34C77B);
         styleToggle(rearFogBtn, s.rearFog, 0xFFFFB020);
@@ -1142,6 +1171,13 @@ public final class HomeView extends LinearLayout {
         bar.addView(acBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(10), 0, 0, 0));
         autoBtn = toggleText(c, "AUTO", L.s(R.string.auto_desc), v -> vehicle.toggleAuto());
         bar.addView(autoBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(8), 0, 0, 0));
+        // riscaldamento: sedile sinistro, volante, sedile destro
+        seatLeftBtn = heatButton(c, R.drawable.ic_seat_heat, false, L.s(R.string.seat_left), v -> vehicle.pressSeatLeft());
+        bar.addView(seatLeftBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(8), 0, 0, 0));
+        wheelBtn = toggleIcon(c, R.drawable.ic_wheel_heat, L.s(R.string.wheel_heat), v -> vehicle.toggleWheelHeat());
+        bar.addView(wheelBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(8), 0, 0, 0));
+        seatRightBtn = heatButton(c, R.drawable.ic_seat_heat, true, L.s(R.string.seat_right), v -> vehicle.pressSeatRight());
+        bar.addView(seatRightBtn, Ui.margins(new LayoutParams(dp(76), dp(76)), dp(8), 0, 0, 0));
 
         bar.addView(Ui.divider(c, t.track, 48));
 
@@ -1185,6 +1221,74 @@ public final class HomeView extends LinearLayout {
         bar.addView(shortcut(c, R.drawable.ic_gear, L.s(R.string.app_settings), v -> host.launch("com.saicmotor.hmi.systemsettings", "com.saicmotor.hmi.systemsettings.SettingsActivity")));
         // le app si aprono scorrendo la home verso sinistra: niente pulsante dedicato
         return bar;
+    }
+
+    /** Blocco TPMS: titolo piccolo (Anteriori / Posteriori) + "2,5 · 2,5 bar" (sinistra · destra). */
+    private LinearLayout tpmsBlock(Context c, String title) {
+        LinearLayout b = Ui.column(c);
+        b.setGravity(Gravity.CENTER_HORIZONTAL);
+        TextView tt = Ui.text(c, title.toUpperCase(L.locale()), 12, t.sub, Ui.MEDIUM);
+        tt.setLetterSpacing(0.08f);
+        b.addView(tt);
+        TextView v = Ui.oneLine(Ui.text(c, "", 19, t.text, Ui.MEDIUM));
+        v.setGravity(Gravity.CENTER);
+        b.addView(v, Ui.margins(new LayoutParams(-2, -2), 0, dp(2), 0, 0));
+        return b;
+    }
+
+    private void showTpms(float[] bar) {
+        boolean any = false;
+        for (float f : bar) if (!Float.isNaN(f)) any = true;
+        tpmsRow.setVisibility(prefs.showTpms() && any ? VISIBLE : GONE);
+        if (!any) return;
+        setTpms(tpmsFront, bar[0], bar[1]);
+        setTpms(tpmsRear, bar[2], bar[3]);
+    }
+
+    private void setTpms(LinearLayout block, float left, float right) {
+        TextView v = (TextView) block.getChildAt(1);
+        String l = Float.isNaN(left) ? "—" : String.format(L.locale(), "%.1f", left);
+        String r = Float.isNaN(right) ? "—" : String.format(L.locale(), "%.1f", right);
+        v.setText(l + " · " + r + " bar");
+        // pressione bassa (sotto 2,0 bar): in ambra
+        boolean low = (!Float.isNaN(left) && left < 2.0f) || (!Float.isNaN(right) && right < 2.0f);
+        v.setTextColor(low ? 0xFFFFB020 : t.text);
+    }
+
+    /** Pulsante sedile riscaldato: icona (specchiata per il lato destro) + tre tacche per il livello. */
+    private FrameLayout heatButton(Context c, int icon, boolean mirror, String desc, View.OnClickListener l) {
+        FrameLayout f = new FrameLayout(c);
+        f.setContentDescription(desc);
+        f.setClickable(true);
+        f.setOnClickListener(l);
+        ImageView iv = Ui.icon(c, icon, t.text, 32);
+        if (mirror) iv.setScaleX(-1f);
+        f.addView(iv, new FrameLayout.LayoutParams(dp(32), dp(32), Gravity.CENTER_HORIZONTAL | Gravity.TOP));
+        ((FrameLayout.LayoutParams) iv.getLayoutParams()).topMargin = dp(14);
+        LinearLayout dots = Ui.row(c);
+        for (int i = 0; i < 3; i++) {
+            View d = new View(c);
+            d.setBackground(Ui.round(t.track, dp(3)));
+            dots.addView(d, Ui.margins(new LayoutParams(dp(12), dp(5)), i == 0 ? 0 : dp(4), 0, 0, 0));
+        }
+        FrameLayout.LayoutParams dl = new FrameLayout.LayoutParams(-2, -2, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+        dl.bottomMargin = dp(14);
+        f.addView(dots, dl);
+        styleHeat(f, -1);
+        return f;
+    }
+
+    /** Livello 0..3: tacche arancioni accese, icona arancione se acceso; -1 = non disponibile (attenuato). */
+    private void styleHeat(FrameLayout f, int level) {
+        Integer prev = (Integer) f.getTag();
+        if (prev != null && prev == level) return;
+        f.setTag(level);
+        f.setAlpha(level < 0 ? 0.45f : 1f);
+        f.setBackground(Ui.pressable(getContext(), t.chip, 20, t));
+        int heat = 0xFFFF7A3D;
+        ((ImageView) f.getChildAt(0)).setColorFilter(level > 0 ? heat : t.text);
+        LinearLayout dots = (LinearLayout) f.getChildAt(1);
+        for (int i = 0; i < 3; i++) dots.getChildAt(i).setBackground(Ui.round(i < level ? heat : t.track, dp(3)));
     }
 
     /** Pulsante a commutazione con testo (A/C, AUTO): acceso = colori invertiti. */

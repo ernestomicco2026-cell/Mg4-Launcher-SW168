@@ -31,6 +31,16 @@
     <string name="defrost_desc" formatted="false">Desembaciar para-brisas</string>
     <string name="fog_front" formatted="false">Faróis de nevoeiro</string>
     <string name="fog_rear" formatted="false">Farol de nevoeiro traseiro</string>
+    <string name="inside_temp">%s° interior</string>
+    <string name="tpms_front" formatted="false">Dianteiros</string>
+    <string name="tpms_rear" formatted="false">Traseiros</string>
+    <string name="seat_left" formatted="false">Banco esquerdo aquecido</string>
+    <string name="seat_right" formatted="false">Banco direito aquecido</string>
+    <string name="wheel_heat" formatted="false">Volante aquecido</string>
+    <string name="display" formatted="false">VISUALIZAÇÃO</string>
+    <string name="soc_decimals" formatted="false">Percentagem da bateria com decimais</string>
+    <string name="show_tpms" formatted="false">Pressão dos pneus por baixo do carro</string>
+    <string name="demo_no_updates" formatted="false">Versão demo: atualizações desativadas</string>
     <string name="climate" formatted="false">Climatização</string>
     <string name="tab_map" formatted="false">Mapa</string>
     <string name="tab_media" formatted="false">Multimédia</string>

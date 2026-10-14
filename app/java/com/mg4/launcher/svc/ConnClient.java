@@ -97,6 +97,14 @@ public final class ConnClient {
     };
 
     private void poll() {
+        if (com.mg4.launcher.Flavor.DEMO) {
+            State d = Demo.conn();
+            last = d;
+            main.post(() -> {
+                if (listener != null) listener.onConn(d);
+            });
+            return;
+        }
         State s = new State();
         // Bluetooth: acceso e collegato a un telefono
         try {

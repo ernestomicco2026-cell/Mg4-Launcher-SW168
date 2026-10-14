@@ -116,4 +116,21 @@ public final class Prefs {
     public void setLanguage(String code) {
         sp.edit().putString("language", code).apply();
     }
+
+    // --- visualizzazione ---
+    public boolean socDecimals() {
+        return sp.getBoolean("socDecimals", false);
+    }
+
+    public void setSocDecimals(boolean b) {
+        sp.edit().putBoolean("socDecimals", b).apply();
+    }
+
+    public boolean showTpms() {
+        return sp.getBoolean("showTpms", true);
+    }
+
+    public void setShowTpms(boolean b) {
+        sp.edit().putBoolean("showTpms", b).apply();
+    }
 }

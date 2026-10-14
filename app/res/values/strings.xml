@@ -31,6 +31,16 @@
     <string name="defrost_desc" formatted="false">Windscreen defrost</string>
     <string name="fog_front" formatted="false">Front fog lights</string>
     <string name="fog_rear" formatted="false">Rear fog light</string>
+    <string name="inside_temp">%s° inside</string>
+    <string name="tpms_front" formatted="false">Front</string>
+    <string name="tpms_rear" formatted="false">Rear</string>
+    <string name="seat_left" formatted="false">Left heated seat</string>
+    <string name="seat_right" formatted="false">Right heated seat</string>
+    <string name="wheel_heat" formatted="false">Heated steering wheel</string>
+    <string name="display" formatted="false">DISPLAY</string>
+    <string name="soc_decimals" formatted="false">Battery percentage with decimals</string>
+    <string name="show_tpms" formatted="false">Tyre pressure under the car</string>
+    <string name="demo_no_updates" formatted="false">Demo version: updates disabled</string>
     <string name="climate" formatted="false">Climate</string>
     <string name="tab_map" formatted="false">Map</string>
     <string name="tab_media" formatted="false">Media</string>

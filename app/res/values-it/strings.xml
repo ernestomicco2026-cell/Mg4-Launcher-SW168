@@ -31,6 +31,16 @@
     <string name="defrost_desc" formatted="false">Sbrinamento parabrezza</string>
     <string name="fog_front" formatted="false">Fendinebbia anteriori</string>
     <string name="fog_rear" formatted="false">Retronebbia</string>
+    <string name="inside_temp">%s° interni</string>
+    <string name="tpms_front" formatted="false">Anteriori</string>
+    <string name="tpms_rear" formatted="false">Posteriori</string>
+    <string name="seat_left" formatted="false">Sedile sinistro riscaldato</string>
+    <string name="seat_right" formatted="false">Sedile destro riscaldato</string>
+    <string name="wheel_heat" formatted="false">Volante riscaldato</string>
+    <string name="display" formatted="false">VISUALIZZAZIONE</string>
+    <string name="soc_decimals" formatted="false">Percentuale batteria con decimali</string>
+    <string name="show_tpms" formatted="false">Pressione pneumatici sotto l\'auto</string>
+    <string name="demo_no_updates" formatted="false">Versione demo: aggiornamenti disattivati</string>
     <string name="climate" formatted="false">Clima</string>
     <string name="tab_map" formatted="false">Mappa</string>
     <string name="tab_media" formatted="false">Media</string>

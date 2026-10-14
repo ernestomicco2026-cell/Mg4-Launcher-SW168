@@ -42,6 +42,16 @@ S = {
     "defrost_desc": ("Sbrinamento parabrezza", "Windscreen defrost", "Desempañado del parabrisas", "Frontscheibe enteisen", "Desembaciar para-brisas", "Désembuage du pare-brise", "Ön cam buz çözme"),
     "fog_front": ("Fendinebbia anteriori", "Front fog lights", "Antiniebla delanteros", "Nebelscheinwerfer", "Faróis de nevoeiro", "Antibrouillards avant", "Ön sis farları"),
     "fog_rear": ("Retronebbia", "Rear fog light", "Antiniebla trasero", "Nebelschlussleuchte", "Farol de nevoeiro traseiro", "Antibrouillard arrière", "Arka sis lambası"),
+    "inside_temp": ("%s° interni", "%s° inside", "%s° interior", "%s° innen", "%s° interior", "%s° intérieur", "İç %s°"),
+    "tpms_front": ("Anteriori", "Front", "Delanteros", "Vorne", "Dianteiros", "Avant", "Ön"),
+    "tpms_rear": ("Posteriori", "Rear", "Traseros", "Hinten", "Traseiros", "Arrière", "Arka"),
+    "seat_left": ("Sedile sinistro riscaldato", "Left heated seat", "Asiento izquierdo calefactado", "Sitzheizung links", "Banco esquerdo aquecido", "Siège gauche chauffant", "Sol koltuk ısıtma"),
+    "seat_right": ("Sedile destro riscaldato", "Right heated seat", "Asiento derecho calefactado", "Sitzheizung rechts", "Banco direito aquecido", "Siège droit chauffant", "Sağ koltuk ısıtma"),
+    "wheel_heat": ("Volante riscaldato", "Heated steering wheel", "Volante calefactado", "Lenkradheizung", "Volante aquecido", "Volant chauffant", "Direksiyon ısıtma"),
+    "display": ("VISUALIZZAZIONE", "DISPLAY", "VISUALIZACIÓN", "ANZEIGE", "VISUALIZAÇÃO", "AFFICHAGE", "GÖRÜNÜM"),
+    "soc_decimals": ("Percentuale batteria con decimali", "Battery percentage with decimals", "Porcentaje de batería con decimales", "Akkustand mit Nachkommastelle", "Percentagem da bateria com decimais", "Pourcentage de batterie avec décimales", "Ondalıklı batarya yüzdesi"),
+    "show_tpms": ("Pressione pneumatici sotto l'auto", "Tyre pressure under the car", "Presión de neumáticos bajo el coche", "Reifendruck unter dem Fahrzeug", "Pressão dos pneus por baixo do carro", "Pression des pneus sous le véhicule", "Aracın altında lastik basıncı"),
+    "demo_no_updates": ("Versione demo: aggiornamenti disattivati", "Demo version: updates disabled", "Versión demo: actualizaciones desactivadas", "Demo-Version: Updates deaktiviert", "Versão demo: atualizações desativadas", "Version démo : mises à jour désactivées", "Demo sürümü: güncellemeler kapalı"),
     "climate": ("Clima", "Climate", "Climatización", "Klima", "Climatização", "Climatisation", "Klima"),
 
     # --- pannello destro ---

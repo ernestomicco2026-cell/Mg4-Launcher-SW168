@@ -31,6 +31,16 @@
     <string name="defrost_desc" formatted="false">Desempañado del parabrisas</string>
     <string name="fog_front" formatted="false">Antiniebla delanteros</string>
     <string name="fog_rear" formatted="false">Antiniebla trasero</string>
+    <string name="inside_temp">%s° interior</string>
+    <string name="tpms_front" formatted="false">Delanteros</string>
+    <string name="tpms_rear" formatted="false">Traseros</string>
+    <string name="seat_left" formatted="false">Asiento izquierdo calefactado</string>
+    <string name="seat_right" formatted="false">Asiento derecho calefactado</string>
+    <string name="wheel_heat" formatted="false">Volante calefactado</string>
+    <string name="display" formatted="false">VISUALIZACIÓN</string>
+    <string name="soc_decimals" formatted="false">Porcentaje de batería con decimales</string>
+    <string name="show_tpms" formatted="false">Presión de neumáticos bajo el coche</string>
+    <string name="demo_no_updates" formatted="false">Versión demo: actualizaciones desactivadas</string>
     <string name="climate" formatted="false">Climatización</string>
     <string name="tab_map" formatted="false">Mapa</string>
     <string name="tab_media" formatted="false">Multimedia</string>

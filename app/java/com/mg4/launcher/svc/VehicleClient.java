@@ -50,6 +50,9 @@ public final class VehicleClient {
     private static final int AC_GET_OUT_TEMP = 88;    // float, -10000 = non disponibile
     // pulsanti come l'app Clima originale: il valore 1 = "premuto" (commuta)
     private static final int AC_SET_AUTO = 7, AC_SET_AC = 8, AC_GET_AUTO = 54, AC_GET_AC = 55;
+    // riscaldamento: come l'app Clima, il valore 1 = "premuto"; sedili 0..3 (4 = non disponibile), volante 0 / 3
+    private static final int AC_SET_DRV_SEAT_HEAT = 33, AC_SET_PSG_SEAT_HEAT = 37, AC_SET_WHEEL_HEAT = 52;
+    private static final int AC_GET_DRV_SEAT_HEAT = 77, AC_GET_PSG_SEAT_HEAT = 79, AC_GET_WHEEL_HEAT = 94;
     private static final int AC_OPEN_FRONT_DEFROST = 48, AC_CLOSE_FRONT_DEFROST = 49, AC_GET_FRONT_DEFROST = 92;
 
     // fendinebbia, come la barra di stato originale (SystemUI): set(1) = premuto, get 1 = acceso
@@ -80,6 +83,10 @@ public final class VehicleClient {
         public int acTemp = -1;           // °C, 17 = LO, 33 = HI
         public int hvacPower = -1;
         public int acOn = -1, autoOn = -1, defrostOn = -1;   // 1 acceso, 0 spento, -1 sconosciuto
+        public int seatLeft = -1, seatRight = -1;          // 0..3, -1 non disponibile
+        public int wheelHeat = -1;                         // 1 acceso, 0 spento, -1 non disponibile
+        public float[] tireBar = {Float.NaN, Float.NaN, Float.NaN, Float.NaN};   // AS, AD, PS, PD
+        public float insideTemp = Float.NaN;
         public int rearFog = -1, frontFog = -1;           // 1 acceso, 0 spento, -1 non disponibile
         public boolean hasFrontFog;
         public int fanLevel = -1;         // 0 spenta, 1..max, 15 auto
@@ -105,7 +112,10 @@ public final class VehicleClient {
     private boolean fanRangeRead;
     private boolean running;
 
+    private final Context ctx;
+
     public VehicleClient(Context ctx) {
+        this.ctx = ctx.getApplicationContext();
         hub = new ServiceLink(ctx, "veicolo", ServiceLink.byAction(PKG, ACTION));
         hub.setOnConnected(() -> {
             synchronized (subs) {
@@ -207,6 +217,14 @@ public final class VehicleClient {
     }
 
     private void poll() {
+        if (com.mg4.launcher.Flavor.DEMO) {
+            State d = Demo.vehicle();
+            last = d;
+            main.post(() -> {
+                if (listener != null) listener.onVehicleState(d);
+            });
+            return;
+        }
         State s = new State();
         s.connected = hub.isConnected();
         if (s.connected) {
@@ -298,6 +316,12 @@ public final class VehicleClient {
                     s.autoOn = held(AC_GET_AUTO, Rpc.callInt(a, AC, AC_GET_AUTO), now);
                     s.defrostOn = held(AC_GET_FRONT_DEFROST, Rpc.callInt(a, AC, AC_GET_FRONT_DEFROST), now);
                     Diag.put("clima.ac/auto/sbrinamento", s.acOn + " / " + s.autoOn + " / " + s.defrostOn);
+                    int ls = Rpc.callInt(a, AC, AC_GET_DRV_SEAT_HEAT), rs = Rpc.callInt(a, AC, AC_GET_PSG_SEAT_HEAT);
+                    int wh = Rpc.callInt(a, AC, AC_GET_WHEEL_HEAT);
+                    s.seatLeft = held(AC_GET_DRV_SEAT_HEAT, ls >= 0 && ls <= 3 ? ls : -1, now);
+                    s.seatRight = held(AC_GET_PSG_SEAT_HEAT, rs >= 0 && rs <= 3 ? rs : -1, now);
+                    s.wheelHeat = held(AC_GET_WHEEL_HEAT, wh == 3 ? 1 : wh == 0 ? 0 : -1, now);
+                    Diag.put("clima.sedili sx/dx · volante", ls + " / " + rs + " · " + wh);
                 }
             } catch (Exception e) {
                 Diag.error("clima", e.toString());
@@ -331,6 +355,7 @@ public final class VehicleClient {
                 }
             }
         }
+        readCarProps(s);
         last = s;
         main.post(() -> {
             if (listener != null) listener.onVehicleState(s);
@@ -339,6 +364,7 @@ public final class VehicleClient {
 
     /** Imposta la temperatura lato guida (17..33). Il valore richiesto resta visibile per qualche secondo. */
     public void setDriverTemp(int celsius) {
+        if (com.mg4.launcher.Flavor.DEMO) { Demo.setTemp(Math.max(TEMP_MIN, Math.min(TEMP_MAX, celsius))); demoRefresh(); return; }
         int t = Math.max(TEMP_MIN, Math.min(TEMP_MAX, celsius));
         heldTemp = t;
         tempHoldUntil = android.os.SystemClock.uptimeMillis() + HOLD_MS;
@@ -348,6 +374,7 @@ public final class VehicleClient {
 
     /** Livello ventola: 0 = spenta, fanMin..fanMax, 15 = automatico. */
     public void setFanLevel(int level) {
+        if (com.mg4.launcher.Flavor.DEMO) { Demo.setFan(level); demoRefresh(); return; }
         int l = level == FAN_AUTO || level == FAN_OFF ? level : Math.max(fanMin, Math.min(fanMax, level));
         heldFan = l;
         fanHoldUntil = android.os.SystemClock.uptimeMillis() + HOLD_MS;
@@ -379,6 +406,42 @@ public final class VehicleClient {
                 }
             }
         });
+    }
+
+    // ---- TPMS e temperatura interna dal CarService ----------------------------------------------
+
+    private CarProps props;
+    private long propsAt;
+    private final float[] tireCache = {Float.NaN, Float.NaN, Float.NaN, Float.NaN};
+    private float insideCache = Float.NaN;
+
+    private void readCarProps(State s) {
+        if (props == null) {
+            props = new CarProps(ctx);
+            props.connect();
+        }
+        long now = android.os.SystemClock.uptimeMillis();
+        if (props.ready() && now - propsAt > 5000) {
+            propsAt = now;
+            int[] ids = {CarProps.TIRE_FL, CarProps.TIRE_FR, CarProps.TIRE_RL, CarProps.TIRE_RR};
+            StringBuilder raw = new StringBuilder();
+            for (int i = 0; i < 4; i++) {
+                int v = props.getInt(ids[i]);
+                tireCache[i] = CarProps.toBar(v);
+                raw.append(i == 0 ? "" : " / ").append(v == Integer.MIN_VALUE ? "?" : String.valueOf(v));
+            }
+            Diag.put("pneumatici (grezzo AS/AD/PS/PD)", raw);
+            float in = props.getFloat(CarProps.HVAC_TEMPERATURE_CURRENT);
+            float amb = props.getFloat(CarProps.HVAC_AMBIENT_TEMPERATURE);
+            Diag.put("clima.tempInterna (corrente / ambient)", in + " / " + amb);
+            insideCache = valid(in) ? in : valid(amb) ? amb : Float.NaN;
+        }
+        System.arraycopy(tireCache, 0, s.tireBar, 0, 4);
+        s.insideTemp = insideCache;
+    }
+
+    private static boolean valid(float t) {
+        return !Float.isNaN(t) && t > -40 && t < 80 && t != 0f;
     }
 
     // ---- pulsanti a commutazione (A/C, AUTO, sbrinamento, fendinebbia) ------------------------
@@ -421,18 +484,57 @@ public final class VehicleClient {
     }
 
     public void toggleAc() {
+        if (com.mg4.launcher.Flavor.DEMO) { Demo.toggleAc(); demoRefresh(); return; }
         press("aircondition", AC, AC_SET_AC, AC_GET_AC, last.acOn, "clima.ac");
     }
 
     public void toggleAuto() {
+        if (com.mg4.launcher.Flavor.DEMO) { Demo.toggleAuto(); demoRefresh(); return; }
         press("aircondition", AC, AC_SET_AUTO, AC_GET_AUTO, last.autoOn, "clima.auto");
     }
 
+    /** Sedile: ogni tocco passa al livello successivo (0 → 1 → 2 → 3 → 0), come il tasto dell'app Clima. */
+    public void pressSeatLeft() {
+        if (com.mg4.launcher.Flavor.DEMO) { Demo.seatLeft(); demoRefresh(); return; }
+        pressLevel(AC_SET_DRV_SEAT_HEAT, AC_GET_DRV_SEAT_HEAT, last.seatLeft, "clima.sedileSx");
+    }
+
+    public void pressSeatRight() {
+        if (com.mg4.launcher.Flavor.DEMO) { Demo.seatRight(); demoRefresh(); return; }
+        pressLevel(AC_SET_PSG_SEAT_HEAT, AC_GET_PSG_SEAT_HEAT, last.seatRight, "clima.sedileDx");
+    }
+
+    public void toggleWheelHeat() {
+        if (com.mg4.launcher.Flavor.DEMO) { Demo.wheel(); demoRefresh(); return; }
+        if (last.wheelHeat == 0 || last.wheelHeat == 1) hold(AC_GET_WHEEL_HEAT, 1 - last.wheelHeat);
+        sendPress(AC_SET_WHEEL_HEAT, "clima.volante");
+    }
+
+    private void pressLevel(int setCode, int getCode, int current, String what) {
+        if (current >= 0) hold(getCode, (current + 1) % 4);
+        sendPress(setCode, what);
+    }
+
+    private void sendPress(int setCode, String what) {
+        if (bg == null) return;
+        bg.post(() -> {
+            try {
+                IBinder a = sub("aircondition");
+                if (a != null) Rpc.call(a, AC, setCode, p -> p.writeInt(1));
+            } catch (Exception e) {
+                Diag.error(what, e.toString());
+            }
+            poll();
+        });
+    }
+
     public void toggleRearFog() {
+        if (com.mg4.launcher.Flavor.DEMO) { Demo.rearFog(); demoRefresh(); return; }
         press("vehiclesetting", SET, SET_SET_REAR_FOG, SET_GET_REAR_FOG, last.rearFog, "luci.retronebbia");
     }
 
     public void toggleFrontFog() {
+        if (com.mg4.launcher.Flavor.DEMO) { Demo.frontFog(); demoRefresh(); return; }
         press("vehiclesetting", SET, SET_SET_FRONT_FOG, SET_GET_FRONT_FOG, last.frontFog, "luci.fendinebbia");
     }
 
@@ -451,7 +553,13 @@ public final class VehicleClient {
         });
     }
 
+    /** Versione demo: ridisegna subito con il nuovo stato simulato. */
+    private void demoRefresh() {
+        if (bg != null) bg.post(this::poll);
+    }
+
     public void setHvacPower(boolean on) {
+        if (com.mg4.launcher.Flavor.DEMO) { Demo.hvacPower(on); demoRefresh(); return; }
         if (bg == null) return;
         bg.post(() -> {
             try {

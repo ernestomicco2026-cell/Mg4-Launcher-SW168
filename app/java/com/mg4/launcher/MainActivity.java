@@ -368,6 +368,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         } else if (home != null) {
             home.applyCarLook();
             home.refreshNav();
+            home.onVehicle(vehicle.last());
         }
     }
 

@@ -91,6 +91,10 @@ public final class Updater {
 
     /** Controlla l'ultima release del repository. */
     public void check(String repo, String token) {
+        if (com.mg4.launcher.Flavor.DEMO) {
+            status(L.s(R.string.demo_no_updates), null, false);
+            return;
+        }
         if (busy) return;
         status(L.s(R.string.upd_checking), null, true);
         bg.post(() -> {

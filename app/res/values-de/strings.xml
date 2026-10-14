@@ -31,6 +31,16 @@
     <string name="defrost_desc" formatted="false">Frontscheibe enteisen</string>
     <string name="fog_front" formatted="false">Nebelscheinwerfer</string>
     <string name="fog_rear" formatted="false">Nebelschlussleuchte</string>
+    <string name="inside_temp">%s° innen</string>
+    <string name="tpms_front" formatted="false">Vorne</string>
+    <string name="tpms_rear" formatted="false">Hinten</string>
+    <string name="seat_left" formatted="false">Sitzheizung links</string>
+    <string name="seat_right" formatted="false">Sitzheizung rechts</string>
+    <string name="wheel_heat" formatted="false">Lenkradheizung</string>
+    <string name="display" formatted="false">ANZEIGE</string>
+    <string name="soc_decimals" formatted="false">Akkustand mit Nachkommastelle</string>
+    <string name="show_tpms" formatted="false">Reifendruck unter dem Fahrzeug</string>
+    <string name="demo_no_updates" formatted="false">Demo-Version: Updates deaktiviert</string>
     <string name="climate" formatted="false">Klima</string>
     <string name="tab_map" formatted="false">Karte</string>
     <string name="tab_media" formatted="false">Medien</string>

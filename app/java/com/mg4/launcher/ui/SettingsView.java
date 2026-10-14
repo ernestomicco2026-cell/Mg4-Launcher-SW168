@@ -88,6 +88,16 @@ public final class SettingsView extends FrameLayout {
         roof.addView(sw);
         col.addView(roof, top(18));
 
+        col.addView(label(c, L.s(R.string.display)), top(24));
+        col.addView(switchRow(c, L.s(R.string.soc_decimals), prefs.socDecimals(), on -> {
+            prefs.setSocDecimals(on);
+            host.settingsChanged(false);
+        }), top(10));
+        col.addView(switchRow(c, L.s(R.string.show_tpms), prefs.showTpms(), on -> {
+            prefs.setShowTpms(on);
+            host.settingsChanged(false);
+        }), top(10));
+
         col.addView(label(c, L.s(R.string.theme)), top(24));
         themeRow = Ui.row(c);
         col.addView(themeRow, top(10));
@@ -166,6 +176,22 @@ public final class SettingsView extends FrameLayout {
             if (canInstall) updInstall.setText(L.f(R.string.download_install_v, found.tag));
         });
         updStatus.setText(L.s(up.isBusy() ? R.string.busy : R.string.press_check));
+    }
+
+    private interface OnSwitch {
+        void changed(boolean on);
+    }
+
+    /** Riga "testo ........ interruttore", come Tetto nero. */
+    private View switchRow(Context c, String text, boolean checked, OnSwitch l) {
+        LinearLayout r = Ui.row(c);
+        r.addView(Ui.text(c, text, 20, t.text, Ui.REGULAR), Ui.lpWeight(0, -2, 1));
+        Switch sw = new Switch(c);
+        sw.setChecked(checked);
+        sw.setOnCheckedChangeListener((b, on) -> l.changed(on));
+        r.addView(sw);
+        r.setLayoutParams(new LinearLayout.LayoutParams(-1, -2));
+        return r;
     }
 
     private TextView button(Context c, String text, boolean primary, View.OnClickListener l) {

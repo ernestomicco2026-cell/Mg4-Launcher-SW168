@@ -31,6 +31,16 @@
     <string name="defrost_desc" formatted="false">Désembuage du pare-brise</string>
     <string name="fog_front" formatted="false">Antibrouillards avant</string>
     <string name="fog_rear" formatted="false">Antibrouillard arrière</string>
+    <string name="inside_temp">%s° intérieur</string>
+    <string name="tpms_front" formatted="false">Avant</string>
+    <string name="tpms_rear" formatted="false">Arrière</string>
+    <string name="seat_left" formatted="false">Siège gauche chauffant</string>
+    <string name="seat_right" formatted="false">Siège droit chauffant</string>
+    <string name="wheel_heat" formatted="false">Volant chauffant</string>
+    <string name="display" formatted="false">AFFICHAGE</string>
+    <string name="soc_decimals" formatted="false">Pourcentage de batterie avec décimales</string>
+    <string name="show_tpms" formatted="false">Pression des pneus sous le véhicule</string>
+    <string name="demo_no_updates" formatted="false">Version démo : mises à jour désactivées</string>
     <string name="climate" formatted="false">Climatisation</string>
     <string name="tab_map" formatted="false">Carte</string>
     <string name="tab_media" formatted="false">Médias</string>

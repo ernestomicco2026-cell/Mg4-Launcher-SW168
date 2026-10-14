@@ -7,6 +7,12 @@
     <!-- indicatori Bluetooth e Wi-Fi in alto a destra -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- CarService: pressione pneumatici (TPMS) e temperatura interna -->
+    <uses-permission android:name="android.car.permission.CAR_TIRES" />
+    <uses-permission android:name="android.car.permission.CAR_VENDOR_EXTENSION" />
+    <uses-permission android:name="android.car.permission.CONTROL_CAR_CLIMATE" />
+    <uses-permission android:name="android.car.permission.CAR_EXTERIOR_ENVIRONMENT" />
+    <uses-permission android:name="android.car.permission.CAR_INFO" />
     <!-- concessi automaticamente perché l'app è firmata con la chiave platform del sistema -->
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
     <uses-permission android:name="android.permission.REAL_GET_TASKS" />
@@ -23,6 +29,9 @@
         android:hardwareAccelerated="true"
         android:directBootAware="true"
         android:defaultToDeviceProtectedStorage="true">
+
+        <!-- libreria del CarService (presente sull'auto; facoltativa altrove, es. versione demo) -->
+        <uses-library android:name="android.car" android:required="false" />
 
         <activity
             android:name=".MainActivity"
