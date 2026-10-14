@@ -96,7 +96,8 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
   - **Home**: percentuale batteria con decimali, pressione pneumatici, **temperatura interna** (facoltativa);
   - **Aspetto**: tema (automatico, notte, giorno), **dimensione dei comandi** (Normale, Grande, Molto grande), **lingua**;
   - **Guida**: **posizione di guida** (come l'auto, sinistra, destra: con la guida a destra la home si specchia e auto e
-    clima passano dal lato del guidatore), navigatore predefinito (Automatico, MG, Telefono), home originale MG;
+    clima passano dal lato del guidatore), home originale MG (il navigatore predefinito si sceglie tenendo premuto un
+    pulsante della riga *Apri con* nella Mappa);
   - **Sistema**: aggiornamenti e avviso, invio automatico dei log, **Salva log**, diagnostica dei servizi.
   Si aprono anche dall'ingranaggio in alto a destra nella pagina App.
 - **Schermo intero**: barra di stato e dock MG nascosti (trascina dal bordo per richiamarli).
@@ -155,7 +156,7 @@ adb pull /sdcard/Android/data/com.mg4.launcher/files/diagnostica.txt
 
 ### Segnalare un problema
 
-In Impostazioni → Sistema, **Diagnostica servizi** → *Mostra* fa vedere i valori grezzi letti da ogni servizio
+In Impostazioni → Sistema, **Diagnostica servizi** fa vedere i valori grezzi letti da ogni servizio
 (veicolo, clima, media, radio, CarPlay, navigatore) e gli errori recenti. Uno screenshot di quella pagina
 o il file `diagnostica.txt` bastano per capire cosa succede.
 
@@ -177,11 +178,14 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 ### Versioni
 
 #### 0.7.1 — 15 ottobre 2026
-- **Nuove impostazioni**: a schermo intero, divise in cinque sezioni (Auto, Home, Aspetto, Guida, Sistema) con un
-  menu a sinistra; righe grandi, interruttori e scelte che seguono la dimensione dei comandi, uguali di giorno e di
-  notte e con il menu a destra quando la guida è a destra. In basso nel menu la versione e lo stato degli
-  aggiornamenti, con **Installa** quando ce n'è una nuova. La diagnostica dei servizi si apre con *Mostra*.
+- **Nuove impostazioni**, con la stessa grafica della versione SWI69: a schermo intero, divise in cinque sezioni
+  (Auto, Home, Aspetto, Guida, Sistema) con un menu a sinistra (la sezione aperta ha una barra a lato e l'icona piena);
+  ogni sezione ha il suo titolo e il pulsante di chiusura, righe grandi raggruppate in schede, interruttori e scelte
+  che seguono la dimensione dei comandi, uguali di giorno e di notte e con il menu a destra quando la guida è a destra.
+  In fondo al menu la versione e lo stato degli aggiornamenti, con **Installa** quando ce n'è una nuova.
+  La diagnostica dei servizi si apre dalla sezione Sistema.
 - Nella sezione Auto un'**anteprima dell'auto** con il colore scelto; tutte le lingue visibili insieme in Aspetto.
+  Il navigatore predefinito si sceglie tenendo premuto un pulsante della riga *Apri con* nella Mappa.
 - **Temperatura interna** ora è un'opzione (Impostazioni → Home), spenta di default perché molte auto non forniscono
   il dato: spenta non viene nemmeno letta; accesa mostra il valore, oppure "—°" se l'auto non lo dà (mai 0°).
 - **Invio automatico dei log** diagnostici, anonimo: dopo 90 secondi dall'avvio, ogni 30 minuti e con *Salva log*;
@@ -365,7 +369,8 @@ It replaces the original home screen, keeping its features, with a new, clean de
   - **Home**: battery percentage with decimals, tyre pressure, **interior temperature** (optional);
   - **Appearance**: theme (auto, night, day), **control size** (Normal, Large, Extra large), **language**;
   - **Driving**: **driving side** (same as car, left, right: with right-hand drive the home is mirrored so the car and
-    climate are on the driver's side), default navigator (Auto, MG, Phone), original MG home;
+    climate are on the driver's side), original MG home (the default navigator is chosen by long-pressing a button of
+    the *Open with* row on the Map);
   - **System**: updates and update notice, automatic log upload, **Save log**, service diagnostics.
   Also available from the gear at the top right of the Apps page.
 - **Full screen**: status bar and MG dock hidden (swipe from the edge to bring them back).
@@ -424,7 +429,7 @@ adb pull /sdcard/Android/data/com.mg4.launcher/files/diagnostica.txt
 
 ### Reporting a problem
 
-In Settings → System, **Service diagnostics** → *Show* displays the raw values read from each service
+In Settings → System, **Service diagnostics** displays the raw values read from each service
 (vehicle, climate, media, radio, CarPlay, navigator) and recent errors. A screenshot of that page
 or the `diagnostica.txt` file is enough to understand what is going on.
 
@@ -446,11 +451,13 @@ the repository or a bug report help a lot too. Thank you!
 ### Changelog
 
 #### 0.7.1 — 15 October 2026
-- **New settings**: full screen, split into five sections (Car, Home, Appearance, Driving, System) with a menu on the
-  left; large rows, switches and choices that follow the control size, the same by day and night, with the menu on
-  the right for right-hand drive. The version and update status sit at the bottom of the menu, with **Install** when
-  a new one is out. Service diagnostics open with *Show*.
+- **New settings**, with the same design as the SWI69 version: full screen, split into five sections (Car, Home,
+  Appearance, Driving, System) with a menu on the left (the open section has a side bar and a filled icon); each
+  section has its own title and close button, large rows grouped in cards, switches and choices that follow the
+  control size, the same by day and night, with the menu on the right for right-hand drive. The version and update
+  status sit at the bottom of the menu, with **Install** when a new one is out. Service diagnostics open from System.
 - A **car preview** with the chosen colour in the Car section; all languages shown together in Appearance.
+  The default navigator is chosen by long-pressing a button of the *Open with* row on the Map.
 - **Interior temperature** is now optional (Settings → Home), off by default because many cars don't provide it:
   when off it isn't even read; when on it shows the value, or "—°" if the car doesn't provide it (never 0°).
 - **Automatic upload of diagnostic logs**, anonymous: 90 seconds after start, every 30 minutes and with *Save log*;

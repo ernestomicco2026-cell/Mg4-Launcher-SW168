@@ -48,41 +48,54 @@
     <string name="log_upload_off" formatted="false">Envio de registos desativado</string>
     <string name="log_upload_nokey" formatted="false">Envio de registos indisponível nesta versão</string>
     <string name="show_inside_temp" formatted="false">Temperatura interior</string>
-    <string name="sec_car" formatted="false">Carro</string>
+    <string name="sec_car" formatted="false">CARRO</string>
     <string name="sec_car_sub" formatted="false">Cor, tejadilho</string>
     <string name="sec_home" formatted="false">Início</string>
-    <string name="sec_home_sub" formatted="false">Bateria, pneus, temperatura</string>
-    <string name="sec_look" formatted="false">Aparência</string>
-    <string name="sec_look_sub" formatted="false">Tema, comandos, idioma</string>
+    <string name="sec_home_sub" formatted="false">Bateria, pneus, temperaturas</string>
+    <string name="sec_look" formatted="false">Aspeto</string>
+    <string name="sec_look_sub" formatted="false">Tema, tamanho, idioma</string>
     <string name="sec_drive" formatted="false">Condução</string>
-    <string name="sec_drive_sub" formatted="false">Lado de condução, navegador</string>
+    <string name="sec_drive_sub" formatted="false">Posição de condução, início MG</string>
     <string name="sec_system" formatted="false">Sistema</string>
-    <string name="sec_system_sub" formatted="false">Atualizações, registos</string>
-    <string name="soc_decimals_hint" formatted="false">Ex.: 76,6% em vez de 77%</string>
-    <string name="show_tpms_hint" formatted="false">Dianteiros e traseiros, âmbar abaixo de 2,0 bar</string>
-    <string name="show_inside_temp_hint" formatted="false">Mostra —° se o carro não fornecer o valor</string>
-    <string name="ui_size_hint" formatted="false">Apenas os botões do início</string>
-    <string name="theme_title" formatted="false">Tema</string>
-    <string name="ui_size_title" formatted="false">Tamanho dos comandos</string>
-    <string name="language_title" formatted="false">Idioma</string>
-    <string name="car_color_title" formatted="false">Cor do carro</string>
-    <string name="drive_side_title" formatted="false">Posição de condução</string>
-    <string name="default_nav_title" formatted="false">Navegador predefinido</string>
-    <string name="original_home_title" formatted="false">Início original MG</string>
-    <string name="original_home_hint" formatted="false">Abre o ecrã de origem</string>
-    <string name="updates_title" formatted="false">Atualizações</string>
-    <string name="check" formatted="false">Verificar</string>
-    <string name="install" formatted="false">Instalar</string>
-    <string name="install_v">Instalar %s</string>
-    <string name="ver_ok" formatted="false">Atualizado</string>
-    <string name="ver_new">Nova versão: %s</string>
-    <string name="ver_unknown" formatted="false">Não verificado</string>
-    <string name="log_full" formatted="false">Registo completo</string>
-    <string name="log_full_hint" formatted="false">Guarda numa pen USB ou na memória</string>
-    <string name="diag_short" formatted="false">Diagnóstico dos serviços</string>
-    <string name="diag_hint" formatted="false">Valores lidos dos serviços do carro</string>
-    <string name="show" formatted="false">Mostrar</string>
-    <string name="back" formatted="false">Voltar</string>
+    <string name="sec_system_sub" formatted="false">Atualizações, registos, diagnóstico</string>
+    <string name="btn_back" formatted="false">Voltar</string>
+    <string name="btn_check" formatted="false">Verificar</string>
+    <string name="btn_install" formatted="false">Instalar</string>
+    <string name="btn_open" formatted="false">Abrir</string>
+    <string name="btn_save" formatted="false">Guardar</string>
+    <string name="diag_waiting" formatted="false">À espera dos serviços do carro…</string>
+    <string name="drive_hint" formatted="false">Com o volante à direita o início fica espelhado: carro e climatização do lado do condutor.</string>
+    <string name="log_saving" formatted="false">A guardar registo…</string>
+    <string name="save_log_sub" formatted="false">Escreve um registo completo na memória (e na pen USB)</string>
+    <string name="set_black_roof" formatted="false">Tejadilho preto</string>
+    <string name="set_black_roof_sub" formatted="false">Como as versões com tejadilho em contraste</string>
+    <string name="set_bodywork" formatted="false">CARROÇARIA</string>
+    <string name="set_car_color" formatted="false">COR DO CARRO</string>
+    <string name="set_diag_section" formatted="false">DIAGNÓSTICO</string>
+    <string name="set_diag_sub" formatted="false">Valores lidos do carro e erros recentes</string>
+    <string name="set_diag_title" formatted="false">Diagnóstico dos serviços do carro</string>
+    <string name="set_home_card" formatted="false">PAINEL DO CARRO</string>
+    <string name="set_inside_sub" formatted="false">Abaixo da exterior · «— °» se o carro não a fornecer</string>
+    <string name="set_language" formatted="false">IDIOMA</string>
+    <string name="set_menu_title" formatted="false">Definições</string>
+    <string name="set_open_original" formatted="false">Abrir o ecrã inicial original MG</string>
+    <string name="set_original_label" formatted="false">INÍCIO ORIGINAL</string>
+    <string name="set_original_sub" formatted="false">Para usar as funções do início de série</string>
+    <string name="set_show_inside_temp" formatted="false">Temperatura interior</string>
+    <string name="set_soc_decimals" formatted="false">Percentagem da bateria com decimais</string>
+    <string name="set_soc_decimals_sub" formatted="false">Ex. 88,1% em vez de 88%</string>
+    <string name="set_theme" formatted="false">TEMA</string>
+    <string name="set_tpms_sub" formatted="false">Sob as rodas do carro desenhado, na unidade do quadrante</string>
+    <string name="set_tpms_title" formatted="false">Pressão dos pneus (TPMS)</string>
+    <string name="set_updates" formatted="false">ATUALIZAÇÕES</string>
+    <string name="theme_auto" formatted="false">Automático</string>
+    <string name="theme_day" formatted="false">Dia</string>
+    <string name="theme_night" formatted="false">Noite</string>
+    <string name="upd_current" formatted="false">Versão atualizada</string>
+    <string name="upd_installed_ver">Instalada %1$s</string>
+    <string name="upd_new">Nova versão disponível: %1$s</string>
+    <string name="upd_new_short">Nova versão %1$s</string>
+    <string name="upd_unknown" formatted="false">Atualizações ainda não verificadas</string>
     <string name="set_ui_size" formatted="false">TAMANHO DOS COMANDOS</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Grande</string>
@@ -159,7 +172,7 @@
     <string name="black_roof" formatted="false">Tejadilho preto</string>
     <string name="theme" formatted="false">TEMA</string>
     <string name="language" formatted="false">IDIOMA</string>
-    <string name="lang_auto">Automático (%s)</string>
+    <string name="lang_auto" formatted="false">Como o carro</string>
     <string name="lang_auto_hint" formatted="false">Automático segue o idioma do sistema do carro.</string>
     <string name="default_nav" formatted="false">NAVEGADOR PREDEFINIDO</string>
     <string name="nav_auto_hint" formatted="false">Automático: o do telemóvel se o CarPlay ou o Android Auto estiver ligado; caso contrário, MG.</string>
@@ -181,7 +194,7 @@
     <string name="log_failed" formatted="false">Não foi possível guardar o registo em nenhuma pasta.</string>
     <string name="log_saved_usb" formatted="false">Registo guardado, também na pen USB:</string>
     <string name="log_saved" formatted="false">Registo guardado:</string>
-    <string name="log_usb_hint" formatted="false">Para o ter numa pen USB, ligue-a e toque novamente em Guardar registo.</string>
+    <string name="log_usb_hint" formatted="false">Para o ter numa pen USB: ligue-a e toque de novo em Guardar registo.</string>
     <string name="waiting_services" formatted="false">À espera dos serviços do carro…</string>
     <string name="upd_checking" formatted="false">A verificar no GitHub…</string>
     <string name="upd_no_apk">A versão mais recente (%s) não contém um APK</string>

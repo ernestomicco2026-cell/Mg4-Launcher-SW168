@@ -48,41 +48,54 @@
     <string name="log_upload_off" formatted="false">Log upload turned off</string>
     <string name="log_upload_nokey" formatted="false">Log upload not available in this version</string>
     <string name="show_inside_temp" formatted="false">Interior temperature</string>
-    <string name="sec_car" formatted="false">Car</string>
+    <string name="sec_car" formatted="false">CAR</string>
     <string name="sec_car_sub" formatted="false">Colour, roof</string>
     <string name="sec_home" formatted="false">Home</string>
-    <string name="sec_home_sub" formatted="false">Battery, tyres, temperature</string>
+    <string name="sec_home_sub" formatted="false">Battery, tyres, temperatures</string>
     <string name="sec_look" formatted="false">Appearance</string>
-    <string name="sec_look_sub" formatted="false">Theme, controls, language</string>
+    <string name="sec_look_sub" formatted="false">Theme, size, language</string>
     <string name="sec_drive" formatted="false">Driving</string>
-    <string name="sec_drive_sub" formatted="false">Driving side, navigation</string>
+    <string name="sec_drive_sub" formatted="false">Driving side, MG home</string>
     <string name="sec_system" formatted="false">System</string>
-    <string name="sec_system_sub" formatted="false">Updates, logs</string>
-    <string name="soc_decimals_hint" formatted="false">E.g. 76.6% instead of 77%</string>
-    <string name="show_tpms_hint" formatted="false">Front and rear, amber below 2.0 bar</string>
-    <string name="show_inside_temp_hint" formatted="false">Shows —° if the car doesn\'t provide it</string>
-    <string name="ui_size_hint" formatted="false">Home screen buttons only</string>
-    <string name="theme_title" formatted="false">Theme</string>
-    <string name="ui_size_title" formatted="false">Control size</string>
-    <string name="language_title" formatted="false">Language</string>
-    <string name="car_color_title" formatted="false">Car colour</string>
-    <string name="drive_side_title" formatted="false">Driving side</string>
-    <string name="default_nav_title" formatted="false">Default navigator</string>
-    <string name="original_home_title" formatted="false">Original MG home</string>
-    <string name="original_home_hint" formatted="false">Opens the factory screen</string>
-    <string name="updates_title" formatted="false">Updates</string>
-    <string name="check" formatted="false">Check</string>
-    <string name="install" formatted="false">Install</string>
-    <string name="install_v">Install %s</string>
-    <string name="ver_ok" formatted="false">Up to date</string>
-    <string name="ver_new">New version: %s</string>
-    <string name="ver_unknown" formatted="false">Not checked</string>
-    <string name="log_full" formatted="false">Full log</string>
-    <string name="log_full_hint" formatted="false">Saves to a USB stick or internal memory</string>
-    <string name="diag_short" formatted="false">Service diagnostics</string>
-    <string name="diag_hint" formatted="false">Values read from the car services</string>
-    <string name="show" formatted="false">Show</string>
-    <string name="back" formatted="false">Back</string>
+    <string name="sec_system_sub" formatted="false">Updates, logs, diagnostics</string>
+    <string name="btn_back" formatted="false">Back</string>
+    <string name="btn_check" formatted="false">Check</string>
+    <string name="btn_install" formatted="false">Install</string>
+    <string name="btn_open" formatted="false">Open</string>
+    <string name="btn_save" formatted="false">Save</string>
+    <string name="diag_waiting" formatted="false">Waiting for the car services…</string>
+    <string name="drive_hint" formatted="false">With right-hand drive the home is mirrored: car and climate on the driver\'s side.</string>
+    <string name="log_saving" formatted="false">Saving log…</string>
+    <string name="save_log_sub" formatted="false">Writes a full log to storage (and to the USB stick)</string>
+    <string name="set_black_roof" formatted="false">Black roof</string>
+    <string name="set_black_roof_sub" formatted="false">Like the versions with a contrasting roof</string>
+    <string name="set_bodywork" formatted="false">BODYWORK</string>
+    <string name="set_car_color" formatted="false">CAR COLOUR</string>
+    <string name="set_diag_section" formatted="false">DIAGNOSTICS</string>
+    <string name="set_diag_sub" formatted="false">Values read from the car and recent errors</string>
+    <string name="set_diag_title" formatted="false">Car services diagnostics</string>
+    <string name="set_home_card" formatted="false">CAR PANEL</string>
+    <string name="set_inside_sub" formatted="false">Below the outside one · «— °» if the car does not provide it</string>
+    <string name="set_language" formatted="false">LANGUAGE</string>
+    <string name="set_menu_title" formatted="false">Settings</string>
+    <string name="set_open_original" formatted="false">Open the original MG home</string>
+    <string name="set_original_label" formatted="false">ORIGINAL HOME</string>
+    <string name="set_original_sub" formatted="false">To use the features of the stock home</string>
+    <string name="set_show_inside_temp" formatted="false">Inside temperature</string>
+    <string name="set_soc_decimals" formatted="false">Battery percentage with decimals</string>
+    <string name="set_soc_decimals_sub" formatted="false">E.g. 88.1% instead of 88%</string>
+    <string name="set_theme" formatted="false">THEME</string>
+    <string name="set_tpms_sub" formatted="false">Under the wheels of the drawn car, in the cluster unit</string>
+    <string name="set_tpms_title" formatted="false">Tyre pressure (TPMS)</string>
+    <string name="set_updates" formatted="false">UPDATES</string>
+    <string name="theme_auto" formatted="false">Automatic</string>
+    <string name="theme_day" formatted="false">Day</string>
+    <string name="theme_night" formatted="false">Night</string>
+    <string name="upd_current" formatted="false">Up to date</string>
+    <string name="upd_installed_ver">Installed %1$s</string>
+    <string name="upd_new">New version available: %1$s</string>
+    <string name="upd_new_short">New version %1$s</string>
+    <string name="upd_unknown" formatted="false">Updates not checked yet</string>
     <string name="set_ui_size" formatted="false">CONTROL SIZE</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Large</string>
@@ -159,7 +172,7 @@
     <string name="black_roof" formatted="false">Black roof</string>
     <string name="theme" formatted="false">THEME</string>
     <string name="language" formatted="false">LANGUAGE</string>
-    <string name="lang_auto">Automatic (%s)</string>
+    <string name="lang_auto" formatted="false">Same as car</string>
     <string name="lang_auto_hint" formatted="false">Automatic follows the car\'s system language.</string>
     <string name="default_nav" formatted="false">DEFAULT NAVIGATOR</string>
     <string name="nav_auto_hint" formatted="false">Automatic: the phone\'s when CarPlay or Android Auto is connected, otherwise MG.</string>
@@ -178,10 +191,10 @@
     <string name="busy" formatted="false">Working…</string>
     <string name="press_check" formatted="false">Tap Check to look for a new version</string>
     <string name="saving_log" formatted="false">Saving the log…</string>
-    <string name="log_failed" formatted="false">Could not save the log to any folder.</string>
-    <string name="log_saved_usb" formatted="false">Log saved, also to the USB stick:</string>
+    <string name="log_failed" formatted="false">Could not save the log in any folder.</string>
+    <string name="log_saved_usb" formatted="false">Log saved, also on the USB stick:</string>
     <string name="log_saved" formatted="false">Log saved:</string>
-    <string name="log_usb_hint" formatted="false">To get it on a USB stick, plug one in and tap Save log again.</string>
+    <string name="log_usb_hint" formatted="false">To get it on a USB stick: plug one in and tap Save log again.</string>
     <string name="waiting_services" formatted="false">Waiting for the car services…</string>
     <string name="upd_checking" formatted="false">Checking GitHub…</string>
     <string name="upd_no_apk">The latest release (%s) has no APK</string>

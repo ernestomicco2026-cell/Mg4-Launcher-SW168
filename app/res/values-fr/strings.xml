@@ -48,41 +48,54 @@
     <string name="log_upload_off" formatted="false">Envoi des journaux désactivé</string>
     <string name="log_upload_nokey" formatted="false">Envoi des journaux indisponible dans cette version</string>
     <string name="show_inside_temp" formatted="false">Température intérieure</string>
-    <string name="sec_car" formatted="false">Voiture</string>
+    <string name="sec_car" formatted="false">VOITURE</string>
     <string name="sec_car_sub" formatted="false">Couleur, toit</string>
     <string name="sec_home" formatted="false">Accueil</string>
-    <string name="sec_home_sub" formatted="false">Batterie, pneus, température</string>
+    <string name="sec_home_sub" formatted="false">Batterie, pneus, températures</string>
     <string name="sec_look" formatted="false">Apparence</string>
-    <string name="sec_look_sub" formatted="false">Thème, commandes, langue</string>
+    <string name="sec_look_sub" formatted="false">Thème, taille, langue</string>
     <string name="sec_drive" formatted="false">Conduite</string>
-    <string name="sec_drive_sub" formatted="false">Côté conduite, navigation</string>
+    <string name="sec_drive_sub" formatted="false">Position de conduite, accueil MG</string>
     <string name="sec_system" formatted="false">Système</string>
-    <string name="sec_system_sub" formatted="false">Mises à jour, journaux</string>
-    <string name="soc_decimals_hint" formatted="false">Ex. 76,6 % au lieu de 77 %</string>
-    <string name="show_tpms_hint" formatted="false">Avant et arrière, en orange sous 2,0 bar</string>
-    <string name="show_inside_temp_hint" formatted="false">Affiche —° si la voiture ne fournit pas la valeur</string>
-    <string name="ui_size_hint" formatted="false">Seulement les boutons de l\'accueil</string>
-    <string name="theme_title" formatted="false">Thème</string>
-    <string name="ui_size_title" formatted="false">Taille des commandes</string>
-    <string name="language_title" formatted="false">Langue</string>
-    <string name="car_color_title" formatted="false">Couleur de la voiture</string>
-    <string name="drive_side_title" formatted="false">Position de conduite</string>
-    <string name="default_nav_title" formatted="false">Navigation par défaut</string>
-    <string name="original_home_title" formatted="false">Accueil MG d\'origine</string>
-    <string name="original_home_hint" formatted="false">Ouvre l\'écran d\'origine</string>
-    <string name="updates_title" formatted="false">Mises à jour</string>
-    <string name="check" formatted="false">Vérifier</string>
-    <string name="install" formatted="false">Installer</string>
-    <string name="install_v">Installer %s</string>
-    <string name="ver_ok" formatted="false">À jour</string>
-    <string name="ver_new">Nouvelle version : %s</string>
-    <string name="ver_unknown" formatted="false">Non vérifié</string>
-    <string name="log_full" formatted="false">Journal complet</string>
-    <string name="log_full_hint" formatted="false">Enregistre sur clé USB ou en mémoire</string>
-    <string name="diag_short" formatted="false">Diagnostic des services</string>
-    <string name="diag_hint" formatted="false">Valeurs lues dans les services de la voiture</string>
-    <string name="show" formatted="false">Afficher</string>
-    <string name="back" formatted="false">Retour</string>
+    <string name="sec_system_sub" formatted="false">Mises à jour, journaux, diagnostic</string>
+    <string name="btn_back" formatted="false">Retour</string>
+    <string name="btn_check" formatted="false">Vérifier</string>
+    <string name="btn_install" formatted="false">Installer</string>
+    <string name="btn_open" formatted="false">Ouvrir</string>
+    <string name="btn_save" formatted="false">Enregistrer</string>
+    <string name="diag_waiting" formatted="false">En attente des services de la voiture…</string>
+    <string name="drive_hint" formatted="false">En conduite à droite, l\'accueil est inversé : voiture et climatisation côté conducteur.</string>
+    <string name="log_saving" formatted="false">Enregistrement du journal…</string>
+    <string name="save_log_sub" formatted="false">Écrit un journal complet dans la mémoire (et sur la clé USB)</string>
+    <string name="set_black_roof" formatted="false">Toit noir</string>
+    <string name="set_black_roof_sub" formatted="false">Comme les versions à toit contrasté</string>
+    <string name="set_bodywork" formatted="false">CARROSSERIE</string>
+    <string name="set_car_color" formatted="false">COULEUR DE LA VOITURE</string>
+    <string name="set_diag_section" formatted="false">DIAGNOSTIC</string>
+    <string name="set_diag_sub" formatted="false">Valeurs lues dans la voiture et erreurs récentes</string>
+    <string name="set_diag_title" formatted="false">Diagnostic des services du véhicule</string>
+    <string name="set_home_card" formatted="false">PANNEAU VOITURE</string>
+    <string name="set_inside_sub" formatted="false">Sous la température extérieure · « — ° » si la voiture ne la fournit pas</string>
+    <string name="set_language" formatted="false">LANGUE</string>
+    <string name="set_menu_title" formatted="false">Réglages</string>
+    <string name="set_open_original" formatted="false">Ouvrir l\'accueil MG d\'origine</string>
+    <string name="set_original_label" formatted="false">ACCUEIL D\'ORIGINE</string>
+    <string name="set_original_sub" formatted="false">Pour utiliser les fonctions de l\'accueil d\'origine</string>
+    <string name="set_show_inside_temp" formatted="false">Température intérieure</string>
+    <string name="set_soc_decimals" formatted="false">Pourcentage de batterie avec décimales</string>
+    <string name="set_soc_decimals_sub" formatted="false">Ex. 88,1 % au lieu de 88 %</string>
+    <string name="set_theme" formatted="false">THÈME</string>
+    <string name="set_tpms_sub" formatted="false">Sous les roues de la voiture dessinée, dans l\'unité du combiné</string>
+    <string name="set_tpms_title" formatted="false">Pression des pneus (TPMS)</string>
+    <string name="set_updates" formatted="false">MISES À JOUR</string>
+    <string name="theme_auto" formatted="false">Automatique</string>
+    <string name="theme_day" formatted="false">Jour</string>
+    <string name="theme_night" formatted="false">Nuit</string>
+    <string name="upd_current" formatted="false">Version à jour</string>
+    <string name="upd_installed_ver">Installée %1$s</string>
+    <string name="upd_new">Nouvelle version disponible : %1$s</string>
+    <string name="upd_new_short">Nouvelle version %1$s</string>
+    <string name="upd_unknown" formatted="false">Mises à jour pas encore vérifiées</string>
     <string name="set_ui_size" formatted="false">TAILLE DES COMMANDES</string>
     <string name="ui_size_normal" formatted="false">Normale</string>
     <string name="ui_size_large" formatted="false">Grande</string>
@@ -159,7 +172,7 @@
     <string name="black_roof" formatted="false">Toit noir</string>
     <string name="theme" formatted="false">THÈME</string>
     <string name="language" formatted="false">LANGUE</string>
-    <string name="lang_auto">Automatique (%s)</string>
+    <string name="lang_auto" formatted="false">Comme la voiture</string>
     <string name="lang_auto_hint" formatted="false">Automatique suit la langue du système du véhicule.</string>
     <string name="default_nav" formatted="false">NAVIGATION PAR DÉFAUT</string>
     <string name="nav_auto_hint" formatted="false">Automatique : celle du téléphone si CarPlay ou Android Auto est connecté, sinon MG.</string>
@@ -181,7 +194,7 @@
     <string name="log_failed" formatted="false">Impossible d\'enregistrer le journal dans un dossier.</string>
     <string name="log_saved_usb" formatted="false">Journal enregistré, aussi sur la clé USB :</string>
     <string name="log_saved" formatted="false">Journal enregistré :</string>
-    <string name="log_usb_hint" formatted="false">Pour l\'avoir sur une clé USB, branchez-la et touchez à nouveau Enregistrer le journal.</string>
+    <string name="log_usb_hint" formatted="false">Pour l\'avoir sur clé USB : branchez-la et touchez à nouveau Enregistrer le journal.</string>
     <string name="waiting_services" formatted="false">En attente des services du véhicule…</string>
     <string name="upd_checking" formatted="false">Vérification sur GitHub…</string>
     <string name="upd_no_apk">La dernière version (%s) ne contient pas d\'APK</string>

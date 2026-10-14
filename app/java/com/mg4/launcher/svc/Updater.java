@@ -133,6 +133,20 @@ public final class Updater {
         });
     }
 
+    /** Controllo silenzioso per le impostazioni: restituisce sempre l'ultima release trovata (anche se non è nuova). */
+    public void checkSilent(String repo, String token, Found cb) {
+        if (busy) return;
+        bg.post(() -> {
+            try {
+                Release r = latest(repo, token);
+                Diag.put("aggiornamenti.controllo", "ultima " + r.tag + (r.newer ? " (nuova)" : ""));
+                main.post(() -> cb.found(r));
+            } catch (Exception e) {
+                Diag.put("aggiornamenti.controllo", "non riuscito: " + e.getClass().getSimpleName());
+            }
+        });
+    }
+
     /**
      * Scarica l'APK della release e lo installa. L'APK resta in memoria e va direttamente nella sessione
      * di installazione: nessun file temporaneo da salvare (era il punto che non riusciva sull'auto).

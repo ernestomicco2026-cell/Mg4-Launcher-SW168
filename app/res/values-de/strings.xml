@@ -48,41 +48,54 @@
     <string name="log_upload_off" formatted="false">Log-Upload ausgeschaltet</string>
     <string name="log_upload_nokey" formatted="false">Log-Upload in dieser Version nicht verfügbar</string>
     <string name="show_inside_temp" formatted="false">Innentemperatur</string>
-    <string name="sec_car" formatted="false">Auto</string>
+    <string name="sec_car" formatted="false">FAHRZEUG</string>
     <string name="sec_car_sub" formatted="false">Farbe, Dach</string>
     <string name="sec_home" formatted="false">Startseite</string>
-    <string name="sec_home_sub" formatted="false">Akku, Reifen, Temperatur</string>
+    <string name="sec_home_sub" formatted="false">Batterie, Reifen, Temperaturen</string>
     <string name="sec_look" formatted="false">Darstellung</string>
-    <string name="sec_look_sub" formatted="false">Design, Bedienelemente, Sprache</string>
+    <string name="sec_look_sub" formatted="false">Design, Größe, Sprache</string>
     <string name="sec_drive" formatted="false">Fahren</string>
-    <string name="sec_drive_sub" formatted="false">Lenkradseite, Navigation</string>
+    <string name="sec_drive_sub" formatted="false">Lenkradposition, MG-Startseite</string>
     <string name="sec_system" formatted="false">System</string>
-    <string name="sec_system_sub" formatted="false">Updates, Logs</string>
-    <string name="soc_decimals_hint" formatted="false">Z. B. 76,6 % statt 77 %</string>
-    <string name="show_tpms_hint" formatted="false">Vorne und hinten, gelb unter 2,0 bar</string>
-    <string name="show_inside_temp_hint" formatted="false">Zeigt —°, wenn das Auto den Wert nicht liefert</string>
-    <string name="ui_size_hint" formatted="false">Nur die Tasten der Startseite</string>
-    <string name="theme_title" formatted="false">Design</string>
-    <string name="ui_size_title" formatted="false">Größe der Bedienelemente</string>
-    <string name="language_title" formatted="false">Sprache</string>
-    <string name="car_color_title" formatted="false">Fahrzeugfarbe</string>
-    <string name="drive_side_title" formatted="false">Lenkradposition</string>
-    <string name="default_nav_title" formatted="false">Standard-Navigation</string>
-    <string name="original_home_title" formatted="false">Original-MG-Startseite</string>
-    <string name="original_home_hint" formatted="false">Öffnet den Serienbildschirm</string>
-    <string name="updates_title" formatted="false">Updates</string>
-    <string name="check" formatted="false">Prüfen</string>
-    <string name="install" formatted="false">Installieren</string>
-    <string name="install_v">%s installieren</string>
-    <string name="ver_ok" formatted="false">Aktuell</string>
-    <string name="ver_new">Neue Version: %s</string>
-    <string name="ver_unknown" formatted="false">Nicht geprüft</string>
-    <string name="log_full" formatted="false">Vollständiges Log</string>
-    <string name="log_full_hint" formatted="false">Speichert auf USB-Stick oder im Speicher</string>
-    <string name="diag_short" formatted="false">Dienst-Diagnose</string>
-    <string name="diag_hint" formatted="false">Von den Fahrzeugdiensten gelesene Werte</string>
-    <string name="show" formatted="false">Anzeigen</string>
-    <string name="back" formatted="false">Zurück</string>
+    <string name="sec_system_sub" formatted="false">Updates, Logs, Diagnose</string>
+    <string name="btn_back" formatted="false">Zurück</string>
+    <string name="btn_check" formatted="false">Prüfen</string>
+    <string name="btn_install" formatted="false">Installieren</string>
+    <string name="btn_open" formatted="false">Öffnen</string>
+    <string name="btn_save" formatted="false">Speichern</string>
+    <string name="diag_waiting" formatted="false">Warte auf die Fahrzeugdienste…</string>
+    <string name="drive_hint" formatted="false">Bei Rechtslenkung wird die Startseite gespiegelt: Auto und Klima auf der Fahrerseite.</string>
+    <string name="log_saving" formatted="false">Log wird gespeichert…</string>
+    <string name="save_log_sub" formatted="false">Schreibt ein vollständiges Log in den Speicher (und auf den USB-Stick)</string>
+    <string name="set_black_roof" formatted="false">Schwarzes Dach</string>
+    <string name="set_black_roof_sub" formatted="false">Wie die Versionen mit Kontrastdach</string>
+    <string name="set_bodywork" formatted="false">KAROSSERIE</string>
+    <string name="set_car_color" formatted="false">FAHRZEUGFARBE</string>
+    <string name="set_diag_section" formatted="false">DIAGNOSE</string>
+    <string name="set_diag_sub" formatted="false">Vom Auto gelesene Werte und letzte Fehler</string>
+    <string name="set_diag_title" formatted="false">Diagnose der Fahrzeugdienste</string>
+    <string name="set_home_card" formatted="false">FAHRZEUGBEREICH</string>
+    <string name="set_inside_sub" formatted="false">Unter der Außentemperatur · „— °“, wenn das Auto sie nicht liefert</string>
+    <string name="set_language" formatted="false">SPRACHE</string>
+    <string name="set_menu_title" formatted="false">Einstellungen</string>
+    <string name="set_open_original" formatted="false">Original-MG-Startbildschirm öffnen</string>
+    <string name="set_original_label" formatted="false">ORIGINAL-STARTSEITE</string>
+    <string name="set_original_sub" formatted="false">Um die Funktionen der Serien-Startseite zu nutzen</string>
+    <string name="set_show_inside_temp" formatted="false">Innentemperatur</string>
+    <string name="set_soc_decimals" formatted="false">Akkustand mit Nachkommastelle</string>
+    <string name="set_soc_decimals_sub" formatted="false">Z. B. 88,1 % statt 88 %</string>
+    <string name="set_theme" formatted="false">DESIGN</string>
+    <string name="set_tpms_sub" formatted="false">Unter den Rädern des gezeichneten Autos, in der Einheit des Kombiinstruments</string>
+    <string name="set_tpms_title" formatted="false">Reifendruck (TPMS)</string>
+    <string name="set_updates" formatted="false">UPDATES</string>
+    <string name="theme_auto" formatted="false">Automatisch</string>
+    <string name="theme_day" formatted="false">Tag</string>
+    <string name="theme_night" formatted="false">Nacht</string>
+    <string name="upd_current" formatted="false">Aktuelle Version</string>
+    <string name="upd_installed_ver">Installiert %1$s</string>
+    <string name="upd_new">Neue Version verfügbar: %1$s</string>
+    <string name="upd_new_short">Neue Version %1$s</string>
+    <string name="upd_unknown" formatted="false">Updates noch nicht geprüft</string>
     <string name="set_ui_size" formatted="false">GRÖSSE DER BEDIENELEMENTE</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Groß</string>
@@ -159,7 +172,7 @@
     <string name="black_roof" formatted="false">Schwarzes Dach</string>
     <string name="theme" formatted="false">DESIGN</string>
     <string name="language" formatted="false">SPRACHE</string>
-    <string name="lang_auto">Automatisch (%s)</string>
+    <string name="lang_auto" formatted="false">Wie im Auto</string>
     <string name="lang_auto_hint" formatted="false">Automatisch folgt der Systemsprache des Fahrzeugs.</string>
     <string name="default_nav" formatted="false">STANDARD-NAVIGATION</string>
     <string name="nav_auto_hint" formatted="false">Automatisch: die des Telefons, wenn CarPlay oder Android Auto verbunden ist, sonst MG.</string>
@@ -181,7 +194,7 @@
     <string name="log_failed" formatted="false">Das Log konnte in keinem Ordner gespeichert werden.</string>
     <string name="log_saved_usb" formatted="false">Log gespeichert, auch auf dem USB-Stick:</string>
     <string name="log_saved" formatted="false">Log gespeichert:</string>
-    <string name="log_usb_hint" formatted="false">Für den USB-Stick: einstecken und erneut auf „Log speichern“ tippen.</string>
+    <string name="log_usb_hint" formatted="false">Für den USB-Stick: einstecken und erneut Log speichern tippen.</string>
     <string name="waiting_services" formatted="false">Warte auf die Fahrzeugdienste…</string>
     <string name="upd_checking" formatted="false">Prüfe GitHub…</string>
     <string name="upd_no_apk">Die neueste Version (%s) enthält keine APK</string>

@@ -1,6 +1,9 @@
 package com.mg4.launcher.ui;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
@@ -8,6 +11,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -21,9 +25,9 @@ import com.mg4.launcher.svc.LogUploader;
 import com.mg4.launcher.svc.Updater;
 
 /**
- * Impostazioni del launcher a schermo intero: a sinistra il menu delle sezioni (con versione e stato degli
- * aggiornamenti sempre visibili in basso), a destra il contenuto della sezione scelta. Con la guida a destra il
- * menu passa a destra. Interruttori, scelte e pulsanti seguono la "Dimensione comandi".
+ * Impostazioni a schermo intero: menu delle sezioni a sinistra (a destra con la guida a destra), contenuto della
+ * sezione dall'altra parte, versione e stato degli aggiornamenti sempre visibili in fondo al menu.
+ * Interruttori e pulsanti seguono "Dimensione comandi" (Ui.K).
  */
 public final class SettingsView extends FrameLayout {
 
@@ -36,553 +40,547 @@ public final class SettingsView extends FrameLayout {
 
         Updater updater();
 
-        com.mg4.launcher.svc.LogUploader logs();
+        LogUploader logs();
 
         /** La lingua è cambiata: ricostruire tutta l'interfaccia. */
         void languageChanged();
     }
 
     public static final int SEC_CAR = 0, SEC_HOME = 1, SEC_LOOK = 2, SEC_DRIVE = 3, SEC_SYSTEM = 4;
-    private static final int[][] SECTIONS = {
-            {R.drawable.ic_car, R.string.sec_car, R.string.sec_car_sub},
-            {R.drawable.ic_home, R.string.sec_home, R.string.sec_home_sub},
-            {R.drawable.ic_palette, R.string.sec_look, R.string.sec_look_sub},
-            {R.drawable.ic_route, R.string.sec_drive, R.string.sec_drive_sub},
-            {R.drawable.ic_gear, R.string.sec_system, R.string.sec_system_sub}};
-
-    /** Sezione aperta: resta la stessa quando l'interfaccia si ricostruisce (tema, lingua, dimensione). */
-    private static int current = SEC_CAR;
-    private static long lastCheck;
-    private static Updater.Release found;
 
     /** Sezione da mostrare alla prossima apertura (es. Sistema dal popup degli aggiornamenti). */
-    public static void openAt(int section) {
-        current = section;
+    public static void openAt(int s) {
+        section = s;
     }
+    private static final int[] SEC_ICON = {R.drawable.ic_car, R.drawable.ic_home, R.drawable.ic_palette, R.drawable.ic_steering, R.drawable.ic_gear};
+    private static final int[] SEC_NAME = {R.string.sec_car, R.string.sec_home, R.string.sec_look, R.string.sec_drive, R.string.sec_system};
+    private static final int[] SEC_SUB = {R.string.sec_car_sub, R.string.sec_home_sub, R.string.sec_look_sub, R.string.sec_drive_sub, R.string.sec_system_sub};
+    /** Spazio in alto a sinistra per la spia luci del sistema (come nella home). */
+    private static final int SYSTEM_LIGHT_INSET = 64;
+    private static final long QUIET_CHECK_MS = 30 * 60_000L;
+
+    /** Sezione aperta: resta la stessa quando la schermata si ricostruisce (tema, lingua, dimensione…). */
+    private static int section = SEC_CAR;
+    /** Ultimo risultato del controllo aggiornamenti, condiviso tra le aperture. */
+    private static Updater.Release lastRelease;
+    private static long lastQuietCheck;
+    private static String lastStatus;
 
     private final Theme t;
     private final Prefs prefs;
     private final Host host;
     private final Handler main = new Handler(Looper.getMainLooper());
+    private final boolean rhd, sysIndicator;
 
-    private final LinearLayout menu;
-    private final LinearLayout body;
-    private final TextView sectionTitle;
-    private TextView verStatus, verInstall;
-    // sezione Sistema
-    private TextView updHint, updCheck, updInstall, logHint, logBtn, logSaveHint, diagText;
-    private String updText = "";
-    private boolean updBusy;
+    private final LinearLayout menuItems;
+    private final FrameLayout footer;
+    private final LinearLayout content;
     private boolean diagOpen;
-    // sezione Auto
-    private CarView preview;
+
+    // viste aggiornate di continuo
+    private TextView diagText, logUploadSub, logSaveSub, updSub;
+    private View logSaveBtn, updCheckBtn, updInstallBtn;
 
     public SettingsView(Context c, Theme t, Prefs prefs, Host host) {
         super(c);
         this.t = t;
         this.prefs = prefs;
         this.host = host;
+        boolean carRhd = CarFeatures.isRightHandDrive(c);
+        String side = prefs.driveSide();
+        rhd = Prefs.DRIVE_RIGHT.equals(side) || (Prefs.DRIVE_AUTO.equals(side) && carRhd);
+        sysIndicator = CarFeatures.hasSystemLightIndicator(c) || carRhd;
+
         setBackgroundColor(t.bg);
         setClickable(true);
-        setPadding(dp(20), dp(20), dp(20), dp(20));
 
-        boolean rhd = Prefs.DRIVE_RIGHT.equals(prefs.driveSide())
-                || (Prefs.DRIVE_AUTO.equals(prefs.driveSide()) && CarFeatures.isRightHandDrive(c));
-
-        LinearLayout row = Ui.row(c);
-        row.setGravity(Gravity.FILL_VERTICAL);
-        addView(row, new LayoutParams(-1, -1));
+        LinearLayout card = Ui.row(c);
+        card.setGravity(Gravity.NO_GRAVITY);
+        card.setBackground(Ui.round(t.panel, dp(28)));
+        card.setClipToOutline(true);
+        LayoutParams clp = new LayoutParams(-1, -1);
+        clp.setMargins(dp(20), dp(20), dp(20), dp(20));
+        addView(card, clp);
 
         // --- menu delle sezioni ---
-        menu = Ui.column(c);
-        menu.setBackground(Ui.round(t.panel, dp(24)));
-        menu.setPadding(dp(18), dp(22), dp(18), dp(18));
-        LinearLayout head = Ui.row(c);
-        head.setPadding(dp(8), 0, 0, dp(14));
-        head.addView(Ui.oneLine(Ui.text(c, L.s(R.string.app_settings), 30, t.text, Ui.MEDIUM)), Ui.lpWeight(0, -2, 1));
-        head.addView(Ui.iconButton(c, t, R.drawable.ic_close, t.text, t.chip, 56, 26, 28, L.s(R.string.close), v -> host.closeSettings()));
-        menu.addView(head, new LinearLayout.LayoutParams(-1, -2));
-        LinearLayout items = Ui.column(c);
-        menu.addView(items, new LinearLayout.LayoutParams(-1, -2));
-        for (int i = 0; i < SECTIONS.length; i++) {
-            final int idx = i;
-            // voci del menu: crescono con i comandi ma al massimo come "Grande", così il menu resta senza scorrere
-            items.addView(menuItem(c, i), Ui.margins(new LinearLayout.LayoutParams(-1, dp(76 * Math.min(Ui.K, 1.15f))), 0, i == 0 ? 0 : dp(6), 0, 0));
-            items.getChildAt(i).setOnClickListener(v -> select(idx));
-        }
-        menu.addView(Ui.spacer(c), Ui.lpWeight(-1, 0, 1));
-        menu.addView(versionCard(c), new LinearLayout.LayoutParams(-1, -2));
+        LinearLayout menu = Ui.column(c);
+        menu.setBackgroundColor(t.day ? 0xFFF6F7F9 : 0xFF111317);
+        menu.setPadding(dp(24), dp(30), dp(24), dp(24));
+        TextView title = Ui.text(c, L.s(R.string.set_menu_title), 32, t.text, Ui.MEDIUM);
+        title.setPadding(dp(12) + (sysIndicator && !rhd ? dp(SYSTEM_LIGHT_INSET) : 0), 0, dp(12), dp(26));
+        menu.addView(title);
+        menuItems = Ui.column(c);
+        menu.addView(menuItems);
+        menu.addView(new View(c), Ui.lpWeight(-1, 0, 1));
+        footer = new FrameLayout(c);
+        menu.addView(footer, new LinearLayout.LayoutParams(-1, -2));
 
-        // --- contenuto della sezione ---
-        LinearLayout content = Ui.column(c);
-        content.setBackground(Ui.round(t.panel, dp(24)));
-        content.setPadding(dp(32), dp(26), dp(32), dp(24));
-        sectionTitle = Ui.text(c, "", 14, t.sub, Ui.MEDIUM);
-        sectionTitle.setLetterSpacing(0.1f);
-        content.addView(sectionTitle);
-        ScrollView sv = new ScrollView(c);
-        sv.setVerticalScrollBarEnabled(false);
-        sv.setOverScrollMode(OVER_SCROLL_NEVER);
-        body = Ui.column(c);
-        sv.addView(body, new FrameLayout.LayoutParams(-1, -2));
-        content.addView(sv, Ui.margins(Ui.lpWeight(-1, 0, 1), 0, dp(16), 0, 0));
+        View sep = new View(c);
+        sep.setBackgroundColor(t.track);
+
+        // --- contenuto ---
+        content = Ui.column(c);
+        int insetLeft = sysIndicator && rhd ? dp(SYSTEM_LIGHT_INSET) : 0;
+        content.setPadding(dp(44) + insetLeft, dp(34), dp(44), dp(30));
 
         if (!rhd) {
-            row.addView(menu, new LinearLayout.LayoutParams(dp(420), -1));
-            row.addView(content, Ui.margins(Ui.lpWeight(0, -1, 1), dp(16), 0, 0, 0));
+            card.addView(menu, new LinearLayout.LayoutParams(dp(440), -1));
+            card.addView(sep, new LinearLayout.LayoutParams(dp(1), -1));
+            card.addView(content, Ui.lpWeight(0, -1, 1));
         } else {
-            row.addView(content, Ui.lpWeight(0, -1, 1));
-            row.addView(menu, Ui.margins(new LinearLayout.LayoutParams(dp(420), -1), dp(16), 0, 0, 0));
+            card.addView(content, Ui.lpWeight(0, -1, 1));
+            card.addView(sep, new LinearLayout.LayoutParams(dp(1), -1));
+            card.addView(menu, new LinearLayout.LayoutParams(dp(440), -1));
         }
 
-        // stato degli aggiornamenti: un solo ascoltatore per il menu e la sezione Sistema
         Updater up = host.updater();
         up.setListener((text, r, busy) -> {
-            if (r != null) found = r;
-            updText = text;
-            updBusy = busy;
-            refreshUpdates();
+            if (r != null) lastRelease = r;
+            lastStatus = text;
+            refreshUpdateViews(busy);
         });
-        updText = L.s(up.isBusy() ? R.string.busy : R.string.press_check);
-        updBusy = up.isBusy();
-        if (!up.isBusy() && SystemClock.uptimeMillis() - lastCheck > 10 * 60_000L) {
-            lastCheck = SystemClock.uptimeMillis();
-            up.check(prefs.updateRepo(), prefs.githubToken());
+        if (SystemClock.elapsedRealtime() - lastQuietCheck > QUIET_CHECK_MS || lastQuietCheck == 0) {
+            lastQuietCheck = SystemClock.elapsedRealtime();
+            up.checkSilent(prefs.updateRepo(), prefs.githubToken(), r -> {
+                if (r != null) lastRelease = r;
+                refreshUpdateViews(up.isBusy());
+            });
         }
-        select(current);
+
+        buildMenu();
+        buildFooter(up.isBusy());
+        showSection(section);
     }
 
     // =========================================================================================
     // Menu
     // =========================================================================================
 
-    private View menuItem(Context c, int i) {
-        LinearLayout it = Ui.row(c);
-        it.setPadding(dp(18), 0, dp(14), 0);
-        it.setClickable(true);
-        FrameLayout box = new FrameLayout(c);
-        box.addView(Ui.icon(c, SECTIONS[i][0], t.sub, 24), new FrameLayout.LayoutParams(tp(24), tp(24), Gravity.CENTER));
-        it.addView(box, new LinearLayout.LayoutParams(tp(44), tp(44)));
-        LinearLayout tx = Ui.column(c);
-        tx.addView(Ui.oneLine(Ui.text(c, L.s(SECTIONS[i][1]), Ui.ts(21), t.text, Ui.MEDIUM)));
-        tx.addView(Ui.oneLine(Ui.text(c, L.s(SECTIONS[i][2]), 14, t.sub, Ui.REGULAR)));
-        it.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), dp(16), 0, 0, 0));
-        return it;
-    }
-
-    private void styleMenu() {
-        LinearLayout items = (LinearLayout) menu.getChildAt(1);
-        for (int i = 0; i < items.getChildCount(); i++) {
-            boolean on = i == current;
-            LinearLayout it = (LinearLayout) items.getChildAt(i);
-            it.setBackground(on ? Ui.round(t.text, dp(18)) : Ui.pressable(getContext(), 0, 18, t));
-            FrameLayout box = (FrameLayout) it.getChildAt(0);
-            box.setBackground(Ui.round(on ? t.panel : t.chip, tp(14)));
-            ((android.widget.ImageView) box.getChildAt(0)).setColorFilter(on ? t.text : t.sub);
-            LinearLayout tx = (LinearLayout) it.getChildAt(1);
-            ((TextView) tx.getChildAt(0)).setTextColor(on ? t.panel : t.text);
-            ((TextView) tx.getChildAt(1)).setTextColor(on ? t.track : t.sub);
-        }
-    }
-
-    /** Riquadro in basso nel menu: versione installata, stato degli aggiornamenti e "Installa". */
-    private View versionCard(Context c) {
-        LinearLayout card = Ui.row(c);
-        card.setBackground(Ui.round(t.chip, dp(18)));
-        card.setPadding(dp(18), dp(14), dp(14), dp(14));
-        LinearLayout tx = Ui.column(c);
-        tx.addView(Ui.oneLine(Ui.text(c, "MG4 Launcher " + host.updater().currentVersion(), 16, t.text, Ui.MEDIUM)));
-        verStatus = Ui.oneLine(Ui.text(c, "", 14, t.sub, Ui.REGULAR));
-        tx.addView(verStatus, Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(2), 0, 0));
-        card.addView(tx, Ui.lpWeight(0, -2, 1));
-        verInstall = button(c, L.s(R.string.install), true, v -> install());
-        verInstall.setMinHeight(tp(44));
-        verInstall.setPadding(tp(18), 0, tp(18), 0);
-        card.addView(verInstall, Ui.margins(Ui.lp(-2, tp(44)), dp(10), 0, 0, 0));
-        return card;
-    }
-
-    private void select(int section) {
-        current = section;
-        diagOpen = false;
-        main.removeCallbacks(refreshDiag);
-        styleMenu();
-        sectionTitle.setText(L.s(SECTIONS[section][1]).toUpperCase(L.locale()));
-        body.removeAllViews();
-        updHint = updCheck = updInstall = logHint = logBtn = logSaveHint = diagText = null;
-        preview = null;
+    private void buildMenu() {
         Context c = getContext();
-        switch (section) {
-            case SEC_CAR: buildCar(c); break;
-            case SEC_HOME: buildHome(c); break;
-            case SEC_LOOK: buildLook(c); break;
-            case SEC_DRIVE: buildDrive(c); break;
-            default: buildSystem(c); break;
+        menuItems.removeAllViews();
+        for (int i = 0; i < SEC_NAME.length; i++) {
+            final int idx = i;
+            boolean on = i == section;
+            FrameLayout item = new FrameLayout(c);
+            item.setBackground(Ui.pressable(c, on ? t.chip : 0x00000000, 20, t));
+            item.setClickable(true);
+            item.setOnClickListener(v -> {
+                if (section == idx && !diagOpen) return;
+                section = idx;
+                diagOpen = false;
+                buildMenu();
+                showSection(idx);
+            });
+            if (on) {
+                View bar = new View(c);
+                bar.setBackground(Ui.round(t.text, dp(3)));
+                item.addView(bar, new LayoutParams(dp(5), dp(44), Gravity.CENTER_VERTICAL | (rhd ? Gravity.RIGHT : Gravity.LEFT)));
+            }
+            LinearLayout r = Ui.row(c);
+            r.setPadding(dp(20), 0, dp(20), 0);
+            FrameLayout box = new FrameLayout(c);
+            box.setBackground(Ui.round(on ? t.text : t.chip, dp(16)));
+            box.addView(Ui.icon(c, SEC_ICON[i], on ? t.panel : t.text, 28), new LayoutParams(dp(28), dp(28), Gravity.CENTER));
+            r.addView(box, Ui.lp(dp(52), dp(52)));
+            LinearLayout tx = Ui.column(c);
+            tx.addView(Ui.oneLine(Ui.text(c, L.s(SEC_NAME[i]), 23, t.text, on ? Ui.MEDIUM : Ui.REGULAR)));
+            TextView sub = Ui.oneLine(Ui.text(c, L.s(SEC_SUB[i]), 15, t.sub, Ui.REGULAR));
+            tx.addView(sub, Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(4), 0, 0));
+            r.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), dp(18), 0, 0, 0));
+            item.addView(r, new LayoutParams(-1, -1));
+            item.setContentDescription(L.s(SEC_NAME[i]));
+            menuItems.addView(item, Ui.margins(new LinearLayout.LayoutParams(-1, dp(92)), 0, 0, 0, dp(8)));
         }
-        refreshUpdates();
+    }
+
+    /** Riquadro in fondo al menu: versione installata, oppure nuova versione con "Installa". */
+    private void buildFooter(boolean busy) {
+        Context c = getContext();
+        footer.removeAllViews();
+        Updater up = host.updater();
+        Updater.Release r = lastRelease;
+        boolean newer = r != null && r.newer && r.apkUrl != null;
+        LinearLayout box = Ui.row(c);
+        box.setPadding(dp(18), dp(14), dp(14), dp(14));
+        box.setMinimumHeight(dp(70));
+        if (newer) {
+            box.setBackground(Ui.round(t.text, dp(20)));
+            box.addView(Ui.icon(c, R.drawable.ic_download, t.panel, 28));
+            LinearLayout tx = Ui.column(c);
+            tx.addView(Ui.oneLine(Ui.text(c, L.f(R.string.upd_new_short, r.tag), 18, t.panel, Ui.MEDIUM)));
+            String sub = busy && lastStatus != null ? lastStatus : L.f(R.string.upd_installed_ver, up.currentVersion());
+            tx.addView(Ui.oneLine(Ui.text(c, sub, 14, t.panel, Ui.REGULAR)), Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(4), 0, 0));
+            tx.getChildAt(1).setAlpha(0.75f);
+            box.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), dp(14), 0, dp(10), 0));
+            TextView inst = Ui.text(c, L.s(R.string.btn_install), Ui.ts(18), t.text, Ui.MEDIUM);
+            inst.setGravity(Gravity.CENTER);
+            inst.setPadding(tp(20), 0, tp(20), 0);
+            inst.setBackground(Ui.pressable(c, t.panel, 14 * Ui.K, t));
+            inst.setClickable(!busy);
+            inst.setAlpha(busy ? 0.5f : 1f);
+            inst.setOnClickListener(v -> up.install(r, prefs.githubToken()));
+            box.addView(inst, Ui.lp(-2, tp(52)));
+        } else {
+            box.setBackground(Ui.round(t.chip, dp(20)));
+            boolean known = r != null;
+            box.addView(Ui.icon(c, known ? R.drawable.ic_check : R.drawable.ic_info, known ? t.battery : t.sub, 26));
+            LinearLayout tx = Ui.column(c);
+            tx.addView(Ui.oneLine(Ui.text(c, "MG4 Launcher " + up.currentVersion(), 18, t.text, Ui.MEDIUM)));
+            String sub = busy && lastStatus != null ? lastStatus : L.s(known ? R.string.upd_current : R.string.upd_unknown);
+            tx.addView(Ui.oneLine(Ui.text(c, sub, 14, t.sub, Ui.REGULAR)), Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(4), 0, 0));
+            box.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), dp(14), 0, 0, 0));
+        }
+        footer.addView(box, new LayoutParams(-1, -2));
+    }
+
+    private void refreshUpdateViews(boolean busy) {
+        buildFooter(busy);
+        if (updSub != null) {
+            Context c = getContext();
+            updSub.setVisibility(VISIBLE);
+            updSub.setText(lastStatus != null ? lastStatus
+                    : lastRelease == null ? L.s(R.string.upd_unknown)
+                    : lastRelease.newer ? L.f(R.string.upd_new, lastRelease.tag)
+                    : L.s(R.string.upd_current));
+            updCheckBtn.setEnabled(!busy);
+            updCheckBtn.setAlpha(busy ? 0.5f : 1f);
+            boolean canInstall = !busy && lastRelease != null && lastRelease.newer && lastRelease.apkUrl != null;
+            updInstallBtn.setVisibility(canInstall ? VISIBLE : GONE);
+        }
     }
 
     // =========================================================================================
-    // Sezioni
+    // Contenuto delle sezioni
     // =========================================================================================
 
-    private void buildCar(Context c) {
-        LinearLayout two = Ui.row(c);
-        two.setGravity(Gravity.TOP);
-        LinearLayout left = Ui.column(c);
-        int sel = prefs.carColorIndex();
-        View colorRow = row(c, L.s(R.string.car_color_title), Prefs.CAR_COLORS[sel], null);
-        left.addView(colorRow, new LinearLayout.LayoutParams(-1, -2));
+    private void showSection(int s) {
+        Context c = getContext();
+        content.removeAllViews();
+        diagText = null;
+        logUploadSub = null;
+        logSaveSub = null;
+        updSub = null;
+
+        // intestazione: titolo + chiudi
+        LinearLayout head = Ui.row(c);
+        if (diagOpen) {
+            head.addView(Ui.iconButton(c, t, R.drawable.ic_chev_left, t.text, t.chip, 64, 30, 32, L.s(R.string.btn_back), v -> {
+                diagOpen = false;
+                showSection(section);
+            }), Ui.margins(Ui.lp(tp(64), tp(64)), 0, 0, dp(20), 0));
+        }
+        head.addView(Ui.oneLine(Ui.text(c, L.s(diagOpen ? R.string.set_diag_title : SEC_NAME[s]), 34, t.text, Ui.MEDIUM)), Ui.lpWeight(0, -2, 1));
+        head.addView(Ui.iconButton(c, t, R.drawable.ic_close, t.text, t.chip, 64, 30, 32, L.s(R.string.close), v -> host.closeSettings()));
+        content.addView(head, new LinearLayout.LayoutParams(-1, -2));
+
+        if (diagOpen) {
+            buildDiag(c);
+            refreshTick.run();
+            return;
+        }
+
+        ScrollView sv = new ScrollView(c);
+        sv.setVerticalScrollBarEnabled(false);
+        sv.setOverScrollMode(OVER_SCROLL_NEVER);
+        LinearLayout col = Ui.column(c);
+        col.setPadding(0, dp(26), 0, 0);
+        sv.addView(col, new FrameLayout.LayoutParams(-1, -2));
+        content.addView(sv, Ui.lpWeight(-1, 0, 1));
+
+        switch (s) {
+            case SEC_CAR: buildCar(c, col); break;
+            case SEC_HOME: buildHome(c, col); break;
+            case SEC_LOOK: buildLook(c, col); break;
+            case SEC_DRIVE: buildDrive(c, col); break;
+            default: buildSystem(c, col); break;
+        }
+        refreshTick.run();
+    }
+
+    private void buildCar(Context c, LinearLayout col) {
+        col.addView(label(c, L.s(R.string.set_car_color)));
         LinearLayout sw = Ui.row(c);
-        sw.setPadding(dp(4), dp(14), dp(4), dp(14));
+        int sel = prefs.carColorIndex();
         for (int i = 0; i < Prefs.CAR_COLORS.length; i++) {
             final int idx = i;
             sw.addView(swatch(c, Prefs.CAR_COLOR_VALUES[i], i == sel, Prefs.CAR_COLORS[i], v -> {
                 prefs.setCarColorIndex(idx);
                 host.settingsChanged(false);
-                select(SEC_CAR);
-            }), Ui.margins(Ui.lp(tp(60), tp(60)), i == 0 ? 0 : dp(14), 0, 0, 0));
+                showSection(SEC_CAR);
+            }), Ui.margins(Ui.lp(tp(72), tp(72)), 0, 0, dp(16), 0));
         }
-        left.addView(sw);
-        left.addView(row(c, L.s(R.string.black_roof), null, toggle(c, prefs.blackRoof(), on -> {
-            prefs.setBlackRoof(on);
-            host.settingsChanged(false);
-            if (preview != null) preview.setLook(Prefs.CAR_COLOR_VALUES[prefs.carColorIndex()], on, t);
-        })), new LinearLayout.LayoutParams(-1, -2));
-        two.addView(left, Ui.lpWeight(0, -2, 1.25f));
+        col.addView(sw, top(14));
+        col.addView(Ui.text(c, Prefs.CAR_COLORS[sel], 18, t.sub, Ui.REGULAR), top(14));
 
-        FrameLayout pv = new FrameLayout(c);
-        pv.setBackground(Ui.round(t.chip, dp(20)));
-        pv.setPadding(dp(24), dp(24), dp(24), dp(24));
-        preview = new CarView(c);
-        preview.setLook(Prefs.CAR_COLOR_VALUES[sel], prefs.blackRoof(), t);
-        pv.addView(preview, new FrameLayout.LayoutParams(-1, -1));
-        two.addView(pv, Ui.margins(Ui.lpWeight(0, dp(560), 1f), dp(24), 0, 0, 0));
-        body.addView(two, new LinearLayout.LayoutParams(-1, -2));
-    }
-
-    private void buildHome(Context c) {
-        add(row(c, L.s(R.string.soc_decimals), L.s(R.string.soc_decimals_hint), toggle(c, prefs.socDecimals(), on -> {
-            prefs.setSocDecimals(on);
-            host.settingsChanged(false);
-        })));
-        add(row(c, L.s(R.string.show_tpms), L.s(R.string.show_tpms_hint), toggle(c, prefs.showTpms(), on -> {
-            prefs.setShowTpms(on);
-            host.settingsChanged(false);
-        })));
-        add(row(c, L.s(R.string.show_inside_temp), L.s(R.string.show_inside_temp_hint), toggle(c, prefs.showInsideTemp(), on -> {
-            prefs.setShowInsideTemp(on);
-            host.settingsChanged(false);
-        })));
-    }
-
-    private void buildLook(Context c) {
-        String[] modes = {Prefs.THEME_AUTO, Prefs.THEME_NIGHT, Prefs.THEME_DAY};
-        add(row(c, L.s(R.string.theme_title), null, seg(c,
-                new String[]{L.s(R.string.auto), L.s(R.string.night), L.s(R.string.day)}, indexOf(modes, prefs.themeMode()), i -> {
-                    if (modes[i].equals(prefs.themeMode())) return;
-                    prefs.setThemeMode(modes[i]);
-                    host.settingsChanged(true);
-                })));
-        add(row(c, L.s(R.string.ui_size_title), L.s(R.string.ui_size_hint), seg(c,
-                new String[]{L.s(R.string.ui_size_normal), L.s(R.string.ui_size_large), L.s(R.string.ui_size_xlarge)}, prefs.uiScale(), i -> {
-                    if (prefs.uiScale() == i) return;
-                    prefs.setUiScale(i);
-                    host.settingsChanged(true);
-                })));
-        add(row(c, L.s(R.string.language_title), L.s(R.string.lang_auto_hint), null));
-        String[] codes = new String[L.CODES.length + 1];
-        String[] names = new String[L.CODES.length + 1];
-        codes[0] = L.AUTO;
-        names[0] = L.f(R.string.lang_auto, L.nameOf(L.resolve(L.AUTO)));
-        for (int i = 0; i < L.CODES.length; i++) {
-            codes[i + 1] = L.CODES[i];
-            names[i + 1] = L.NAMES[i];
-        }
-        // con i comandi grandi le lingue vanno su due righe
-        int perRow = Ui.K > 1.05f ? 4 : codes.length;
-        LinearLayout line = null;
-        for (int i = 0; i < codes.length; i++) {
-            if (i % perRow == 0) {
-                line = Ui.row(c);
-                body.addView(line, Ui.margins(new LinearLayout.LayoutParams(-2, -2), dp(4), dp(i == 0 ? 2 : 10), 0, 0));
-            }
-            final String code = codes[i];
-            boolean on = code.equals(prefs.language());
-            line.addView(chip(c, names[i], on, v -> {
-                if (code.equals(prefs.language())) return;
-                prefs.setLanguage(code);
-                host.languageChanged();
-            }), Ui.margins(Ui.lp(-2, tp(56)), i % perRow == 0 ? 0 : dp(10), 0, 0, 0));
-        }
-    }
-
-    private void buildDrive(Context c) {
-        boolean carRhd = CarFeatures.isRightHandDrive(c);
-        String[] sides = {Prefs.DRIVE_AUTO, Prefs.DRIVE_LEFT, Prefs.DRIVE_RIGHT};
-        add(row(c, L.s(R.string.drive_side_title), null, seg(c, new String[]{
-                L.s(R.string.drive_auto) + " · " + L.s(carRhd ? R.string.right : R.string.left),
-                L.s(R.string.left), L.s(R.string.right)}, indexOf(sides, prefs.driveSide()), i -> {
-            if (sides[i].equals(prefs.driveSide())) return;
-            prefs.setDriveSide(sides[i]);
-            host.settingsChanged(true);
-        })));
-        String[] navs = {Prefs.NAV_AUTO, Prefs.NAV_MG, Prefs.NAV_PHONE};
-        add(row(c, L.s(R.string.default_nav_title), L.s(R.string.nav_auto_hint), seg(c,
-                new String[]{L.s(R.string.auto), "MG", L.s(R.string.app_phone)}, indexOf(navs, prefs.navApp()), i -> {
-                    prefs.setNavApp(navs[i]);
+        col.addView(label(c, L.s(R.string.set_bodywork)), top(30));
+        LinearLayout card = card(c);
+        card.addView(row(c, L.s(R.string.set_black_roof), L.s(R.string.set_black_roof_sub),
+                toggle(c, prefs.blackRoof(), on -> {
+                    prefs.setBlackRoof(on);
                     host.settingsChanged(false);
-                    select(SEC_DRIVE);
-                })));
-        add(row(c, L.s(R.string.original_home_title), L.s(R.string.original_home_hint),
-                button(c, L.s(R.string.open), false, v -> host.openOriginalHome())));
+                    showSection(SEC_CAR);
+                }), true));
+        col.addView(card, topFull(14));
+
+        // anteprima dell'auto con colore e tetto scelti
+        CarView car = new CarView(c);
+        car.setLook(Prefs.CAR_COLOR_VALUES[sel], prefs.blackRoof(), t);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp(520), dp(230));
+        lp.gravity = rhd ? Gravity.LEFT : Gravity.RIGHT;
+        lp.topMargin = dp(10);
+        col.addView(car, lp);
     }
 
-    private void buildSystem(Context c) {
+    private void buildHome(Context c, LinearLayout col) {
+        col.addView(label(c, L.s(R.string.set_home_card)));
+        LinearLayout card = card(c);
+        card.addView(row(c, L.s(R.string.set_soc_decimals), L.s(R.string.set_soc_decimals_sub),
+                toggle(c, prefs.socDecimals(), on -> {
+                    prefs.setSocDecimals(on);
+                    host.settingsChanged(false);
+                }), false));
+        card.addView(row(c, L.s(R.string.set_tpms_title), L.s(R.string.set_tpms_sub),
+                toggle(c, prefs.showTpms(), on -> {
+                    prefs.setShowTpms(on);
+                    host.settingsChanged(false);
+                }), false));
+        card.addView(row(c, L.s(R.string.set_show_inside_temp), L.s(R.string.set_inside_sub),
+                toggle(c, prefs.showInsideTemp(), on -> {
+                    prefs.setShowInsideTemp(on);
+                    host.settingsChanged(false);
+                }), true));
+        col.addView(card, topFull(14));
+    }
+
+    private void buildLook(Context c, LinearLayout col) {
+        col.addView(label(c, L.s(R.string.set_theme)));
+        String mode = prefs.themeMode();
+        String[][] modes = {{Prefs.THEME_AUTO, L.s(R.string.theme_auto)}, {Prefs.THEME_NIGHT, L.s(R.string.theme_night)}, {Prefs.THEME_DAY, L.s(R.string.theme_day)}};
+        Flow f = new Flow(c);
+        for (String[] m : modes) {
+            f.addView(choice(c, m[1], m[0].equals(mode), v -> {
+                if (m[0].equals(prefs.themeMode())) return;
+                prefs.setThemeMode(m[0]);
+                host.settingsChanged(true);
+            }));
+        }
+        col.addView(f, topFull(14));
+
+        col.addView(label(c, L.s(R.string.set_ui_size)), top(28));
+        int[] names = {R.string.ui_size_normal, R.string.ui_size_large, R.string.ui_size_xlarge};
+        f = new Flow(c);
+        for (int i = 0; i < names.length; i++) {
+            final int idx = i;
+            f.addView(choice(c, L.s(names[i]), prefs.uiScale() == i, v -> {
+                if (prefs.uiScale() == idx) return;
+                prefs.setUiScale(idx);
+                host.settingsChanged(true);   // ricostruisce home e impostazioni con la nuova dimensione
+            }));
+        }
+        col.addView(f, topFull(14));
+
+        col.addView(label(c, L.s(R.string.set_language)), top(28));
+        String cur = prefs.language();
+        f = new Flow(c);
+        f.addView(choice(c, L.s(R.string.lang_auto) + " · " + L.nameOf(L.resolve(L.AUTO)), L.AUTO.equals(cur), v -> setLang(L.AUTO)));
+        for (int i = 0; i < L.CODES.length; i++) {
+            final String code = L.CODES[i];
+            f.addView(choice(c, L.NAMES[i], code.equals(cur), v -> setLang(code)));
+        }
+        col.addView(f, topFull(14));
+    }
+
+    private void setLang(String code) {
+        if (code.equals(prefs.language())) return;
+        prefs.setLanguage(code);
+        host.languageChanged();   // riapplica la lingua e ricostruisce l'interfaccia
+    }
+
+    private void buildDrive(Context c, LinearLayout col) {
+        col.addView(label(c, L.s(R.string.set_drive_side)));
+        boolean carRight = CarFeatures.isRightHandDrive(c);
+        String[][] sides = {
+                {Prefs.DRIVE_AUTO, L.s(R.string.drive_auto) + " · " + L.s(carRight ? R.string.drive_right : R.string.drive_left)},
+                {Prefs.DRIVE_LEFT, L.s(R.string.drive_left)},
+                {Prefs.DRIVE_RIGHT, L.s(R.string.drive_right)}};
+        Flow f = new Flow(c);
+        for (String[] m : sides) {
+            f.addView(choice(c, m[1], m[0].equals(prefs.driveSide()), v -> {
+                if (m[0].equals(prefs.driveSide())) return;
+                prefs.setDriveSide(m[0]);
+                host.settingsChanged(true);   // ricostruisce la home (e le impostazioni) nella nuova disposizione
+            }));
+        }
+        col.addView(f, topFull(14));
+        col.addView(Ui.text(c, L.s(R.string.drive_hint), 17, t.sub, Ui.REGULAR), top(14));
+
+        col.addView(label(c, L.s(R.string.set_original_label)), top(30));
+        LinearLayout card = card(c);
+        card.addView(row(c, L.s(R.string.set_open_original), L.s(R.string.set_original_sub),
+                button(c, L.s(R.string.btn_open), v -> host.openOriginalHome()), true));
+        col.addView(card, topFull(14));
+    }
+
+    private void buildSystem(Context c, LinearLayout col) {
         Updater up = host.updater();
-        LinearLayout ub = Ui.row(c);
-        updCheck = button(c, L.s(R.string.check), false, v -> {
-            lastCheck = SystemClock.uptimeMillis();
-            up.check(prefs.updateRepo(), prefs.githubToken());
+        col.addView(label(c, L.s(R.string.set_updates)));
+        LinearLayout card = card(c);
+        LinearLayout btns = Ui.row(c);
+        updInstallBtn = button(c, L.s(R.string.btn_install), v -> {
+            if (lastRelease != null) up.install(lastRelease, prefs.githubToken());
         });
-        ub.addView(updCheck, Ui.lp(-2, tp(56)));
-        updInstall = button(c, L.s(R.string.install), true, v -> install());
-        ub.addView(updInstall, Ui.margins(Ui.lp(-2, tp(56)), dp(10), 0, 0, 0));
-        View ur = row(c, L.s(R.string.updates_title), "", ub);
-        updHint = hintOf(ur);
-        add(ur);
-        add(row(c, L.s(R.string.upd_popup_setting), null, toggle(c, prefs.updatePopup(), on -> {
-            prefs.setUpdatePopup(on);
-            if (on) prefs.setDismissedUpdate("");
-        })));
-        View tg = toggle(c, host.logs().enabled(), on -> {
-            host.logs().setEnabled(on);
-            if (logHint != null) logHint.setText(logUploadText());
+        ((TextView) updInstallBtn).setTextColor(t.panel);
+        updInstallBtn.setBackground(Ui.pressable(c, t.text, 16 * Ui.K, t));
+        btns.addView(updInstallBtn, Ui.margins(Ui.lp(-2, tp(60)), 0, 0, dp(12), 0));
+        updCheckBtn = button(c, L.s(R.string.btn_check), v -> up.check(prefs.updateRepo(), prefs.githubToken()));
+        btns.addView(updCheckBtn, Ui.lp(-2, tp(60)));
+        LinearLayout ur = row(c, "MG4 Launcher " + up.currentVersion(), "", btns, true);
+        updSub = (TextView) ((ViewGroup) ur.getChildAt(0)).getChildAt(1);
+        card.addView(ur);
+        col.addView(card, topFull(14));
+
+        col.addView(label(c, L.s(R.string.set_diag_section)), top(30));
+        card = card(c);
+        LinearLayout lr = row(c, L.s(R.string.log_upload_on), "", toggle(c, host.logs().enabled(), on -> host.logs().setEnabled(on)), false);
+        if (!LogUploader.configured()) lr.getChildAt(1).setEnabled(false);
+        logUploadSub = (TextView) ((ViewGroup) lr.getChildAt(0)).getChildAt(1);
+        card.addView(lr);
+        logSaveBtn = button(c, L.s(R.string.btn_save), v -> saveLog());
+        LinearLayout sr = row(c, L.s(R.string.save_log), L.s(R.string.save_log_sub), logSaveBtn, false);
+        logSaveSub = (TextView) ((ViewGroup) sr.getChildAt(0)).getChildAt(1);
+        card.addView(sr);
+        LinearLayout dr = row(c, L.s(R.string.set_diag_title), L.s(R.string.set_diag_sub),
+                Ui.icon(c, R.drawable.ic_chev_right, t.sub, Math.round(30 * Ui.K)), true);
+        dr.setBackground(Ui.pressable(c, 0x00000000, 0, t));
+        dr.setClickable(true);
+        dr.setOnClickListener(v -> {
+            diagOpen = true;
+            showSection(SEC_SYSTEM);
         });
-        if (!LogUploader.configured()) {
-            tg.setEnabled(false);
-            tg.setAlpha(0.4f);
-        }
-        View lr = row(c, L.s(R.string.log_upload_on), logUploadText(), tg);
-        logHint = hintOf(lr);
-        add(lr);
-        logBtn = button(c, L.s(R.string.save_log), false, v -> saveLog());
-        View sr = row(c, L.s(R.string.log_full), L.s(R.string.log_full_hint), logBtn);
-        logSaveHint = hintOf(sr);
-        add(sr);
-        add(row(c, L.s(R.string.diag_short), L.s(R.string.diag_hint), button(c, L.s(R.string.show), false, v -> showDiag())));
-        main.removeCallbacks(refreshLogHint);
-        main.postDelayed(refreshLogHint, 5000);
+        card.addView(dr);
+        col.addView(card, topFull(14));
+
+        refreshUpdateViews(up.isBusy());
     }
 
-    /** Diagnostica completa al posto delle righe di Sistema, con "Indietro". */
-    private void showDiag() {
-        Context c = getContext();
-        diagOpen = true;
-        body.removeAllViews();
-        updHint = updCheck = updInstall = logHint = null;
-        LinearLayout h = Ui.row(c);
-        h.addView(button(c, L.s(R.string.back), false, v -> select(SEC_SYSTEM)), Ui.lp(-2, tp(56)));
-        h.addView(Ui.text(c, L.s(R.string.diag_hint), 16, t.sub, Ui.REGULAR), Ui.margins(Ui.lpWeight(0, -2, 1), dp(16), 0, 0, 0));
-        logBtn = button(c, L.s(R.string.save_log), false, v -> saveLog());
-        h.addView(logBtn, Ui.lp(-2, tp(56)));
-        body.addView(h, new LinearLayout.LayoutParams(-1, -2));
-        diagText = Ui.text(c, "", 13, t.sub, Typeface.MONOSPACE);
-        diagText.setPadding(dp(18), dp(14), dp(18), dp(14));
+    private void buildDiag(Context c) {
+        ScrollView ds = new ScrollView(c);
+        ds.setBackground(Ui.round(t.chip, dp(22)));
+        diagText = Ui.text(c, "", 14, t.sub, Typeface.MONOSPACE);
+        diagText.setPadding(dp(22), dp(18), dp(22), dp(18));
         diagText.setTextIsSelectable(true);
-        diagText.setBackground(Ui.round(t.bg, dp(16)));
-        body.addView(diagText, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, dp(14), 0, 0));
-        logHint = Ui.text(c, "", 14, t.sub, Ui.REGULAR);
-        body.addView(logHint, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, dp(10), 0, 0));
-        main.removeCallbacks(refreshDiag);
-        refreshDiag.run();
+        diagText.setLineSpacing(0, 1.15f);
+        ds.addView(diagText);
+        content.addView(ds, Ui.margins(Ui.lpWeight(-1, 0, 1), 0, dp(24), 0, 0));
     }
 
-    // =========================================================================================
-    // Aggiornamenti e log
-    // =========================================================================================
-
-    private void install() {
-        if (found == null || !found.newer || found.apkUrl == null) return;
-        if (current != SEC_SYSTEM || diagOpen) select(SEC_SYSTEM);
-        host.updater().install(found, prefs.githubToken());
-    }
-
-    private void refreshUpdates() {
-        boolean canInstall = !updBusy && found != null && found.newer && found.apkUrl != null;
-        if (verStatus != null) {
-            String s;
-            if (updBusy) s = updText;
-            else if (found != null && found.newer) s = L.f(R.string.ver_new, found.tag);
-            else if (found != null) s = L.s(R.string.ver_ok);
-            else s = L.s(R.string.ver_unknown);
-            verStatus.setText(s);
-            verInstall.setVisibility(canInstall ? VISIBLE : GONE);
-        }
-        if (updHint != null) {
-            updHint.setText(updText);
-            updCheck.setEnabled(!updBusy);
-            updCheck.setAlpha(updBusy ? 0.5f : 1f);
-            updInstall.setVisibility(canInstall ? VISIBLE : GONE);
-            if (canInstall) updInstall.setText(L.f(R.string.install_v, found.tag));
-        }
-    }
-
-    private String logUploadText() {
-        if (!LogUploader.configured()) return L.s(R.string.log_upload_nokey);
-        if (!host.logs().enabled()) return L.s(R.string.log_upload_off);
-        String st = LogUploader.status();
-        if (st.startsWith("ok ")) return L.f(R.string.log_upload_last, st.substring(3));
-        if (st.startsWith("errore ")) return L.f(R.string.log_upload_error, st.substring(7));
-        return L.s(R.string.log_upload_never);
-    }
-
-    private final Runnable refreshLogHint = new Runnable() {
-        @Override
-        public void run() {
-            if (current == SEC_SYSTEM && !diagOpen && logHint != null) logHint.setText(logUploadText());
-            if (isAttachedToWindow() && current == SEC_SYSTEM && !diagOpen) main.postDelayed(this, 5000);
-        }
-    };
-
-    /** Salva il log completo (in background) e mostra dove è finito; con l'invio attivo parte anche quello. */
+    /** Salva il log completo (in background) e mostra dove è finito. */
     private void saveLog() {
-        TextView btn = logBtn;
-        if (btn == null) return;
-        btn.setEnabled(false);
-        btn.setAlpha(0.5f);
-        TextView status = diagOpen ? logHint : logSaveHint;
-        if (status != null) status.setText(L.s(R.string.saving_log));
+        logSaveBtn.setEnabled(false);
+        logSaveBtn.setAlpha(0.5f);
+        if (logSaveSub != null) logSaveSub.setText(L.s(R.string.log_saving));
         Context app = getContext().getApplicationContext();
         new Thread(() -> {
             Diag.Saved r = Diag.saveLog(app);
             main.post(() -> {
-                btn.setEnabled(true);
-                btn.setAlpha(1f);
-                if (status == null) return;
+                if (logSaveBtn != null) {
+                    logSaveBtn.setEnabled(true);
+                    logSaveBtn.setAlpha(1f);
+                }
+                if (logSaveSub == null) return;
                 if (r.paths.isEmpty()) {
-                    status.setText(L.s(R.string.log_failed));
+                    logSaveSub.setText(L.s(R.string.log_failed));
                     return;
                 }
                 StringBuilder sb = new StringBuilder(L.s(r.onUsb ? R.string.log_saved_usb : R.string.log_saved)).append(' ');
                 sb.append(r.paths.get(0));
                 if (!r.onUsb) sb.append('\n').append(L.s(R.string.log_usb_hint));
-                status.setText(sb.toString());
+                logSaveSub.setSingleLine(false);
+                logSaveSub.setText(sb.toString());
             });
         }, "mg4-log").start();
     }
-
-    private final Runnable refreshDiag = new Runnable() {
-        @Override
-        public void run() {
-            if (diagText == null || !diagOpen) return;
-            String d = Diag.dump();
-            diagText.setText(d.isEmpty() ? L.s(R.string.waiting_services) : d);
-            if (isAttachedToWindow()) main.postDelayed(this, 1000);
-        }
-    };
 
     // =========================================================================================
     // Elementi grafici
     // =========================================================================================
 
-    private interface OnSwitch {
-        void changed(boolean on);
+    private int dp(float v) {
+        return Ui.dp(getContext(), v);
     }
 
-    private interface OnPick {
-        void picked(int index);
+    private int tp(float v) {
+        return Ui.tp(getContext(), v);
     }
 
-    private void add(View v) {
-        body.addView(v, Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, body.getChildCount() == 0 ? 0 : dp(14), 0, 0));
+    private LinearLayout.LayoutParams top(int m) {
+        return Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(m), 0, 0);
     }
 
-    /** Riga grande: titolo, spiegazione facoltativa e comando a destra. */
-    private LinearLayout row(Context c, String title, String hint, View control) {
+    private LinearLayout.LayoutParams topFull(int m) {
+        return Ui.margins(new LinearLayout.LayoutParams(-1, -2), 0, dp(m), 0, 0);
+    }
+
+    private TextView label(Context c, String s) {
+        TextView tv = Ui.text(c, s.toUpperCase(L.locale()), 15, t.sub, Ui.MEDIUM);
+        tv.setLetterSpacing(0.08f);
+        return tv;
+    }
+
+    private LinearLayout card(Context c) {
+        LinearLayout l = Ui.column(c);
+        l.setBackground(Ui.round(t.chip, dp(22)));
+        l.setClipToOutline(true);
+        return l;
+    }
+
+    /** Riga grande: titolo + spiegazione a sinistra, comando a destra; separatore sotto se non è l'ultima. */
+    private LinearLayout row(Context c, String title, String sub, View right, boolean last) {
         LinearLayout r = Ui.row(c);
-        r.setBackground(Ui.round(t.chip, dp(20)));
-        r.setPadding(dp(24), dp(12), dp(20), dp(12));
-        r.setMinimumHeight(tp(84));
+        r.setMinimumHeight(tp(96));
+        r.setPadding(dp(28), dp(14), dp(28), dp(14));
+        if (!last) {
+            GradientDrawable line = new GradientDrawable();
+            line.setColor(t.chip);
+            r.setBackground(new android.graphics.drawable.LayerDrawable(new android.graphics.drawable.Drawable[]{
+                    new android.graphics.drawable.ColorDrawable(t.track), line}) {{
+                setLayerInset(1, 0, 0, 0, dp(1));
+            }});
+        }
         LinearLayout tx = Ui.column(c);
-        tx.addView(Ui.text(c, title, 22, t.text, Ui.REGULAR));
-        TextView h = Ui.text(c, hint == null ? "" : hint, 15, t.sub, Ui.REGULAR);
-        h.setVisibility(hint == null ? GONE : VISIBLE);
-        tx.addView(h, Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(3), 0, 0));
-        r.addView(tx, Ui.lpWeight(0, -2, 1));
-        if (control != null) r.addView(control, Ui.margins(new LinearLayout.LayoutParams(-2, -2), dp(20), 0, 0, 0));
+        tx.addView(Ui.text(c, title, 24, t.text, Ui.REGULAR));
+        TextView st = Ui.text(c, sub, 17, t.sub, Ui.REGULAR);
+        tx.addView(st, Ui.margins(new LinearLayout.LayoutParams(-2, -2), 0, dp(6), 0, 0));
+        if (sub.isEmpty()) st.setVisibility(GONE);
+        r.addView(tx, Ui.margins(Ui.lpWeight(0, -2, 1), 0, 0, dp(20), 0));
+        r.addView(right);
         return r;
     }
 
-    private static TextView hintOf(View row) {
-        return (TextView) ((LinearLayout) ((LinearLayout) row).getChildAt(0)).getChildAt(1);
-    }
-
-    /** Interruttore a pillola con i colori della home; segue la dimensione comandi. */
-    private View toggle(Context c, boolean checked, OnSwitch l) {
-        FrameLayout f = new FrameLayout(c);
-        View knob = new View(c);
-        FrameLayout.LayoutParams kl = new FrameLayout.LayoutParams(tp(32), tp(32), Gravity.CENTER_VERTICAL);
-        f.addView(knob, kl);
-        f.setClickable(true);
-        f.setTag(checked);
-        Runnable style = () -> {
-            boolean on = (Boolean) f.getTag();
-            f.setBackground(Ui.round(on ? t.text : t.track, tp(20)));
-            knob.setBackground(Ui.round(on ? t.panel : t.sub, tp(16)));
-            FrameLayout.LayoutParams p = (FrameLayout.LayoutParams) knob.getLayoutParams();
-            p.gravity = Gravity.CENTER_VERTICAL | (on ? Gravity.END : Gravity.START);
-            p.leftMargin = p.rightMargin = tp(4);
-            knob.setLayoutParams(p);
-        };
-        style.run();
-        f.setOnClickListener(v -> {
-            boolean on = !(Boolean) f.getTag();
-            f.setTag(on);
-            style.run();
-            l.changed(on);
-        });
-        f.setLayoutParams(new LinearLayout.LayoutParams(tp(72), tp(40)));
-        return f;
-    }
-
-    /** Scelta tra più opzioni (tema, dimensione, lato di guida...). */
-    private View seg(Context c, String[] labels, int sel, OnPick l) {
-        LinearLayout s = Ui.row(c);
-        s.setBackground(Ui.round(t.track, tp(16)));
-        s.setPadding(dp(5), dp(5), dp(5), dp(5));
-        for (int i = 0; i < labels.length; i++) {
-            final int idx = i;
-            boolean on = i == sel;
-            TextView b = Ui.text(c, labels[i], Ui.ts(18), on ? t.panel : t.sub, Ui.MEDIUM);
-            b.setGravity(Gravity.CENTER);
-            b.setPadding(tp(22), 0, tp(22), 0);
-            b.setBackground(on ? Ui.round(t.text, tp(12)) : Ui.pressable(c, 0, 12 * Ui.K, t));
-            b.setClickable(true);
-            b.setOnClickListener(v -> l.picked(idx));
-            s.addView(b, Ui.margins(Ui.lp(-2, tp(52)), i == 0 ? 0 : dp(6), 0, 0, 0));
-        }
-        return s;
-    }
-
-    private TextView chip(Context c, String text, boolean on, View.OnClickListener l) {
-        TextView b = Ui.text(c, text, Ui.ts(18), on ? t.panel : t.text, Ui.MEDIUM);
+    /** Pulsante secondario di una riga (sfondo pannello sulla scheda). */
+    private TextView button(Context c, String text, View.OnClickListener l) {
+        TextView b = Ui.text(c, text, Ui.ts(20), t.text, Ui.MEDIUM);
         b.setGravity(Gravity.CENTER);
-        b.setPadding(tp(24), 0, tp(24), 0);
-        b.setBackground(on ? Ui.round(t.text, tp(16)) : Ui.pressable(c, t.chip, 16 * Ui.K, t));
+        b.setPadding(tp(26), 0, tp(26), 0);
+        b.setMinHeight(tp(60));
+        b.setBackground(Ui.pressable(c, t.panel, 16 * Ui.K, t));
         b.setClickable(true);
         b.setOnClickListener(l);
+        b.setLayoutParams(Ui.lp(-2, tp(60)));
         return b;
     }
 
-    private TextView button(Context c, String text, boolean primary, View.OnClickListener l) {
-        TextView b = Ui.text(c, text, Ui.ts(18), primary ? t.panel : t.text, Ui.MEDIUM);
+    /** Scelta a pulsanti (tema, dimensione, lingua, guida): selezionata = colori invertiti. */
+    private TextView choice(Context c, String text, boolean on, View.OnClickListener l) {
+        TextView b = Ui.text(c, text, Ui.ts(20), on ? t.panel : t.text, Ui.MEDIUM);
         b.setGravity(Gravity.CENTER);
-        b.setPadding(tp(24), 0, tp(24), 0);
-        b.setMinHeight(tp(56));
-        b.setBackground(Ui.pressable(c, primary ? t.text : t.track, 16 * Ui.K, t));
+        b.setPadding(tp(26), 0, tp(26), 0);
+        b.setSingleLine(true);
+        b.setBackground(on ? Ui.round(t.text, tp(16)) : Ui.pressable(c, t.chip, 16 * Ui.K, t));
         b.setClickable(true);
         b.setOnClickListener(l);
+        b.setLayoutParams(new ViewGroup.LayoutParams(-2, tp(60)));
         return b;
     }
 
@@ -599,23 +597,137 @@ public final class SettingsView extends FrameLayout {
         return f;
     }
 
-    private static int indexOf(String[] a, String v) {
-        for (int i = 0; i < a.length; i++) if (a[i].equals(v)) return i;
-        return 0;
+    private interface OnToggle {
+        void changed(boolean on);
     }
 
-    private int dp(float v) {
-        return Ui.dp(getContext(), v);
+    private Toggle toggle(Context c, boolean on, OnToggle l) {
+        Toggle tg = new Toggle(c, on, l);
+        tg.setLayoutParams(Ui.lp(tp(76), tp(44)));
+        return tg;
     }
 
-    private int tp(float v) {
-        return Ui.tp(getContext(), v);
+    /** Interruttore disegnato con i colori del tema (acceso = colore testo, spento = binario). */
+    private final class Toggle extends View {
+        private boolean on;
+        private final Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final RectF r = new RectF();
+
+        Toggle(Context c, boolean on, OnToggle l) {
+            super(c);
+            this.on = on;
+            setClickable(true);
+            setOnClickListener(v -> {
+                this.on = !this.on;
+                invalidate();
+                l.changed(this.on);
+            });
+        }
+
+        @Override
+        public void setEnabled(boolean enabled) {
+            super.setEnabled(enabled);
+            setAlpha(enabled ? 1f : 0.4f);
+        }
+
+        @Override
+        protected void onDraw(Canvas cv) {
+            float w = getWidth(), h = getHeight(), pad = h * 4f / 44f, d = h - 2 * pad;
+            r.set(0, 0, w, h);
+            p.setColor(on ? t.text : t.track);
+            cv.drawRoundRect(r, h / 2, h / 2, p);
+            p.setColor(on ? t.panel : t.sub);
+            float cx = on ? w - pad - d / 2 : pad + d / 2;
+            cv.drawCircle(cx, h / 2, d / 2, p);
+        }
+    }
+
+    /** Riga di pulsanti che va a capo quando non c'è spazio (lingue, guida a dimensioni grandi). */
+    private final class Flow extends ViewGroup {
+        private final int gap = dp(12);
+
+        Flow(Context c) {
+            super(c);
+        }
+
+        @Override
+        protected void onMeasure(int ws, int hs) {
+            int max = MeasureSpec.getSize(ws);
+            int x = 0, y = 0, lineH = 0;
+            for (int i = 0; i < getChildCount(); i++) {
+                View v = getChildAt(i);
+                v.measure(MeasureSpec.makeMeasureSpec(max, MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(v.getLayoutParams().height, MeasureSpec.EXACTLY));
+                if (x > 0 && x + v.getMeasuredWidth() > max) {
+                    x = 0;
+                    y += lineH + gap;
+                    lineH = 0;
+                }
+                x += v.getMeasuredWidth() + gap;
+                lineH = Math.max(lineH, v.getMeasuredHeight());
+            }
+            setMeasuredDimension(max, y + lineH);
+        }
+
+        @Override
+        protected void onLayout(boolean changed, int l, int tt, int rr, int b) {
+            int max = rr - l, x = 0, y = 0, lineH = 0;
+            for (int i = 0; i < getChildCount(); i++) {
+                View v = getChildAt(i);
+                int w = v.getMeasuredWidth(), h = v.getMeasuredHeight();
+                if (x > 0 && x + w > max) {
+                    x = 0;
+                    y += lineH + gap;
+                    lineH = 0;
+                }
+                int left = rhd ? max - x - w : x;   // con la guida a destra le scelte partono da destra
+                v.layout(left, y, left + w, y + h);
+                x += w + gap;
+                lineH = Math.max(lineH, h);
+            }
+        }
+    }
+
+    // =========================================================================================
+    // Aggiornamento continuo (stato log e diagnostica)
+    // =========================================================================================
+
+    private String logUploadText() {
+        Context c = getContext();
+        if (!LogUploader.configured()) return L.s(R.string.log_upload_nokey);
+        if (!host.logs().enabled()) return L.s(R.string.log_upload_off);
+        String st = LogUploader.status();
+        if (st.startsWith("ok ")) return L.f(R.string.log_upload_last, st.substring(3));
+        if (st.startsWith("errore ")) return L.f(R.string.log_upload_error, st.substring(7));
+        return L.s(R.string.log_upload_never);
+    }
+
+    private final Runnable refreshTick = new Runnable() {
+        @Override
+        public void run() {
+            main.removeCallbacks(this);
+            if (diagText == null && logUploadSub == null) return;
+            if (diagText != null) {
+                String d = Diag.dump();
+                diagText.setText(d.isEmpty() ? L.s(R.string.diag_waiting) : d);
+            }
+            if (logUploadSub != null) {
+                logUploadSub.setVisibility(VISIBLE);
+                logUploadSub.setText(logUploadText());
+            }
+            if (isAttachedToWindow()) main.postDelayed(this, 1000);
+        }
+    };
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        refreshTick.run();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        main.removeCallbacksAndMessages(null);
+        main.removeCallbacks(refreshTick);
         host.updater().setListener(null);
     }
 }

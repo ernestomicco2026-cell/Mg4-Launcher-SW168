@@ -48,41 +48,54 @@
     <string name="log_upload_off" formatted="false">Günlük gönderimi kapalı</string>
     <string name="log_upload_nokey" formatted="false">Bu sürümde günlük gönderimi yok</string>
     <string name="show_inside_temp" formatted="false">İç sıcaklık</string>
-    <string name="sec_car" formatted="false">Araç</string>
+    <string name="sec_car" formatted="false">ARAÇ</string>
     <string name="sec_car_sub" formatted="false">Renk, tavan</string>
     <string name="sec_home" formatted="false">Ana ekran</string>
-    <string name="sec_home_sub" formatted="false">Batarya, lastikler, sıcaklık</string>
+    <string name="sec_home_sub" formatted="false">Batarya, lastikler, sıcaklıklar</string>
     <string name="sec_look" formatted="false">Görünüm</string>
-    <string name="sec_look_sub" formatted="false">Tema, kontroller, dil</string>
+    <string name="sec_look_sub" formatted="false">Tema, boyut, dil</string>
     <string name="sec_drive" formatted="false">Sürüş</string>
-    <string name="sec_drive_sub" formatted="false">Direksiyon tarafı, navigasyon</string>
+    <string name="sec_drive_sub" formatted="false">Direksiyon konumu, MG ana ekranı</string>
     <string name="sec_system" formatted="false">Sistem</string>
-    <string name="sec_system_sub" formatted="false">Güncellemeler, günlükler</string>
-    <string name="soc_decimals_hint" formatted="false">Örn. %77 yerine %76,6</string>
-    <string name="show_tpms_hint" formatted="false">Ön ve arka, 2,0 bar altında turuncu</string>
-    <string name="show_inside_temp_hint" formatted="false">Araç değeri vermiyorsa —° gösterir</string>
-    <string name="ui_size_hint" formatted="false">Yalnızca ana ekran düğmeleri</string>
-    <string name="theme_title" formatted="false">Tema</string>
-    <string name="ui_size_title" formatted="false">Kontrol boyutu</string>
-    <string name="language_title" formatted="false">Dil</string>
-    <string name="car_color_title" formatted="false">Araç rengi</string>
-    <string name="drive_side_title" formatted="false">Direksiyon konumu</string>
-    <string name="default_nav_title" formatted="false">Varsayılan navigasyon</string>
-    <string name="original_home_title" formatted="false">Orijinal MG ana ekranı</string>
-    <string name="original_home_hint" formatted="false">Fabrika ekranını açar</string>
-    <string name="updates_title" formatted="false">Güncellemeler</string>
-    <string name="check" formatted="false">Denetle</string>
-    <string name="install" formatted="false">Yükle</string>
-    <string name="install_v">%s yükle</string>
-    <string name="ver_ok" formatted="false">Güncel</string>
-    <string name="ver_new">Yeni sürüm: %s</string>
-    <string name="ver_unknown" formatted="false">Denetlenmedi</string>
-    <string name="log_full" formatted="false">Tam günlük</string>
-    <string name="log_full_hint" formatted="false">USB belleğe veya hafızaya kaydeder</string>
-    <string name="diag_short" formatted="false">Servis tanılama</string>
-    <string name="diag_hint" formatted="false">Araç servislerinden okunan değerler</string>
-    <string name="show" formatted="false">Göster</string>
-    <string name="back" formatted="false">Geri</string>
+    <string name="sec_system_sub" formatted="false">Güncellemeler, günlükler, tanılama</string>
+    <string name="btn_back" formatted="false">Geri</string>
+    <string name="btn_check" formatted="false">Denetle</string>
+    <string name="btn_install" formatted="false">Yükle</string>
+    <string name="btn_open" formatted="false">Aç</string>
+    <string name="btn_save" formatted="false">Kaydet</string>
+    <string name="diag_waiting" formatted="false">Araç servisleri bekleniyor…</string>
+    <string name="drive_hint" formatted="false">Sağdan direksiyonda ana ekran ters çevrilir: araç ve klima sürücü tarafında.</string>
+    <string name="log_saving" formatted="false">Günlük kaydediliyor…</string>
+    <string name="save_log_sub" formatted="false">Belleğe (ve USB belleğe) tam bir günlük yazar</string>
+    <string name="set_black_roof" formatted="false">Siyah tavan</string>
+    <string name="set_black_roof_sub" formatted="false">Kontrast tavanlı versiyonlar gibi</string>
+    <string name="set_bodywork" formatted="false">KAROSER</string>
+    <string name="set_car_color" formatted="false">ARAÇ RENGİ</string>
+    <string name="set_diag_section" formatted="false">TANILAMA</string>
+    <string name="set_diag_sub" formatted="false">Araçtan okunan değerler ve son hatalar</string>
+    <string name="set_diag_title" formatted="false">Araç servisleri tanılaması</string>
+    <string name="set_home_card" formatted="false">ARAÇ PANELİ</string>
+    <string name="set_inside_sub" formatted="false">Dış sıcaklığın altında · araç vermezse «— °»</string>
+    <string name="set_language" formatted="false">DİL</string>
+    <string name="set_menu_title" formatted="false">Ayarlar</string>
+    <string name="set_open_original" formatted="false">Orijinal MG ana ekranını aç</string>
+    <string name="set_original_label" formatted="false">ORİJİNAL ANA EKRAN</string>
+    <string name="set_original_sub" formatted="false">Standart ana ekranın özelliklerini kullanmak için</string>
+    <string name="set_show_inside_temp" formatted="false">İç sıcaklık</string>
+    <string name="set_soc_decimals" formatted="false">Ondalıklı batarya yüzdesi</string>
+    <string name="set_soc_decimals_sub" formatted="false">Örn. %88 yerine %88,1</string>
+    <string name="set_theme" formatted="false">TEMA</string>
+    <string name="set_tpms_sub" formatted="false">Çizili aracın tekerleklerinin altında, gösterge birimiyle</string>
+    <string name="set_tpms_title" formatted="false">Lastik basıncı (TPMS)</string>
+    <string name="set_updates" formatted="false">GÜNCELLEMELER</string>
+    <string name="theme_auto" formatted="false">Otomatik</string>
+    <string name="theme_day" formatted="false">Gündüz</string>
+    <string name="theme_night" formatted="false">Gece</string>
+    <string name="upd_current" formatted="false">Sürüm güncel</string>
+    <string name="upd_installed_ver">Yüklü %1$s</string>
+    <string name="upd_new">Yeni sürüm mevcut: %1$s</string>
+    <string name="upd_new_short">Yeni sürüm %1$s</string>
+    <string name="upd_unknown" formatted="false">Güncellemeler henüz denetlenmedi</string>
     <string name="set_ui_size" formatted="false">KONTROL BOYUTU</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Büyük</string>
@@ -159,7 +172,7 @@
     <string name="black_roof" formatted="false">Siyah tavan</string>
     <string name="theme" formatted="false">TEMA</string>
     <string name="language" formatted="false">DİL</string>
-    <string name="lang_auto">Otomatik (%s)</string>
+    <string name="lang_auto" formatted="false">Araçla aynı</string>
     <string name="lang_auto_hint" formatted="false">Otomatik, aracın sistem dilini izler.</string>
     <string name="default_nav" formatted="false">VARSAYILAN NAVİGASYON</string>
     <string name="nav_auto_hint" formatted="false">Otomatik: CarPlay veya Android Auto bağlıysa telefonunki, değilse MG.</string>
@@ -179,9 +192,9 @@
     <string name="press_check" formatted="false">Yeni sürüm aramak için Denetle\'ye dokunun</string>
     <string name="saving_log" formatted="false">Günlük kaydediliyor…</string>
     <string name="log_failed" formatted="false">Günlük hiçbir klasöre kaydedilemedi.</string>
-    <string name="log_saved_usb" formatted="false">Günlük USB belleğe de kaydedildi:</string>
+    <string name="log_saved_usb" formatted="false">Günlük kaydedildi, USB belleğe de:</string>
     <string name="log_saved" formatted="false">Günlük kaydedildi:</string>
-    <string name="log_usb_hint" formatted="false">USB belleğe almak için belleği takıp Günlüğü kaydet\'e yeniden dokunun.</string>
+    <string name="log_usb_hint" formatted="false">USB belleğe almak için: takın ve tekrar Günlüğü kaydet\'e dokunun.</string>
     <string name="waiting_services" formatted="false">Araç hizmetleri bekleniyor…</string>
     <string name="upd_checking" formatted="false">GitHub denetleniyor…</string>
     <string name="upd_no_apk">Son sürüm (%s) APK içermiyor</string>

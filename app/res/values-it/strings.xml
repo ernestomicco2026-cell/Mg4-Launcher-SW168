@@ -48,41 +48,54 @@
     <string name="log_upload_off" formatted="false">Invio dei log disattivato</string>
     <string name="log_upload_nokey" formatted="false">Invio dei log non disponibile in questa versione</string>
     <string name="show_inside_temp" formatted="false">Temperatura interna</string>
-    <string name="sec_car" formatted="false">Auto</string>
+    <string name="sec_car" formatted="false">AUTO</string>
     <string name="sec_car_sub" formatted="false">Colore, tetto</string>
     <string name="sec_home" formatted="false">Home</string>
-    <string name="sec_home_sub" formatted="false">Batteria, pneumatici, temperatura</string>
+    <string name="sec_home_sub" formatted="false">Batteria, pneumatici, temperature</string>
     <string name="sec_look" formatted="false">Aspetto</string>
-    <string name="sec_look_sub" formatted="false">Tema, comandi, lingua</string>
+    <string name="sec_look_sub" formatted="false">Tema, dimensione, lingua</string>
     <string name="sec_drive" formatted="false">Guida</string>
-    <string name="sec_drive_sub" formatted="false">Lato guida, navigatore</string>
+    <string name="sec_drive_sub" formatted="false">Posizione di guida, home MG</string>
     <string name="sec_system" formatted="false">Sistema</string>
-    <string name="sec_system_sub" formatted="false">Aggiornamenti, log</string>
-    <string name="soc_decimals_hint" formatted="false">Es. 76,6% invece di 77%</string>
-    <string name="show_tpms_hint" formatted="false">Anteriori e posteriori, in ambra sotto 2,0 bar</string>
-    <string name="show_inside_temp_hint" formatted="false">Mostra —° se l\'auto non fornisce il dato</string>
-    <string name="ui_size_hint" formatted="false">Solo i pulsanti della home</string>
-    <string name="theme_title" formatted="false">Tema</string>
-    <string name="ui_size_title" formatted="false">Dimensione comandi</string>
-    <string name="language_title" formatted="false">Lingua</string>
-    <string name="car_color_title" formatted="false">Colore dell\'auto</string>
-    <string name="drive_side_title" formatted="false">Posizione di guida</string>
-    <string name="default_nav_title" formatted="false">Navigatore predefinito</string>
-    <string name="original_home_title" formatted="false">Home originale MG</string>
-    <string name="original_home_hint" formatted="false">Apre la schermata di serie</string>
-    <string name="updates_title" formatted="false">Aggiornamenti</string>
-    <string name="check" formatted="false">Controlla</string>
-    <string name="install" formatted="false">Installa</string>
-    <string name="install_v">Installa %s</string>
-    <string name="ver_ok" formatted="false">Aggiornato</string>
-    <string name="ver_new">Nuova versione: %s</string>
-    <string name="ver_unknown" formatted="false">Non verificato</string>
-    <string name="log_full" formatted="false">Log completo</string>
-    <string name="log_full_hint" formatted="false">Salva su chiavetta USB o in memoria</string>
-    <string name="diag_short" formatted="false">Diagnostica servizi</string>
-    <string name="diag_hint" formatted="false">Valori letti dai servizi dell\'auto</string>
-    <string name="show" formatted="false">Mostra</string>
-    <string name="back" formatted="false">Indietro</string>
+    <string name="sec_system_sub" formatted="false">Aggiornamenti, log, diagnostica</string>
+    <string name="btn_back" formatted="false">Indietro</string>
+    <string name="btn_check" formatted="false">Controlla</string>
+    <string name="btn_install" formatted="false">Installa</string>
+    <string name="btn_open" formatted="false">Apri</string>
+    <string name="btn_save" formatted="false">Salva</string>
+    <string name="diag_waiting" formatted="false">In attesa dei servizi dell\'auto…</string>
+    <string name="drive_hint" formatted="false">Con la guida a destra la home si specchia: auto e clima dal lato del guidatore.</string>
+    <string name="log_saving" formatted="false">Salvataggio del log…</string>
+    <string name="save_log_sub" formatted="false">Scrive un log completo nella memoria (e sulla chiavetta USB)</string>
+    <string name="set_black_roof" formatted="false">Tetto nero</string>
+    <string name="set_black_roof_sub" formatted="false">Come le versioni con tetto a contrasto</string>
+    <string name="set_bodywork" formatted="false">CARROZZERIA</string>
+    <string name="set_car_color" formatted="false">COLORE AUTO</string>
+    <string name="set_diag_section" formatted="false">DIAGNOSTICA</string>
+    <string name="set_diag_sub" formatted="false">Valori letti dall\'auto ed errori recenti</string>
+    <string name="set_diag_title" formatted="false">Diagnostica servizi auto</string>
+    <string name="set_home_card" formatted="false">RIQUADRO AUTO</string>
+    <string name="set_inside_sub" formatted="false">Sotto quella esterna · «— °» se l\'auto non la fornisce</string>
+    <string name="set_language" formatted="false">LINGUA</string>
+    <string name="set_menu_title" formatted="false">Impostazioni</string>
+    <string name="set_open_original" formatted="false">Apri la home originale MG</string>
+    <string name="set_original_label" formatted="false">HOME ORIGINALE</string>
+    <string name="set_original_sub" formatted="false">Per usare le funzioni della home di serie</string>
+    <string name="set_show_inside_temp" formatted="false">Temperatura interna</string>
+    <string name="set_soc_decimals" formatted="false">Percentuale batteria con decimali</string>
+    <string name="set_soc_decimals_sub" formatted="false">Es. 88,1% invece di 88%</string>
+    <string name="set_theme" formatted="false">TEMA</string>
+    <string name="set_tpms_sub" formatted="false">Sotto le ruote dell\'auto disegnata, nell\'unità del quadro</string>
+    <string name="set_tpms_title" formatted="false">Pressione pneumatici (TPMS)</string>
+    <string name="set_updates" formatted="false">AGGIORNAMENTI</string>
+    <string name="theme_auto" formatted="false">Automatico</string>
+    <string name="theme_day" formatted="false">Giorno</string>
+    <string name="theme_night" formatted="false">Notte</string>
+    <string name="upd_current" formatted="false">Versione aggiornata</string>
+    <string name="upd_installed_ver">Installata %1$s</string>
+    <string name="upd_new">Nuova versione disponibile: %1$s</string>
+    <string name="upd_new_short">Nuova versione %1$s</string>
+    <string name="upd_unknown" formatted="false">Aggiornamenti non ancora controllati</string>
     <string name="set_ui_size" formatted="false">DIMENSIONE COMANDI</string>
     <string name="ui_size_normal" formatted="false">Normale</string>
     <string name="ui_size_large" formatted="false">Grande</string>
@@ -159,7 +172,7 @@
     <string name="black_roof" formatted="false">Tetto nero</string>
     <string name="theme" formatted="false">TEMA</string>
     <string name="language" formatted="false">LINGUA</string>
-    <string name="lang_auto">Automatica (%s)</string>
+    <string name="lang_auto" formatted="false">Come l\'auto</string>
     <string name="lang_auto_hint" formatted="false">Automatica segue la lingua del sistema dell\'auto.</string>
     <string name="default_nav" formatted="false">NAVIGATORE PREDEFINITO</string>
     <string name="nav_auto_hint" formatted="false">Automatico: quello del telefono se è collegato CarPlay o Android Auto, altrimenti MG.</string>
