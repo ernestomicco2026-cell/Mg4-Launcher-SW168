@@ -16,8 +16,6 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
-<img width="1920" height="720" alt="mg4-0 6 0-home" src="https://github.com/user-attachments/assets/1ac6aa31-220f-4dbd-b31f-ce9b77eb6480" />
-
 ![MG4 Launcher 0.6.2 — home (simulazione / mock-up)](docs/home-0.6.2.png)
 *Home 0.6.2: orologio, batteria con decimali, TPMS, temperatura interna, sedili e volante riscaldati · 0.6.2 home: clock, battery decimals, TPMS, interior temperature, heated seats and wheel (mock-up).*
 
