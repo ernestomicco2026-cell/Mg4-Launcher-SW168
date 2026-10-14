@@ -150,5 +150,10 @@
     <string name="upd_unexpected">Beklenmeyen GitHub yanıtı: %d</string>
     <string name="upd_confirm" formatted="false">Yüklemeyi ekranda onaylayın</string>
     <string name="upd_installed" formatted="false">Güncelleme yüklendi</string>
+    <string name="upd_popup_title" formatted="false">Güncelleme mevcut</string>
+    <string name="upd_popup_text">MG4 Launcher %s kuruluma hazır</string>
+    <string name="upd_later" formatted="false">Daha sonra</string>
+    <string name="upd_now" formatted="false">Güncelle</string>
+    <string name="upd_popup_setting" formatted="false">Yeni güncelleme olduğunda bildir</string>
     <string name="upd_error_code">hata %d</string>
 </resources>

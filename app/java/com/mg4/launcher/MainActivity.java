@@ -10,7 +10,10 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowInsets;
+import android.view.Gravity;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.mg4.launcher.apps.AppCatalog;
 import com.mg4.launcher.apps.IconStyler;
@@ -25,6 +28,7 @@ import com.mg4.launcher.ui.Pager;
 import com.mg4.launcher.ui.Prefs;
 import com.mg4.launcher.ui.SettingsView;
 import com.mg4.launcher.ui.Theme;
+import com.mg4.launcher.ui.Ui;
 
 /** Home del launcher: costruisce l'interfaccia e collega i servizi dell'auto. */
 public final class MainActivity extends Activity implements HomeView.Host, AppsView.Host, SettingsView.Host {
@@ -110,6 +114,85 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         tf.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         registerReceiver(clockTick, tf);
         root.postDelayed(saveDiag, 15000);
+        // primo controllo aggiornamenti dopo l'avvio, quando la radio ha finito di caricare
+        root.postDelayed(autoCheck, com.mg4.launcher.Flavor.DEMO ? 8000 : 90_000);
+    }
+
+    // ---- popup discreto per i nuovi aggiornamenti ----------------------------------------------
+
+    private static final long CHECK_EVERY = 6 * 60 * 60 * 1000L;   // ogni 6 ore
+    private static final long POPUP_SHOW = 20_000;                  // poi si nasconde da solo
+    private View updPopup;
+
+    private final Runnable autoCheck = new Runnable() {
+        @Override
+        public void run() {
+            if (prefs.updatePopup()) updater.checkQuiet(prefs.updateRepo(), prefs.githubToken(), r -> showUpdatePopup(r));
+            if (!com.mg4.launcher.Flavor.DEMO) root.postDelayed(this, CHECK_EVERY);
+        }
+    };
+
+    private final Runnable hidePopup = () -> hideUpdatePopup();
+
+    private void showUpdatePopup(Updater.Release r) {
+        if (r == null || updPopup != null || !prefs.updatePopup()) return;
+        if (r.tag.equals(prefs.dismissedUpdate()) || updater.isBusy()) return;
+        Theme t = theme;
+        LinearLayout card = Ui.row(this);
+        card.setGravity(Gravity.CENTER_VERTICAL);
+        card.setPadding(dp(24), dp(14), dp(14), dp(14));
+        android.graphics.drawable.GradientDrawable bgd = Ui.round(t.panel, dp(22));
+        bgd.setStroke(dp(1), t.track);
+        card.setBackground(bgd);
+        card.setElevation(dp(14));
+        card.setClickable(true);   // i tocchi sul popup non passano alla home sotto
+
+        LinearLayout txt = Ui.column(this);
+        txt.addView(Ui.text(this, L.s(R.string.upd_popup_title), 18, t.text, Ui.MEDIUM));
+        txt.addView(Ui.text(this, L.f(R.string.upd_popup_text, r.tag), 15, t.sub, Ui.REGULAR));
+        card.addView(txt, Ui.margins(Ui.lp(-2, -2), 0, 0, dp(28), 0));
+
+        card.addView(popupButton(L.s(R.string.upd_later), t.chip, t.text, v -> {
+            prefs.setDismissedUpdate(r.tag);
+            hideUpdatePopup();
+        }), Ui.margins(Ui.lp(-2, dp(48)), 0, 0, dp(10), 0));
+        card.addView(popupButton(L.s(R.string.upd_now), t.accent, t.onAccent, v -> {
+            hideUpdatePopup();
+            openSettings();
+            updater.install(r, prefs.githubToken());
+        }), Ui.lp(-2, dp(48)));
+
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+        lp.topMargin = dp(20);
+        root.addView(card, lp);
+        updPopup = card;
+        card.setAlpha(0f);
+        card.setTranslationY(-dp(30));
+        card.animate().alpha(1f).translationY(0).setDuration(280).start();
+        root.removeCallbacks(hidePopup);
+        root.postDelayed(hidePopup, POPUP_SHOW);
+    }
+
+    private void hideUpdatePopup() {
+        root.removeCallbacks(hidePopup);
+        View v = updPopup;
+        updPopup = null;
+        if (v == null) return;
+        v.animate().alpha(0f).translationY(-dp(30)).setDuration(220).withEndAction(() -> root.removeView(v)).start();
+    }
+
+    private TextView popupButton(String text, int bg, int fg, View.OnClickListener l) {
+        TextView b = Ui.text(this, text, 16, fg, Ui.MEDIUM);
+        b.setGravity(Gravity.CENTER);
+        b.setPadding(dp(20), 0, dp(20), 0);
+        b.setBackground(Ui.pressable(this, bg, 14, theme));
+        b.setClickable(true);
+        b.setOnClickListener(l);
+        return b;
+    }
+
+    private int dp(float v) {
+        return Ui.dp(this, v);
     }
 
     /** Ogni 15 s salva la diagnostica su file: adb pull /sdcard/Android/data/com.mg4.launcher/files/diagnostica.txt */
@@ -153,6 +236,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         theme = Theme.resolve(this, prefs);
         root.setBackgroundColor(theme.bg);
         root.removeAllViews();
+        root.removeCallbacks(hidePopup);
+        updPopup = null;
         int keepPage = pager != null ? pager.page() : 0;
         pager = new Pager(this);
         home = new HomeView(this, theme, prefs, this, vehicle, media, nav);
@@ -197,6 +282,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     protected void onDestroy() {
         super.onDestroy();
         root.removeCallbacks(saveDiag);
+        root.removeCallbacks(autoCheck);
+        root.removeCallbacks(hidePopup);
         vehicle.stop();
         conn.stop();
         try {
@@ -271,6 +358,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         if (settings == null) {
             settings = new SettingsView(this, theme, prefs, this);
             root.addView(settings, new FrameLayout.LayoutParams(-1, -1));
+            if (updPopup != null) updPopup.bringToFront();
         }
     }
 

@@ -150,5 +150,10 @@
     <string name="upd_unexpected">Unerwartete GitHub-Antwort: %d</string>
     <string name="upd_confirm" formatted="false">Installation auf dem Bildschirm bestätigen</string>
     <string name="upd_installed" formatted="false">Update installiert</string>
+    <string name="upd_popup_title" formatted="false">Update verfügbar</string>
+    <string name="upd_popup_text">MG4 Launcher %s ist bereit zur Installation</string>
+    <string name="upd_later" formatted="false">Später</string>
+    <string name="upd_now" formatted="false">Aktualisieren</string>
+    <string name="upd_popup_setting" formatted="false">Benachrichtigen, wenn ein neues Update verfügbar ist</string>
     <string name="upd_error_code">Fehler %d</string>
 </resources>

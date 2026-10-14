@@ -171,6 +171,11 @@ S = {
     "upd_unexpected": ("Risposta GitHub inattesa: %d", "Unexpected GitHub response: %d", "Respuesta inesperada de GitHub: %d", "Unerwartete GitHub-Antwort: %d", "Resposta inesperada do GitHub: %d", "Réponse GitHub inattendue : %d", "Beklenmeyen GitHub yanıtı: %d"),
     "upd_confirm": ("Conferma l'installazione sullo schermo", "Confirm the installation on screen", "Confirma la instalación en la pantalla", "Installation auf dem Bildschirm bestätigen", "Confirme a instalação no ecrã", "Confirmez l'installation à l'écran", "Yüklemeyi ekranda onaylayın"),
     "upd_installed": ("Aggiornamento installato", "Update installed", "Actualización instalada", "Update installiert", "Atualização instalada", "Mise à jour installée", "Güncelleme yüklendi"),
+    "upd_popup_title": ("Aggiornamento disponibile", "Update available", "Actualización disponible", "Update verfügbar", "Atualização disponível", "Mise à jour disponible", "Güncelleme mevcut"),
+    "upd_popup_text": ("MG4 Launcher %s è pronto da installare", "MG4 Launcher %s is ready to install", "MG4 Launcher %s está listo para instalar", "MG4 Launcher %s ist bereit zur Installation", "MG4 Launcher %s está pronto a instalar", "MG4 Launcher %s est prêt à être installé", "MG4 Launcher %s kuruluma hazır"),
+    "upd_later": ("Più tardi", "Later", "Más tarde", "Später", "Mais tarde", "Plus tard", "Daha sonra"),
+    "upd_now": ("Aggiorna", "Update", "Actualizar", "Aktualisieren", "Atualizar", "Mettre à jour", "Güncelle"),
+    "upd_popup_setting": ("Avvisa quando c'è un nuovo aggiornamento", "Notify me when a new update is available", "Avisar cuando haya una nueva actualización", "Benachrichtigen, wenn ein neues Update verfügbar ist", "Avisar quando houver uma nova atualização", "Prévenir quand une nouvelle mise à jour est disponible", "Yeni güncelleme olduğunda bildir"),
     "upd_error_code": ("errore %d", "error %d", "error %d", "Fehler %d", "erro %d", "erreur %d", "hata %d"),
 }
 

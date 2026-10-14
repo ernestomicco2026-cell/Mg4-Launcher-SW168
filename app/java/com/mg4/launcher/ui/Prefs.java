@@ -133,4 +133,22 @@ public final class Prefs {
     public void setShowTpms(boolean b) {
         sp.edit().putBoolean("showTpms", b).apply();
     }
+
+    /** Popup discreto quando su GitHub c'è una versione nuova. */
+    public boolean updatePopup() {
+        return sp.getBoolean("updatePopup", true);
+    }
+
+    public void setUpdatePopup(boolean b) {
+        sp.edit().putBoolean("updatePopup", b).apply();
+    }
+
+    /** Ultima versione per cui è stato premuto "Più tardi": per quella il popup non ricompare. */
+    public String dismissedUpdate() {
+        return sp.getString("dismissedUpdate", "");
+    }
+
+    public void setDismissedUpdate(String tag) {
+        sp.edit().putString("dismissedUpdate", tag == null ? "" : tag).apply();
+    }
 }

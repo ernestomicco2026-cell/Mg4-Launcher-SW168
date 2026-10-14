@@ -165,6 +165,10 @@ public final class SettingsView extends FrameLayout {
 
         updStatus = Ui.text(c, "", 16, t.sub, Ui.REGULAR);
         col.addView(updStatus, top(10));
+        col.addView(switchRow(c, L.s(R.string.upd_popup_setting), prefs.updatePopup(), on -> {
+            prefs.setUpdatePopup(on);
+            if (on) prefs.setDismissedUpdate("");
+        }), top(14));
 
         up.setListener((text, r, busy) -> {
             if (r != null) found = r;
