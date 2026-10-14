@@ -48,6 +48,41 @@
     <string name="log_upload_off" formatted="false">Log upload turned off</string>
     <string name="log_upload_nokey" formatted="false">Log upload not available in this version</string>
     <string name="show_inside_temp" formatted="false">Interior temperature</string>
+    <string name="sec_car" formatted="false">Car</string>
+    <string name="sec_car_sub" formatted="false">Colour, roof</string>
+    <string name="sec_home" formatted="false">Home</string>
+    <string name="sec_home_sub" formatted="false">Battery, tyres, temperature</string>
+    <string name="sec_look" formatted="false">Appearance</string>
+    <string name="sec_look_sub" formatted="false">Theme, controls, language</string>
+    <string name="sec_drive" formatted="false">Driving</string>
+    <string name="sec_drive_sub" formatted="false">Driving side, navigation</string>
+    <string name="sec_system" formatted="false">System</string>
+    <string name="sec_system_sub" formatted="false">Updates, logs</string>
+    <string name="soc_decimals_hint" formatted="false">E.g. 76.6% instead of 77%</string>
+    <string name="show_tpms_hint" formatted="false">Front and rear, amber below 2.0 bar</string>
+    <string name="show_inside_temp_hint" formatted="false">Shows —° if the car doesn\'t provide it</string>
+    <string name="ui_size_hint" formatted="false">Home screen buttons only</string>
+    <string name="theme_title" formatted="false">Theme</string>
+    <string name="ui_size_title" formatted="false">Control size</string>
+    <string name="language_title" formatted="false">Language</string>
+    <string name="car_color_title" formatted="false">Car colour</string>
+    <string name="drive_side_title" formatted="false">Driving side</string>
+    <string name="default_nav_title" formatted="false">Default navigator</string>
+    <string name="original_home_title" formatted="false">Original MG home</string>
+    <string name="original_home_hint" formatted="false">Opens the factory screen</string>
+    <string name="updates_title" formatted="false">Updates</string>
+    <string name="check" formatted="false">Check</string>
+    <string name="install" formatted="false">Install</string>
+    <string name="install_v">Install %s</string>
+    <string name="ver_ok" formatted="false">Up to date</string>
+    <string name="ver_new">New version: %s</string>
+    <string name="ver_unknown" formatted="false">Not checked</string>
+    <string name="log_full" formatted="false">Full log</string>
+    <string name="log_full_hint" formatted="false">Saves to a USB stick or internal memory</string>
+    <string name="diag_short" formatted="false">Service diagnostics</string>
+    <string name="diag_hint" formatted="false">Values read from the car services</string>
+    <string name="show" formatted="false">Show</string>
+    <string name="back" formatted="false">Back</string>
     <string name="set_ui_size" formatted="false">CONTROL SIZE</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Large</string>

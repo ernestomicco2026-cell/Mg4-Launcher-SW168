@@ -48,6 +48,41 @@
     <string name="log_upload_off" formatted="false">Log-Upload ausgeschaltet</string>
     <string name="log_upload_nokey" formatted="false">Log-Upload in dieser Version nicht verfügbar</string>
     <string name="show_inside_temp" formatted="false">Innentemperatur</string>
+    <string name="sec_car" formatted="false">Auto</string>
+    <string name="sec_car_sub" formatted="false">Farbe, Dach</string>
+    <string name="sec_home" formatted="false">Startseite</string>
+    <string name="sec_home_sub" formatted="false">Akku, Reifen, Temperatur</string>
+    <string name="sec_look" formatted="false">Darstellung</string>
+    <string name="sec_look_sub" formatted="false">Design, Bedienelemente, Sprache</string>
+    <string name="sec_drive" formatted="false">Fahren</string>
+    <string name="sec_drive_sub" formatted="false">Lenkradseite, Navigation</string>
+    <string name="sec_system" formatted="false">System</string>
+    <string name="sec_system_sub" formatted="false">Updates, Logs</string>
+    <string name="soc_decimals_hint" formatted="false">Z. B. 76,6 % statt 77 %</string>
+    <string name="show_tpms_hint" formatted="false">Vorne und hinten, gelb unter 2,0 bar</string>
+    <string name="show_inside_temp_hint" formatted="false">Zeigt —°, wenn das Auto den Wert nicht liefert</string>
+    <string name="ui_size_hint" formatted="false">Nur die Tasten der Startseite</string>
+    <string name="theme_title" formatted="false">Design</string>
+    <string name="ui_size_title" formatted="false">Größe der Bedienelemente</string>
+    <string name="language_title" formatted="false">Sprache</string>
+    <string name="car_color_title" formatted="false">Fahrzeugfarbe</string>
+    <string name="drive_side_title" formatted="false">Lenkradposition</string>
+    <string name="default_nav_title" formatted="false">Standard-Navigation</string>
+    <string name="original_home_title" formatted="false">Original-MG-Startseite</string>
+    <string name="original_home_hint" formatted="false">Öffnet den Serienbildschirm</string>
+    <string name="updates_title" formatted="false">Updates</string>
+    <string name="check" formatted="false">Prüfen</string>
+    <string name="install" formatted="false">Installieren</string>
+    <string name="install_v">%s installieren</string>
+    <string name="ver_ok" formatted="false">Aktuell</string>
+    <string name="ver_new">Neue Version: %s</string>
+    <string name="ver_unknown" formatted="false">Nicht geprüft</string>
+    <string name="log_full" formatted="false">Vollständiges Log</string>
+    <string name="log_full_hint" formatted="false">Speichert auf USB-Stick oder im Speicher</string>
+    <string name="diag_short" formatted="false">Dienst-Diagnose</string>
+    <string name="diag_hint" formatted="false">Von den Fahrzeugdiensten gelesene Werte</string>
+    <string name="show" formatted="false">Anzeigen</string>
+    <string name="back" formatted="false">Zurück</string>
     <string name="set_ui_size" formatted="false">GRÖSSE DER BEDIENELEMENTE</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Groß</string>

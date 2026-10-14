@@ -170,6 +170,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         }), Ui.margins(Ui.lp(-2, dp(48)), 0, 0, dp(10), 0));
         card.addView(popupButton(L.s(R.string.upd_now), t.accent, t.onAccent, v -> {
             hideUpdatePopup();
+            SettingsView.openAt(SettingsView.SEC_SYSTEM);
+            closeSettings();
             openSettings();
             updater.install(r, prefs.githubToken());
         }), Ui.lp(-2, dp(48)));

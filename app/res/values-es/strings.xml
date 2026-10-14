@@ -48,6 +48,41 @@
     <string name="log_upload_off" formatted="false">Envío de registros desactivado</string>
     <string name="log_upload_nokey" formatted="false">Envío de registros no disponible en esta versión</string>
     <string name="show_inside_temp" formatted="false">Temperatura interior</string>
+    <string name="sec_car" formatted="false">Coche</string>
+    <string name="sec_car_sub" formatted="false">Color, techo</string>
+    <string name="sec_home" formatted="false">Inicio</string>
+    <string name="sec_home_sub" formatted="false">Batería, neumáticos, temperatura</string>
+    <string name="sec_look" formatted="false">Apariencia</string>
+    <string name="sec_look_sub" formatted="false">Tema, controles, idioma</string>
+    <string name="sec_drive" formatted="false">Conducción</string>
+    <string name="sec_drive_sub" formatted="false">Lado de conducción, navegador</string>
+    <string name="sec_system" formatted="false">Sistema</string>
+    <string name="sec_system_sub" formatted="false">Actualizaciones, registros</string>
+    <string name="soc_decimals_hint" formatted="false">P. ej. 76,6 % en lugar de 77 %</string>
+    <string name="show_tpms_hint" formatted="false">Delanteros y traseros, en ámbar por debajo de 2,0 bar</string>
+    <string name="show_inside_temp_hint" formatted="false">Muestra —° si el coche no proporciona el dato</string>
+    <string name="ui_size_hint" formatted="false">Solo los botones de inicio</string>
+    <string name="theme_title" formatted="false">Tema</string>
+    <string name="ui_size_title" formatted="false">Tamaño de los controles</string>
+    <string name="language_title" formatted="false">Idioma</string>
+    <string name="car_color_title" formatted="false">Color del coche</string>
+    <string name="drive_side_title" formatted="false">Posición de conducción</string>
+    <string name="default_nav_title" formatted="false">Navegador predeterminado</string>
+    <string name="original_home_title" formatted="false">Inicio original de MG</string>
+    <string name="original_home_hint" formatted="false">Abre la pantalla de serie</string>
+    <string name="updates_title" formatted="false">Actualizaciones</string>
+    <string name="check" formatted="false">Buscar</string>
+    <string name="install" formatted="false">Instalar</string>
+    <string name="install_v">Instalar %s</string>
+    <string name="ver_ok" formatted="false">Actualizado</string>
+    <string name="ver_new">Nueva versión: %s</string>
+    <string name="ver_unknown" formatted="false">Sin comprobar</string>
+    <string name="log_full" formatted="false">Registro completo</string>
+    <string name="log_full_hint" formatted="false">Guarda en una memoria USB o en la memoria interna</string>
+    <string name="diag_short" formatted="false">Diagnóstico de servicios</string>
+    <string name="diag_hint" formatted="false">Valores leídos de los servicios del coche</string>
+    <string name="show" formatted="false">Mostrar</string>
+    <string name="back" formatted="false">Atrás</string>
     <string name="set_ui_size" formatted="false">TAMAÑO DE LOS CONTROLES</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Grande</string>

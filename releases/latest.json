@@ -1,6 +1,6 @@
 {
-  "version": "0.7.0",
-  "apk": "releases/MG4Launcher-0.7.0.apk",
-  "size": 426306,
-  "notes": "Dimensione comandi (Normale, Grande, Molto grande), posizione di guida destra/sinistra, spazio per la spia luci del sistema."
+  "version": "0.7.1",
+  "apk": "releases/MG4Launcher-0.7.1.apk",
+  "size": 446786,
+  "notes": "Nuove impostazioni a sezioni, temperatura interna attivabile, invio automatico dei log diagnostici."
 }

@@ -48,6 +48,41 @@
     <string name="log_upload_off" formatted="false">Invio dei log disattivato</string>
     <string name="log_upload_nokey" formatted="false">Invio dei log non disponibile in questa versione</string>
     <string name="show_inside_temp" formatted="false">Temperatura interna</string>
+    <string name="sec_car" formatted="false">Auto</string>
+    <string name="sec_car_sub" formatted="false">Colore, tetto</string>
+    <string name="sec_home" formatted="false">Home</string>
+    <string name="sec_home_sub" formatted="false">Batteria, pneumatici, temperatura</string>
+    <string name="sec_look" formatted="false">Aspetto</string>
+    <string name="sec_look_sub" formatted="false">Tema, comandi, lingua</string>
+    <string name="sec_drive" formatted="false">Guida</string>
+    <string name="sec_drive_sub" formatted="false">Lato guida, navigatore</string>
+    <string name="sec_system" formatted="false">Sistema</string>
+    <string name="sec_system_sub" formatted="false">Aggiornamenti, log</string>
+    <string name="soc_decimals_hint" formatted="false">Es. 76,6% invece di 77%</string>
+    <string name="show_tpms_hint" formatted="false">Anteriori e posteriori, in ambra sotto 2,0 bar</string>
+    <string name="show_inside_temp_hint" formatted="false">Mostra —° se l\'auto non fornisce il dato</string>
+    <string name="ui_size_hint" formatted="false">Solo i pulsanti della home</string>
+    <string name="theme_title" formatted="false">Tema</string>
+    <string name="ui_size_title" formatted="false">Dimensione comandi</string>
+    <string name="language_title" formatted="false">Lingua</string>
+    <string name="car_color_title" formatted="false">Colore dell\'auto</string>
+    <string name="drive_side_title" formatted="false">Posizione di guida</string>
+    <string name="default_nav_title" formatted="false">Navigatore predefinito</string>
+    <string name="original_home_title" formatted="false">Home originale MG</string>
+    <string name="original_home_hint" formatted="false">Apre la schermata di serie</string>
+    <string name="updates_title" formatted="false">Aggiornamenti</string>
+    <string name="check" formatted="false">Controlla</string>
+    <string name="install" formatted="false">Installa</string>
+    <string name="install_v">Installa %s</string>
+    <string name="ver_ok" formatted="false">Aggiornato</string>
+    <string name="ver_new">Nuova versione: %s</string>
+    <string name="ver_unknown" formatted="false">Non verificato</string>
+    <string name="log_full" formatted="false">Log completo</string>
+    <string name="log_full_hint" formatted="false">Salva su chiavetta USB o in memoria</string>
+    <string name="diag_short" formatted="false">Diagnostica servizi</string>
+    <string name="diag_hint" formatted="false">Valori letti dai servizi dell\'auto</string>
+    <string name="show" formatted="false">Mostra</string>
+    <string name="back" formatted="false">Indietro</string>
     <string name="set_ui_size" formatted="false">DIMENSIONE COMANDI</string>
     <string name="ui_size_normal" formatted="false">Normale</string>
     <string name="ui_size_large" formatted="false">Grande</string>

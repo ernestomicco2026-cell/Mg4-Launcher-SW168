@@ -48,6 +48,41 @@
     <string name="log_upload_off" formatted="false">Envio de registos desativado</string>
     <string name="log_upload_nokey" formatted="false">Envio de registos indisponível nesta versão</string>
     <string name="show_inside_temp" formatted="false">Temperatura interior</string>
+    <string name="sec_car" formatted="false">Carro</string>
+    <string name="sec_car_sub" formatted="false">Cor, tejadilho</string>
+    <string name="sec_home" formatted="false">Início</string>
+    <string name="sec_home_sub" formatted="false">Bateria, pneus, temperatura</string>
+    <string name="sec_look" formatted="false">Aparência</string>
+    <string name="sec_look_sub" formatted="false">Tema, comandos, idioma</string>
+    <string name="sec_drive" formatted="false">Condução</string>
+    <string name="sec_drive_sub" formatted="false">Lado de condução, navegador</string>
+    <string name="sec_system" formatted="false">Sistema</string>
+    <string name="sec_system_sub" formatted="false">Atualizações, registos</string>
+    <string name="soc_decimals_hint" formatted="false">Ex.: 76,6% em vez de 77%</string>
+    <string name="show_tpms_hint" formatted="false">Dianteiros e traseiros, âmbar abaixo de 2,0 bar</string>
+    <string name="show_inside_temp_hint" formatted="false">Mostra —° se o carro não fornecer o valor</string>
+    <string name="ui_size_hint" formatted="false">Apenas os botões do início</string>
+    <string name="theme_title" formatted="false">Tema</string>
+    <string name="ui_size_title" formatted="false">Tamanho dos comandos</string>
+    <string name="language_title" formatted="false">Idioma</string>
+    <string name="car_color_title" formatted="false">Cor do carro</string>
+    <string name="drive_side_title" formatted="false">Posição de condução</string>
+    <string name="default_nav_title" formatted="false">Navegador predefinido</string>
+    <string name="original_home_title" formatted="false">Início original MG</string>
+    <string name="original_home_hint" formatted="false">Abre o ecrã de origem</string>
+    <string name="updates_title" formatted="false">Atualizações</string>
+    <string name="check" formatted="false">Verificar</string>
+    <string name="install" formatted="false">Instalar</string>
+    <string name="install_v">Instalar %s</string>
+    <string name="ver_ok" formatted="false">Atualizado</string>
+    <string name="ver_new">Nova versão: %s</string>
+    <string name="ver_unknown" formatted="false">Não verificado</string>
+    <string name="log_full" formatted="false">Registo completo</string>
+    <string name="log_full_hint" formatted="false">Guarda numa pen USB ou na memória</string>
+    <string name="diag_short" formatted="false">Diagnóstico dos serviços</string>
+    <string name="diag_hint" formatted="false">Valores lidos dos serviços do carro</string>
+    <string name="show" formatted="false">Mostrar</string>
+    <string name="back" formatted="false">Voltar</string>
     <string name="set_ui_size" formatted="false">TAMANHO DOS COMANDOS</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Grande</string>

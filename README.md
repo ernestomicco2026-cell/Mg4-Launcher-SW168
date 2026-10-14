@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.7.0](releases/MG4Launcher-0.7.0.apk)**
+**Ultima versione / Latest version: [0.7.1](releases/MG4Launcher-0.7.1.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -18,14 +18,20 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
-![MG4 Launcher 0.7.0 — home (simulazione / mock-up)](docs/home-0.7.0.png)
-*Home 0.7.0 — comandi normali, guida a sinistra · 0.7.0 home: normal controls, left-hand drive (mock-up).*
+![MG4 Launcher 0.7.1 — home (simulazione / mock-up)](docs/home-0.7.1.png)
+*Home 0.7.1 — comandi normali, guida a sinistra · 0.7.1 home: normal controls, left-hand drive (mock-up).*
 
-![MG4 Launcher 0.7.0 — comandi molto grandi (simulazione / mock-up)](docs/home-0.7.0-comandi-grandi.png)
+![MG4 Launcher 0.7.1 — comandi molto grandi (simulazione / mock-up)](docs/home-0.7.1-comandi-grandi.png)
 *Dimensione comandi "Molto grande" · "Extra large" control size (mock-up).*
 
-![MG4 Launcher 0.7.0 — guida a destra (simulazione / mock-up)](docs/home-0.7.0-guida-destra.png)
+![MG4 Launcher 0.7.1 — guida a destra (simulazione / mock-up)](docs/home-0.7.1-guida-destra.png)
 *Guida a destra: home specchiata, auto e clima dal lato del guidatore · Right-hand drive: mirrored home, car and climate on the driver's side (mock-up).*
+
+![MG4 Launcher 0.7.1 — impostazioni, sezione Auto, notte (simulazione / mock-up)](docs/impostazioni-0.7.1-auto.png)
+*Impostazioni 0.7.1, sezione Auto (notte) · 0.7.1 settings, Car section (night, mock-up).*
+
+![MG4 Launcher 0.7.1 — impostazioni, sezione Sistema, giorno (simulazione / mock-up)](docs/impostazioni-0.7.1-sistema.png)
+*Impostazioni 0.7.1, sezione Sistema (giorno) · 0.7.1 settings, System section (day, mock-up).*
 
 ---
 
@@ -84,10 +90,14 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
 - **In alto a destra**: indicatori di **Bluetooth**, **Wi-Fi** e rete **4G** della T-Box (con le tacche del segnale).
 - **App**: scorri la home verso sinistra per le app dell'auto e quelle che installi tu,
   con le icone tutte nello stesso stile; scorri verso destra per tornare. Con **Modifica** scegli quali app installate mostrare.
-- **Impostazioni** (tieni premuta l'auto): colore dell'auto, tetto nero, tema (automatico, notte, giorno),
-  **dimensione dei comandi** (Normale, Grande, Molto grande), **posizione di guida** (come l'auto, sinistra, destra: con la
-  guida a destra la home si specchia e auto e clima passano dal lato del guidatore), **lingua**, percentuale batteria con decimali, pressione pneumatici sì/no,
-  navigatore predefinito (Automatico, MG, Telefono), aggiornamenti, diagnostica con **Salva log**.
+- **Impostazioni** (tieni premuta l'auto): a schermo intero, con un menu di cinque sezioni e la versione con lo stato
+  degli aggiornamenti sempre visibile in basso (con **Installa** quando c'è una versione nuova):
+  - **Auto**: colore dell'auto (con anteprima) e tetto nero;
+  - **Home**: percentuale batteria con decimali, pressione pneumatici, **temperatura interna** (facoltativa);
+  - **Aspetto**: tema (automatico, notte, giorno), **dimensione dei comandi** (Normale, Grande, Molto grande), **lingua**;
+  - **Guida**: **posizione di guida** (come l'auto, sinistra, destra: con la guida a destra la home si specchia e auto e
+    clima passano dal lato del guidatore), navigatore predefinito (Automatico, MG, Telefono), home originale MG;
+  - **Sistema**: aggiornamenti e avviso, invio automatico dei log, **Salva log**, diagnostica dei servizi.
   Si aprono anche dall'ingranaggio in alto a destra nella pagina App.
 - **Schermo intero**: barra di stato e dock MG nascosti (trascina dal bordo per richiamarli).
 - **Aggiornamenti**: le nuove versioni si scaricano e si installano dalle impostazioni, senza computer.
@@ -103,7 +113,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.7.0.apk
+   adb install -r -f MG4Launcher-0.7.1.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -145,11 +155,14 @@ adb pull /sdcard/Android/data/com.mg4.launcher/files/diagnostica.txt
 
 ### Segnalare un problema
 
-Nelle impostazioni la colonna **Diagnostica servizi auto** mostra i valori grezzi letti da ogni servizio
-(veicolo, clima, media, radio, CarPlay, navigatore) e gli errori recenti. Uno screenshot di quella colonna
+In Impostazioni → Sistema, **Diagnostica servizi** → *Mostra* fa vedere i valori grezzi letti da ogni servizio
+(veicolo, clima, media, radio, CarPlay, navigatore) e gli errori recenti. Uno screenshot di quella pagina
 o il file `diagnostica.txt` bastano per capire cosa succede.
 
-Con **Salva log** (in alto nella colonna Diagnostica) il launcher scrive un log completo — valori, errori, eventi
+I log diagnostici vengono inviati automaticamente in forma anonima, per migliorare il launcher; l'invio si può
+disattivare in Impostazioni → Sistema.
+
+Con **Salva log** (in Impostazioni → Sistema) il launcher scrive un log completo — valori, errori, eventi
 recenti e logcat del launcher — in `Android/data/com.mg4.launcher/files/mg4-launcher-log-….txt`.
 Se è inserita una chiavetta USB il file finisce anche lì, nella stessa cartella: basta aprirla dal computer o dal telefono.
 
@@ -162,6 +175,18 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.7.1 — 15 ottobre 2026
+- **Nuove impostazioni**: a schermo intero, divise in cinque sezioni (Auto, Home, Aspetto, Guida, Sistema) con un
+  menu a sinistra; righe grandi, interruttori e scelte che seguono la dimensione dei comandi, uguali di giorno e di
+  notte e con il menu a destra quando la guida è a destra. In basso nel menu la versione e lo stato degli
+  aggiornamenti, con **Installa** quando ce n'è una nuova. La diagnostica dei servizi si apre con *Mostra*.
+- Nella sezione Auto un'**anteprima dell'auto** con il colore scelto; tutte le lingue visibili insieme in Aspetto.
+- **Temperatura interna** ora è un'opzione (Impostazioni → Home), spenta di default perché molte auto non forniscono
+  il dato: spenta non viene nemmeno letta; accesa mostra il valore, oppure "—°" se l'auto non lo dà (mai 0°).
+- **Invio automatico dei log** diagnostici, anonimo: dopo 90 secondi dall'avvio, ogni 30 minuti e con *Salva log*;
+  senza rete restano in coda. Si disattiva in Impostazioni → Sistema, dove si vede anche l'ora dell'ultimo invio.
+- Il popup degli aggiornamenti apre direttamente la sezione Sistema.
 
 #### 0.7.0 — 14 ottobre 2026
 - **Dimensione comandi** in Impostazioni: Normale, Grande o Molto grande. Si ingrandiscono solo i pulsanti da toccare
@@ -334,10 +359,14 @@ It replaces the original home screen, keeping its features, with a new, clean de
 - **Top right**: **Bluetooth**, **Wi-Fi** and T-Box **4G** indicators (with signal bars).
 - **Apps**: swipe the home screen left for the car's apps and the ones you install,
   all with matching icons; swipe right to go back. Use **Modifica** (Edit) to choose which installed apps to show.
-- **Settings** (long-press the car): car colour, black roof, theme (auto, night, day), **control size** (Normal, Large,
-  Extra large), **driving side** (same as car, left, right: with right-hand drive the home is mirrored so the car and
-  climate are on the driver's side), **language**, battery percentage with decimals, tyre pressure on/off,
-  default navigator (Auto, MG, Phone), updates, diagnostics with **Salva log** (save log).
+- **Settings** (long-press the car): full screen, with a menu of five sections and the version with the update status
+  always visible at the bottom (with **Install** when a new version is out):
+  - **Car**: car colour (with preview) and black roof;
+  - **Home**: battery percentage with decimals, tyre pressure, **interior temperature** (optional);
+  - **Appearance**: theme (auto, night, day), **control size** (Normal, Large, Extra large), **language**;
+  - **Driving**: **driving side** (same as car, left, right: with right-hand drive the home is mirrored so the car and
+    climate are on the driver's side), default navigator (Auto, MG, Phone), original MG home;
+  - **System**: updates and update notice, automatic log upload, **Save log**, service diagnostics.
   Also available from the gear at the top right of the Apps page.
 - **Full screen**: status bar and MG dock hidden (swipe from the edge to bring them back).
 - **Updates**: new versions download and install from the settings, no computer needed.
@@ -353,7 +382,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.7.0.apk
+   adb install -r -f MG4Launcher-0.7.1.apk
    ```
 3. Make it the default home:
    ```bash
@@ -395,11 +424,14 @@ adb pull /sdcard/Android/data/com.mg4.launcher/files/diagnostica.txt
 
 ### Reporting a problem
 
-In the settings, the **Diagnostica servizi auto** (car services diagnostics) column shows the raw values read from
-each service (vehicle, climate, media, radio, CarPlay, navigator) and recent errors. A screenshot of that column
+In Settings → System, **Service diagnostics** → *Show* displays the raw values read from each service
+(vehicle, climate, media, radio, CarPlay, navigator) and recent errors. A screenshot of that page
 or the `diagnostica.txt` file is enough to understand what is going on.
 
-**Salva log** (save log, at the top of the Diagnostics column) writes a full log — values, errors, recent events
+Diagnostic logs are sent automatically and anonymously to help improve the launcher; uploading can be turned off
+in Settings → System.
+
+**Save log** (in Settings → System) writes a full log — values, errors, recent events
 and the launcher's logcat — to `Android/data/com.mg4.launcher/files/mg4-launcher-log-….txt`.
 With a USB stick plugged in, the file is written there too, in the same folder.
 
@@ -412,6 +444,18 @@ the repository or a bug report help a lot too. Thank you!
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.7.1 — 15 October 2026
+- **New settings**: full screen, split into five sections (Car, Home, Appearance, Driving, System) with a menu on the
+  left; large rows, switches and choices that follow the control size, the same by day and night, with the menu on
+  the right for right-hand drive. The version and update status sit at the bottom of the menu, with **Install** when
+  a new one is out. Service diagnostics open with *Show*.
+- A **car preview** with the chosen colour in the Car section; all languages shown together in Appearance.
+- **Interior temperature** is now optional (Settings → Home), off by default because many cars don't provide it:
+  when off it isn't even read; when on it shows the value, or "—°" if the car doesn't provide it (never 0°).
+- **Automatic upload of diagnostic logs**, anonymous: 90 seconds after start, every 30 minutes and with *Save log*;
+  without a connection they are queued. It can be turned off in Settings → System, which also shows the last upload time.
+- The update pop-up opens the System section directly.
 
 #### 0.7.0 — 14 October 2026
 - **Control size** in Settings: Normal, Large or Extra large. Only the buttons you touch get bigger (climate, A/C,
