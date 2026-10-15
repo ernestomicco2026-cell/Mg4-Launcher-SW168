@@ -458,6 +458,8 @@ public final class SettingsView extends FrameLayout {
                     officinaDays = d;
                     showSection(SEC_SYSTEM);
                 });
+                // sulla scheda (sfondo chip) le scelte non selezionate hanno lo sfondo del pannello
+                if (officinaDays != d) ch.setBackground(Ui.pressable(c, t.panel, 16 * Ui.K, t));
                 oc.addView(ch, Ui.margins(new LinearLayout.LayoutParams(-2, tp(60)), 0, 0, dp(10), 0));
             }
             TextView act = button(c, L.s(R.string.btn_activate), v -> {

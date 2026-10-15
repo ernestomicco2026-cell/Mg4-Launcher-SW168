@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.7.3](releases/MG4Launcher-0.7.3.apk)**
+**Ultima versione / Latest version: [0.7.4](releases/MG4Launcher-0.7.4.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -18,23 +18,23 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
-![MG4 Launcher 0.7.2 — home (simulazione / mock-up)](docs/home-0.7.2.png)
-*Home 0.7.2 — comandi normali, guida a sinistra · 0.7.2 home: normal controls, left-hand drive (mock-up).*
+![MG4 Launcher 0.7.4 — home (simulazione / mock-up)](docs/home-0.7.4.png)
+*Home 0.7.4 — comandi normali, guida a sinistra · 0.7.4 home: normal controls, left-hand drive (mock-up).*
 
-![MG4 Launcher 0.7.2 — comandi molto grandi (simulazione / mock-up)](docs/home-0.7.2-comandi-grandi.png)
+![MG4 Launcher 0.7.4 — comandi molto grandi (simulazione / mock-up)](docs/home-0.7.4-comandi-grandi.png)
 *Dimensione comandi "Molto grande" · "Extra large" control size (mock-up).*
 
-![MG4 Launcher 0.7.2 — guida a destra (simulazione / mock-up)](docs/home-0.7.2-guida-destra.png)
+![MG4 Launcher 0.7.4 — guida a destra (simulazione / mock-up)](docs/home-0.7.4-guida-destra.png)
 *Guida a destra: home specchiata, auto e clima dal lato del guidatore · Right-hand drive: mirrored home, car and climate on the driver's side (mock-up).*
 
 ![MG4 Launcher 0.7.1 — impostazioni, sezione Auto, notte (simulazione / mock-up)](docs/impostazioni-0.7.1-auto.png)
 *Impostazioni 0.7.1, sezione Auto (notte) · 0.7.1 settings, Car section (night, mock-up).*
 
-![MG4 Launcher 0.7.1 — impostazioni, sezione Sistema, giorno (simulazione / mock-up)](docs/impostazioni-0.7.1-sistema.png)
-*Impostazioni 0.7.1, sezione Sistema (giorno) · 0.7.1 settings, System section (day, mock-up).*
+![MG4 Launcher 0.7.4 — impostazioni, sezione Sistema, giorno (simulazione / mock-up)](docs/impostazioni-0.7.4-sistema.png)
+*Impostazioni 0.7.4, sezione Sistema (giorno), con home predefinita e modalità officina · 0.7.4 settings, System section (day), with default home and service mode (mock-up).*
 
-![MG4 Launcher 0.7.3 — pagina App (simulazione / mock-up)](docs/app-0.7.3.png)
-*Pagina App 0.7.3, con Impostazioni Android e File Android · 0.7.3 Apps page, with Android settings and Android files (mock-up).*
+![MG4 Launcher 0.7.4 — pagina App (simulazione / mock-up)](docs/app-0.7.4.png)
+*Pagina App 0.7.4, con Impostazioni Android e File Android · 0.7.4 Apps page, with Android settings and Android files (mock-up).*
 
 ---
 
@@ -118,7 +118,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.7.3.apk
+   adb install -r -f MG4Launcher-0.7.4.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -127,8 +127,15 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
    In alternativa premi il tasto Home: Android chiede quale home usare.
 
 All'accensione il firmware apre comunque la home MG originale: il launcher se ne accorge e torna in primo piano da solo
-(dalla 0.7.2), senza toccare la retrocamera, CarPlay/Android Auto o una chiamata. A ogni avvio riconferma anche di
-essere la home predefinita.
+(dalla 0.7.2; dalla 0.7.4 prima, grazie a un servizio di accessibilità che guarda solo quale app è in primo piano),
+senza toccare la retrocamera, CarPlay/Android Auto o una chiamata. A ogni avvio riconferma anche di essere la home predefinita.
+
+**Home MG originale e modalità officina** (Impostazioni → Sistema):
+- *Usa come home predefinita* spento: la home MG torna quella predefinita, anche all'accensione; il launcher resta
+  usabile come app. *Modalità officina* (1, 3 o 7 giorni): per l'assistenza l'auto usa la home MG e gli aggiornamenti
+  sono sospesi; alla scadenza il launcher torna da solo, come prima.
+- Per rientrare prima: la home MG non mostra MG4 Launcher tra le sue app (ha un elenco fisso), quindi serve un computer:
+  `adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity`, poi riaccendi l'interruttore nelle impostazioni.
 
 ### Aggiornamenti
 
@@ -182,6 +189,21 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.7.4 — 15 ottobre 2026
+- **Avvio all'accensione più rapido**: un servizio di accessibilità del launcher (attivato da solo, guarda solo quale
+  app passa in primo piano, non legge il contenuto dello schermo) parte con il sistema, prima del segnale di avvio
+  completato che arrivava dopo 30 secondi circa: appena compare la home MG il launcher torna in primo piano. Vale anche
+  al risveglio dello schermo. Il controllo ogni 400 ms resta come riserva se il servizio non è attivo.
+- **Usa come home predefinita** (Impostazioni → Sistema): spento, la home MG originale torna quella predefinita, anche
+  all'accensione, e il launcher si usa come app normale (aggiornamenti e invio log continuano). Prima di spegnerlo
+  il launcher spiega come rientrare.
+- **Modalità officina** (Impostazioni → Sistema): per 1, 3 o 7 giorni l'auto usa la home MG originale, senza
+  aggiornamenti né avvisi; alla scadenza (controllata all'accensione e periodicamente) il launcher torna da solo.
+  Si annulla prima riaccendendo l'interruttore o, se apri il launcher durante l'officina, rispondendo alla domanda.
+- Nella diagnostica: tempi di avvio (processo, accessibilità, boot, home MG, launcher), stato del servizio di
+  accessibilità, home predefinita e officina.
+- Restano le icone **Impostazioni Android** e **File Android** nella pagina App, arrivate con la 0.7.3.
 
 #### 0.7.3 — 15 ottobre 2026
 - Nella pagina App, in fondo alle app dell'auto, due nuove icone: **Impostazioni Android** (le impostazioni di
@@ -421,7 +443,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.7.3.apk
+   adb install -r -f MG4Launcher-0.7.4.apk
    ```
 3. Make it the default home:
    ```bash
@@ -430,8 +452,16 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
    Or press the Home button: Android asks which home app to use.
 
 At power-on the firmware still opens the original MG home: the launcher notices and comes back to the front by itself
-(since 0.7.2), without touching the reversing camera, CarPlay/Android Auto or a call. At every start it also re-confirms
-that it is the default home.
+(since 0.7.2; since 0.7.4 sooner, thanks to an accessibility service that only looks at which app is in the foreground),
+without touching the reversing camera, CarPlay/Android Auto or a call. At every start it also re-confirms that it is the
+default home.
+
+**Original MG home and service mode** (Settings → System):
+- *Use as default home* off: the MG home becomes the default again, also at power-on; the launcher stays usable as an
+  app. *Service mode* (1, 3 or 7 days): for servicing, the car uses the MG home and updates are paused; when it expires
+  the launcher comes back by itself, as before.
+- To come back earlier: the MG home does not list MG4 Launcher among its apps (it has a fixed list), so you need a
+  computer: `adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity`, then turn the switch back on.
 
 ### Updates
 
@@ -485,6 +515,21 @@ the repository or a bug report help a lot too. Thank you!
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.7.4 — 15 October 2026
+- **Faster start at power-on**: a launcher accessibility service (turned on automatically; it only looks at which app
+  comes to the foreground and does not read screen content) starts with the system, before the boot-completed
+  signal that arrived after about 30 seconds: as soon as the MG home appears, the launcher comes back to the front.
+  It also works when the screen wakes up. The 400 ms check stays as a fallback if the service is not active.
+- **Use as default home** (Settings → System): when off, the original MG home becomes the default again, also at
+  power-on, and the launcher works as a normal app (updates and log upload keep working). Before turning it off the
+  launcher explains how to come back.
+- **Service mode** (Settings → System): for 1, 3 or 7 days the car uses the original MG home, without updates or
+  notices; when it expires (checked at power-on and periodically) the launcher comes back by itself. It can be
+  cancelled earlier by turning the switch back on or, if you open the launcher during service mode, by answering the prompt.
+- In the diagnostics: start-up times (process, accessibility, boot, MG home, launcher), accessibility service status,
+  default home and service mode.
+- The **Android settings** and **Android files** icons on the Apps page, added in 0.7.3, are still there.
 
 #### 0.7.3 — 15 October 2026
 - On the Apps page, at the end of the car apps, two new icons: **Android settings** (Android's system settings) and
