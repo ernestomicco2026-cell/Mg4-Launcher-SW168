@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.7.3](releases/MG4Launcher-0.7.3.apk)**
+**Ultima versione / Latest version: [0.7.2](releases/MG4Launcher-0.7.2.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -114,7 +114,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.7.3.apk
+   adb install -r -f MG4Launcher-0.7.2.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -179,9 +179,6 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 
 ### Versioni
 
-#### 0.7.3 — 15 ottobre 2026
-- Correzione dell'invio automatico dei log diagnostici. Lo stato si vede in Impostazioni → Sistema.
-
 #### 0.7.2 — 15 ottobre 2026
 - **Il launcher parte all'accensione**: il firmware all'avvio apre la home MG per nome, saltando la home predefinita.
   Ora il launcher, appena l'auto si accende, controlla l'app in primo piano ogni 400 ms e, quando compare la home MG,
@@ -200,6 +197,7 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 - **Volante riscaldato**: il pulsante passa sempre da acceso a spento e viceversa, qualunque valore usi l'auto
   per "acceso".
 - Nella diagnostica, per ogni sedile, il livello previsto dopo il tocco e quello letto dall'auto.
+- Correzione dell'invio automatico dei log diagnostici.
 
 #### 0.7.1 — 15 ottobre 2026
 - **Nuove impostazioni**, con la stessa grafica della versione SWI69: a schermo intero, divise in cinque sezioni
@@ -411,7 +409,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.7.3.apk
+   adb install -r -f MG4Launcher-0.7.2.apk
    ```
 3. Make it the default home:
    ```bash
@@ -476,9 +474,6 @@ the repository or a bug report help a lot too. Thank you!
 
 ### Changelog
 
-#### 0.7.3 — 15 October 2026
-- Fix for the automatic upload of diagnostic logs. The status is shown in Settings → System.
-
 #### 0.7.2 — 15 October 2026
 - **The launcher starts at power-on**: at boot the firmware opens the MG home by name, skipping the default home.
   Now, as soon as the car switches on, the launcher checks the app in the foreground every 400 ms and, when the MG
@@ -496,6 +491,7 @@ the repository or a bug report help a lot too. Thank you!
   in the right order.
 - **Heated steering wheel**: the button always switches between on and off, whatever value the car uses for "on".
 - In the diagnostics, for each seat, the level expected after the tap and the one read from the car.
+- Fix for the automatic upload of diagnostic logs.
 
 #### 0.7.1 — 15 October 2026
 - **New settings**, with the same design as the SWI69 version: full screen, split into five sections (Car, Home,

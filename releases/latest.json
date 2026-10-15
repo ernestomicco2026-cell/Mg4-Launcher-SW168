@@ -1,6 +1,6 @@
 {
-  "version": "0.7.3",
-  "apk": "releases/MG4Launcher-0.7.3.apk",
+  "version": "0.7.2",
+  "apk": "releases/MG4Launcher-0.7.2.apk",
   "size": 459148,
-  "notes": "Correzioni."
+  "notes": "Il launcher parte all'accensione al posto della home MG; riconferma della home predefinita; sedili riscaldati con lo stesso ciclo dell'auto (massimo, poi a scendere)."
 }
