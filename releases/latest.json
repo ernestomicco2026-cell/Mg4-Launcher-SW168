@@ -1,6 +1,6 @@
 {
-  "version": "0.7.3",
-  "apk": "releases/MG4Launcher-0.7.3.apk",
-  "size": 459302,
-  "notes": "Impostazioni Android e File Android tra le app dell'auto."
+  "version": "0.7.4",
+  "apk": "releases/MG4Launcher-0.7.4.apk",
+  "size": 479858,
+  "notes": "Avvio all'accensione più rapido, interruttore home predefinita, modalità officina."
 }
