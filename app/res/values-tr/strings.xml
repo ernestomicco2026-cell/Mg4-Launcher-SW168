@@ -166,6 +166,8 @@
     <string name="app_manual" formatted="false">Kılavuz</string>
     <string name="app_account" formatted="false">Hesap</string>
     <string name="app_sos" formatted="false">SOS çağrısı</string>
+    <string name="app_android_settings" formatted="false">Android ayarları</string>
+    <string name="app_android_files" formatted="false">Android dosyaları</string>
     <string name="settings_title" formatted="false">Başlatıcı ayarları</string>
     <string name="settings_desc" formatted="false">Başlatıcı ayarları</string>
     <string name="car_color" formatted="false">ARAÇ RENGİ</string>

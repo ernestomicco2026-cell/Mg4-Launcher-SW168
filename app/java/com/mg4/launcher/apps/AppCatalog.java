@@ -74,7 +74,13 @@ public final class AppCatalog {
             {"MG Touchpoint", "com.saic.saicmaintenance", "com.saic.saicmaintenance.module.maintaince.MaintaiceEp21Activity", "info"},
             {"@app_account", "com.saic.avnlogin", "com.saic.avnlogin.mvp.login.LoginActivity", "user"},
             {"@app_sos", "com.saicmotor.rescuecall", "com.saicmotor.rescuecall.module.ICallCenterAct", "sos"},
+            // scorciatoie di Android (solo se l'attività esiste davvero sull'auto)
+            {"@app_android_settings", "@android_settings", "", "android_settings"},
+            {"@app_android_files", "@android_files", "", "folder"},
     };
+
+    /** Gestori file possibili, nell'ordine in cui si cercano. */
+    private static final String[] FILE_PACKAGES = {"com.android.documentsui", "com.mediatek.filemanager", "com.android.fileexplorer"};
 
     /** Navigatori possibili (dall'originale: Telenav, iGo, SAIC). */
     private static final String[] NAV_PACKAGES = {"com.telenav.app.arp", "com.nng.igo.primong", "com.saicmotor.navigation"};
@@ -119,6 +125,11 @@ public final class AppCatalog {
                 }
                 continue;
             }
+            if ("@android_settings".equals(a[1]) || "@android_files".equals(a[1])) {
+                Intent si = "@android_settings".equals(a[1]) ? androidSettingsIntent() : androidFilesIntent();
+                if (si != null) out.add(new App(a[0], null, si, icon, false, targetPackage(si)));
+                continue;
+            }
             ComponentName cn = new ComponentName(a[1], a[2]);
             if (exists(cn)) {
                 out.add(new App(a[0], cn, null, icon, false, a[1]));
@@ -130,6 +141,52 @@ public final class AppCatalog {
             }
         }
         return out;
+    }
+
+    private String sysDiag;
+
+    /** Impostazioni di Android (com.android.settings), se l'attività esiste. */
+    private Intent androidSettingsIntent() {
+        Intent i = new Intent(android.provider.Settings.ACTION_SETTINGS).setPackage("com.android.settings");
+        if (pm.resolveActivity(i, 0) == null) i = new Intent(android.provider.Settings.ACTION_SETTINGS);
+        boolean ok = pm.resolveActivity(i, 0) != null;
+        sysDiag = "impostazioni " + (ok ? "ok" : "assente");
+        return ok ? i : null;
+    }
+
+    /** Gestore file dell'auto: DocumentsUI, MediaTek, File Explorer, oppure chi apre documenti. */
+    private Intent androidFilesIntent() {
+        Intent found = null;
+        for (String p : FILE_PACKAGES) {
+            Intent li = pm.getLaunchIntentForPackage(p);
+            if (li != null) {
+                found = li;
+                break;
+            }
+            if ("com.android.documentsui".equals(p)) {
+                ComponentName fa = new ComponentName(p, "com.android.documentsui.files.FilesActivity");
+                if (exists(fa)) {
+                    found = new Intent(Intent.ACTION_MAIN).setComponent(fa);
+                    break;
+                }
+            }
+        }
+        if (found == null) {
+            Intent od = new Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*");
+            Intent gc = new Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*");
+            if (pm.resolveActivity(od, 0) != null) found = od;
+            else if (pm.resolveActivity(gc, 0) != null) found = gc;
+        }
+        String head = sysDiag == null ? "impostazioni ?" : sysDiag;
+        Diag.put("app.sistema", head + ", file " + (found != null ? targetPackage(found) : "assente"));
+        return found;
+    }
+
+    private String targetPackage(Intent i) {
+        if (i.getComponent() != null) return i.getComponent().getPackageName();
+        if (i.getPackage() != null) return i.getPackage();
+        android.content.pm.ResolveInfo ri = pm.resolveActivity(i, 0);
+        return ri != null && ri.activityInfo != null ? ri.activityInfo.packageName : "?";
     }
 
     /** Navigatori di terze parti installati sull'auto (Waze, Google Maps, OsmAnd, ...). */

@@ -166,6 +166,8 @@
     <string name="app_manual" formatted="false">Manual</string>
     <string name="app_account" formatted="false">Cuenta</string>
     <string name="app_sos" formatted="false">Llamada SOS</string>
+    <string name="app_android_settings" formatted="false">Ajustes de Android</string>
+    <string name="app_android_files" formatted="false">Archivos de Android</string>
     <string name="settings_title" formatted="false">Ajustes del launcher</string>
     <string name="settings_desc" formatted="false">Ajustes del launcher</string>
     <string name="car_color" formatted="false">COLOR DEL COCHE</string>

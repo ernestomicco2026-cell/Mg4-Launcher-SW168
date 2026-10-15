@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.7.2](releases/MG4Launcher-0.7.2.apk)**
+**Ultima versione / Latest version: [0.7.3](releases/MG4Launcher-0.7.3.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -32,6 +32,9 @@
 
 ![MG4 Launcher 0.7.1 — impostazioni, sezione Sistema, giorno (simulazione / mock-up)](docs/impostazioni-0.7.1-sistema.png)
 *Impostazioni 0.7.1, sezione Sistema (giorno) · 0.7.1 settings, System section (day, mock-up).*
+
+![MG4 Launcher 0.7.3 — pagina App (simulazione / mock-up)](docs/app-0.7.3.png)
+*Pagina App 0.7.3, con Impostazioni Android e File Android · 0.7.3 Apps page, with Android settings and Android files (mock-up).*
 
 ---
 
@@ -90,6 +93,7 @@ Sostituisce la schermata home originale mantenendone le funzioni, con una grafic
 - **In alto a destra**: indicatori di **Bluetooth**, **Wi-Fi** e rete **4G** della T-Box (con le tacche del segnale).
 - **App**: scorri la home verso sinistra per le app dell'auto e quelle che installi tu,
   con le icone tutte nello stesso stile; scorri verso destra per tornare. Con **Modifica** scegli quali app installate mostrare.
+  Tra le app dell'auto ci sono anche **Impostazioni Android** e **File Android** (se l'auto li ha).
 - **Impostazioni** (tieni premuta l'auto): a schermo intero, con un menu di cinque sezioni e la versione con lo stato
   degli aggiornamenti sempre visibile in basso (con **Installa** quando c'è una versione nuova):
   - **Auto**: colore dell'auto (con anteprima) e tetto nero;
@@ -114,7 +118,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.7.2.apk
+   adb install -r -f MG4Launcher-0.7.3.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -178,6 +182,13 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.7.3 — 15 ottobre 2026
+- Nella pagina App, in fondo alle app dell'auto, due nuove icone: **Impostazioni Android** (le impostazioni di
+  sistema di Android) e **File Android** (il gestore file dell'auto: DocumentsUI, quello MediaTek o File Explorer,
+  altrimenti la schermata di Android per aprire i documenti). Ogni icona compare solo se sull'auto c'è davvero.
+- Le altre app di sistema di Android restano nascoste come prima.
+- Nella diagnostica, la riga `app.sistema` dice se le impostazioni e il gestore file sono stati trovati.
 
 #### 0.7.2 — 15 ottobre 2026
 - **Il launcher parte all'accensione**: il firmware all'avvio apre la home MG per nome, saltando la home predefinita.
@@ -385,6 +396,7 @@ It replaces the original home screen, keeping its features, with a new, clean de
 - **Top right**: **Bluetooth**, **Wi-Fi** and T-Box **4G** indicators (with signal bars).
 - **Apps**: swipe the home screen left for the car's apps and the ones you install,
   all with matching icons; swipe right to go back. Use **Modifica** (Edit) to choose which installed apps to show.
+  The car apps also include **Android settings** and **Android files** (if the car has them).
 - **Settings** (long-press the car): full screen, with a menu of five sections and the version with the update status
   always visible at the bottom (with **Install** when a new version is out):
   - **Car**: car colour (with preview) and black roof;
@@ -409,7 +421,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.7.2.apk
+   adb install -r -f MG4Launcher-0.7.3.apk
    ```
 3. Make it the default home:
    ```bash
@@ -473,6 +485,13 @@ the repository or a bug report help a lot too. Thank you!
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.7.3 — 15 October 2026
+- On the Apps page, at the end of the car apps, two new icons: **Android settings** (Android's system settings) and
+  **Android files** (the car's file manager: DocumentsUI, the MediaTek one or File Explorer, otherwise Android's
+  document picker). Each icon appears only if it really exists on the car.
+- The other Android system apps stay hidden as before.
+- In the diagnostics, the `app.sistema` line says whether the settings and the file manager were found.
 
 #### 0.7.2 — 15 October 2026
 - **The launcher starts at power-on**: at boot the firmware opens the MG home by name, skipping the default home.

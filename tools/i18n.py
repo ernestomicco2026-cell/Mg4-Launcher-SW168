@@ -183,6 +183,8 @@ S = {
     "app_manual": ("Manuale", "Manual", "Manual", "Handbuch", "Manual", "Manuel", "Kılavuz"),
     "app_account": ("Account", "Account", "Cuenta", "Konto", "Conta", "Compte", "Hesap"),
     "app_sos": ("Chiamata SOS", "SOS call", "Llamada SOS", "SOS-Notruf", "Chamada SOS", "Appel SOS", "SOS çağrısı"),
+    "app_android_settings": ("Impostazioni Android", "Android settings", "Ajustes de Android", "Android-Einstellungen", "Definições Android", "Paramètres Android", "Android ayarları"),
+    "app_android_files": ("File Android", "Android files", "Archivos de Android", "Android-Dateien", "Ficheiros Android", "Fichiers Android", "Android dosyaları"),
 
     # --- impostazioni ---
     "settings_title": ("Impostazioni launcher", "Launcher settings", "Ajustes del launcher", "Launcher-Einstellungen", "Definições do launcher", "Réglages du launcher", "Başlatıcı ayarları"),
