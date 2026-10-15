@@ -422,9 +422,59 @@ public final class SettingsView extends FrameLayout {
         col.addView(card, topFull(14));
     }
 
+    private static int officinaDays = 3;
+
     private void buildSystem(Context c, LinearLayout col) {
         Updater up = host.updater();
-        col.addView(label(c, L.s(R.string.set_updates)));
+        // home predefinita e modalità officina
+        Context app = c.getApplicationContext();
+        boolean officina = com.mg4.launcher.svc.HomeMode.officina(app);
+        col.addView(label(c, L.s(R.string.set_start_section)));
+        LinearLayout hc = card(c);
+        String homeSub = officina ? L.f(R.string.officina_until_sub, com.mg4.launcher.svc.HomeMode.officinaDate(app))
+                : L.s(com.mg4.launcher.svc.HomeMode.enabled(app) ? R.string.home_default_sub : R.string.home_default_off_sub);
+        hc.addView(row(c, L.s(R.string.home_default_title), homeSub, toggle(c, com.mg4.launcher.svc.HomeMode.enabled(app), on -> {
+            if (on) {
+                com.mg4.launcher.svc.HomeMode.setEnabled(app, true);
+                showSection(SEC_SYSTEM);
+            } else {
+                Confirm.show(this, t, L.s(R.string.confirm_home_off_title), L.s(R.string.confirm_home_off_msg),
+                        L.s(R.string.btn_cancel), L.s(R.string.btn_turn_off), () -> com.mg4.launcher.svc.HomeMode.setEnabled(app, false));
+                showSection(SEC_SYSTEM);   // finché non si conferma l'interruttore resta acceso
+            }
+        }), false));
+        LinearLayout oc = Ui.row(c);
+        if (officina) {
+            oc.addView(button(c, L.s(R.string.btn_deactivate), v -> {
+                com.mg4.launcher.svc.HomeMode.end(app, "annullata");
+                showSection(SEC_SYSTEM);
+            }));
+        } else {
+            int[] days = {1, 3, 7};
+            int[] names = {R.string.days_1, R.string.days_3, R.string.days_7};
+            for (int i = 0; i < 3; i++) {
+                final int d = days[i];
+                TextView ch = choice(c, L.s(names[i]), officinaDays == d, v -> {
+                    officinaDays = d;
+                    showSection(SEC_SYSTEM);
+                });
+                oc.addView(ch, Ui.margins(new LinearLayout.LayoutParams(-2, tp(60)), 0, 0, dp(10), 0));
+            }
+            TextView act = button(c, L.s(R.string.btn_activate), v -> {
+                String until = new java.text.SimpleDateFormat("dd/MM", java.util.Locale.ITALY)
+                        .format(new java.util.Date(System.currentTimeMillis() + officinaDays * 24L * 3600_000L));
+                Confirm.show(this, t, L.s(R.string.confirm_officina_title), L.f(R.string.confirm_officina_msg, until),
+                        L.s(R.string.btn_cancel), L.s(R.string.btn_activate), () -> com.mg4.launcher.svc.HomeMode.startOfficina(app, officinaDays));
+            });
+            act.setTextColor(t.panel);
+            act.setBackground(Ui.pressable(c, t.text, 16 * Ui.K, t));
+            oc.addView(act, Ui.margins(new LinearLayout.LayoutParams(-2, tp(60)), dp(6), 0, 0, 0));
+        }
+        hc.addView(row(c, L.s(R.string.officina_title), officina
+                ? L.f(R.string.officina_until_sub, com.mg4.launcher.svc.HomeMode.officinaDate(app)) : L.s(R.string.officina_sub), oc, true));
+        col.addView(hc, topFull(14));
+
+        col.addView(label(c, L.s(R.string.set_updates)), top(30));
         LinearLayout card = card(c);
         LinearLayout btns = Ui.row(c);
         updInstallBtn = button(c, L.s(R.string.btn_install), v -> {

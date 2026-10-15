@@ -96,6 +96,28 @@
     <string name="upd_new">Nuova versione disponibile: %1$s</string>
     <string name="upd_new_short">Nuova versione %1$s</string>
     <string name="upd_unknown" formatted="false">Aggiornamenti non ancora controllati</string>
+    <string name="a11y_desc" formatted="false">Usato solo per riconoscere quale app è in primo piano all\'accensione e avviare MG4 Launcher al posto della home MG. Non legge il contenuto dello schermo.</string>
+    <string name="set_start_section" formatted="false">Home e officina</string>
+    <string name="home_default_title" formatted="false">Usa come home predefinita</string>
+    <string name="home_default_sub" formatted="false">All\'accensione e con il tasto Home si apre MG4 Launcher</string>
+    <string name="home_default_off_sub" formatted="false">Spento: si usa la home MG originale</string>
+    <string name="officina_until_sub">Modalità officina fino al %1$s</string>
+    <string name="officina_title" formatted="false">Modalità officina</string>
+    <string name="officina_sub" formatted="false">Per qualche giorno l\'auto usa la home MG originale, poi il launcher torna da solo</string>
+    <string name="days_1" formatted="false">1 giorno</string>
+    <string name="days_3" formatted="false">3 giorni</string>
+    <string name="days_7" formatted="false">7 giorni</string>
+    <string name="btn_activate" formatted="false">Attiva</string>
+    <string name="btn_deactivate" formatted="false">Disattiva</string>
+    <string name="btn_cancel" formatted="false">Annulla</string>
+    <string name="btn_turn_off" formatted="false">Spegni</string>
+    <string name="btn_keep" formatted="false">Lascia attiva</string>
+    <string name="confirm_home_off_title" formatted="false">Usare la home MG originale?</string>
+    <string name="confirm_home_off_msg" formatted="false">La home MG diventa quella predefinita, anche all\'accensione. La home MG non mostra MG4 Launcher tra le sue app: per tornare servirà un computer (adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity). Se ti serve solo per qualche giorno, usa la Modalità officina: il launcher torna da solo.</string>
+    <string name="confirm_officina_title" formatted="false">Attivare la modalità officina?</string>
+    <string name="confirm_officina_msg">Fino al %1$s l\'auto userà la home MG originale e gli aggiornamenti saranno sospesi. Alla scadenza MG4 Launcher torna da solo, come prima.</string>
+    <string name="officina_active_title" formatted="false">Modalità officina attiva</string>
+    <string name="officina_active_msg">Modalità officina attiva fino al %1$s. Vuoi disattivarla?</string>
     <string name="set_ui_size" formatted="false">DIMENSIONE COMANDI</string>
     <string name="ui_size_normal" formatted="false">Normale</string>
     <string name="ui_size_large" formatted="false">Grande</string>

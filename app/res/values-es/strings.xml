@@ -96,6 +96,28 @@
     <string name="upd_new">Nueva versión disponible: %1$s</string>
     <string name="upd_new_short">Nueva versión %1$s</string>
     <string name="upd_unknown" formatted="false">Actualizaciones aún no comprobadas</string>
+    <string name="a11y_desc" formatted="false">Solo se usa para saber qué app está en primer plano al encender y abrir MG4 Launcher en lugar del inicio de MG. No lee el contenido de la pantalla.</string>
+    <string name="set_start_section" formatted="false">Inicio y modo taller</string>
+    <string name="home_default_title" formatted="false">Usar como inicio predeterminado</string>
+    <string name="home_default_sub" formatted="false">MG4 Launcher se abre al encender y con el botón Inicio</string>
+    <string name="home_default_off_sub" formatted="false">Apagado: se usa el inicio original de MG</string>
+    <string name="officina_until_sub">Modo taller hasta el %1$s</string>
+    <string name="officina_title" formatted="false">Modo taller</string>
+    <string name="officina_sub" formatted="false">Durante unos días el coche usa el inicio original de MG; después el launcher vuelve solo</string>
+    <string name="days_1" formatted="false">1 día</string>
+    <string name="days_3" formatted="false">3 días</string>
+    <string name="days_7" formatted="false">7 días</string>
+    <string name="btn_activate" formatted="false">Activar</string>
+    <string name="btn_deactivate" formatted="false">Desactivar</string>
+    <string name="btn_cancel" formatted="false">Cancelar</string>
+    <string name="btn_turn_off" formatted="false">Apagar</string>
+    <string name="btn_keep" formatted="false">Mantener</string>
+    <string name="confirm_home_off_title" formatted="false">¿Usar el inicio original de MG?</string>
+    <string name="confirm_home_off_msg" formatted="false">El inicio de MG pasa a ser el predeterminado, también al encender. El inicio de MG no muestra MG4 Launcher entre sus apps: para volver hará falta un ordenador (adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity). Si solo es para unos días, usa el Modo taller: el launcher vuelve solo.</string>
+    <string name="confirm_officina_title" formatted="false">¿Activar el modo taller?</string>
+    <string name="confirm_officina_msg">Hasta el %1$s el coche usará el inicio original de MG y las actualizaciones quedarán en pausa. Al terminar, MG4 Launcher vuelve solo, como antes.</string>
+    <string name="officina_active_title" formatted="false">Modo taller activo</string>
+    <string name="officina_active_msg">Modo taller activo hasta el %1$s. ¿Quieres desactivarlo?</string>
     <string name="set_ui_size" formatted="false">TAMAÑO DE LOS CONTROLES</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Grande</string>

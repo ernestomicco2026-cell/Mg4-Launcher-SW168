@@ -96,6 +96,28 @@
     <string name="upd_new">Neue Version verfügbar: %1$s</string>
     <string name="upd_new_short">Neue Version %1$s</string>
     <string name="upd_unknown" formatted="false">Updates noch nicht geprüft</string>
+    <string name="a11y_desc" formatted="false">Wird nur verwendet, um beim Einschalten die App im Vordergrund zu erkennen und MG4 Launcher statt der MG-Startseite zu starten. Liest keine Bildschirminhalte.</string>
+    <string name="set_start_section" formatted="false">Startseite und Werkstattmodus</string>
+    <string name="home_default_title" formatted="false">Als Standard-Startseite verwenden</string>
+    <string name="home_default_sub" formatted="false">MG4 Launcher öffnet sich beim Einschalten und mit der Home-Taste</string>
+    <string name="home_default_off_sub" formatted="false">Aus: die originale MG-Startseite wird verwendet</string>
+    <string name="officina_until_sub">Werkstattmodus bis %1$s</string>
+    <string name="officina_title" formatted="false">Werkstattmodus</string>
+    <string name="officina_sub" formatted="false">Einige Tage nutzt das Auto die originale MG-Startseite, danach kehrt der Launcher von selbst zurück</string>
+    <string name="days_1" formatted="false">1 Tag</string>
+    <string name="days_3" formatted="false">3 Tage</string>
+    <string name="days_7" formatted="false">7 Tage</string>
+    <string name="btn_activate" formatted="false">Aktivieren</string>
+    <string name="btn_deactivate" formatted="false">Deaktivieren</string>
+    <string name="btn_cancel" formatted="false">Abbrechen</string>
+    <string name="btn_turn_off" formatted="false">Ausschalten</string>
+    <string name="btn_keep" formatted="false">Beibehalten</string>
+    <string name="confirm_home_off_title" formatted="false">Originale MG-Startseite verwenden?</string>
+    <string name="confirm_home_off_msg" formatted="false">Die MG-Startseite wird zum Standard, auch beim Einschalten. Die MG-Startseite zeigt MG4 Launcher nicht in ihren Apps: Zum Zurückkehren brauchst du einen Computer (adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity). Wenn du es nur für ein paar Tage brauchst, nutze den Werkstattmodus: Der Launcher kehrt von selbst zurück.</string>
+    <string name="confirm_officina_title" formatted="false">Werkstattmodus aktivieren?</string>
+    <string name="confirm_officina_msg">Bis %1$s nutzt das Auto die originale MG-Startseite, Updates sind pausiert. Danach kehrt MG4 Launcher von selbst zurück, wie zuvor.</string>
+    <string name="officina_active_title" formatted="false">Werkstattmodus aktiv</string>
+    <string name="officina_active_msg">Werkstattmodus aktiv bis %1$s. Möchtest du ihn deaktivieren?</string>
     <string name="set_ui_size" formatted="false">GRÖSSE DER BEDIENELEMENTE</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Groß</string>

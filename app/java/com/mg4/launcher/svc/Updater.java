@@ -153,6 +153,7 @@ public final class Updater {
      */
     public void install(Release r, String token) {
         if (busy || r == null || r.apkUrl == null) return;
+        if (HomeMode.officina(ctx)) return;   // aggiornamenti sospesi durante la modalità officina
         status(L.f(R.string.upd_downloading, r.apkName), r, true);
         bg.post(() -> {
             byte[] apk;

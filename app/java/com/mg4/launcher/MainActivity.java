@@ -110,8 +110,14 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         media.start();
         nav.start();
         logs.start();
-        // riconferma della home predefinita (un aggiornamento di sistema può averla azzerata)
-        new Thread(() -> com.mg4.launcher.svc.HomeDefault.ensure(getApplicationContext()), "mg4-home").start();
+        // avvio all'accensione: servizio di accessibilità, scadenza officina, riconferma della home predefinita
+        com.mg4.launcher.svc.StartGuard.markProcess();
+        com.mg4.launcher.svc.HomeMode.checkExpiry(getApplicationContext());
+        com.mg4.launcher.svc.HomeMode.diag(getApplicationContext());
+        new Thread(() -> {
+            com.mg4.launcher.svc.BootAccessibility.ensureEnabled(getApplicationContext());
+            com.mg4.launcher.svc.HomeDefault.ensure(getApplicationContext());
+        }, "mg4-home").start();
 
         IntentFilter f = new IntentFilter();
         f.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -132,6 +138,29 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         root.postDelayed(autoCheck, 90_000);
     }
 
+    // ---- modalità officina: aperto il launcher durante l'officina, si chiede se disattivarla ----------
+
+    private boolean officinaAsked;
+
+    private void askOfficina() {
+        android.content.Context app = getApplicationContext();
+        if (!com.mg4.launcher.svc.HomeMode.officina(app)) {
+            officinaAsked = false;
+            return;
+        }
+        if (officinaAsked) return;
+        officinaAsked = true;
+        root.post(() -> com.mg4.launcher.ui.Confirm.show(root, theme, L.s(R.string.officina_active_title),
+                L.f(R.string.officina_active_msg, com.mg4.launcher.svc.HomeMode.officinaDate(app)),
+                L.s(R.string.btn_keep), L.s(R.string.btn_deactivate), () -> {
+                    com.mg4.launcher.svc.HomeMode.end(app, "annullata");
+                    if (settings != null) {
+                        closeSettings();
+                        openSettings();
+                    }
+                }));
+    }
+
     // ---- popup discreto per i nuovi aggiornamenti ----------------------------------------------
 
     private static final long CHECK_EVERY = 6 * 60 * 60 * 1000L;   // ogni 6 ore
@@ -141,7 +170,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     private final Runnable autoCheck = new Runnable() {
         @Override
         public void run() {
-            if (prefs.updatePopup()) updater.checkQuiet(prefs.updateRepo(), prefs.githubToken(), r -> showUpdatePopup(r));
+            if (prefs.updatePopup() && !com.mg4.launcher.svc.HomeMode.officina(getApplicationContext())) updater.checkQuiet(prefs.updateRepo(), prefs.githubToken(), r -> showUpdatePopup(r));
             root.postDelayed(this, CHECK_EVERY);
         }
     };
@@ -239,6 +268,7 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     protected void onResume() {
         super.onResume();
+        askOfficina();
         goFullscreen();
     }
 

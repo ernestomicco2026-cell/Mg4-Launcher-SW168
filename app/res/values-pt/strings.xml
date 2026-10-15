@@ -96,6 +96,28 @@
     <string name="upd_new">Nova versão disponível: %1$s</string>
     <string name="upd_new_short">Nova versão %1$s</string>
     <string name="upd_unknown" formatted="false">Atualizações ainda não verificadas</string>
+    <string name="a11y_desc" formatted="false">Usado apenas para saber que app está em primeiro plano ao ligar e abrir o MG4 Launcher em vez do início MG. Não lê o conteúdo do ecrã.</string>
+    <string name="set_start_section" formatted="false">Início e modo oficina</string>
+    <string name="home_default_title" formatted="false">Usar como início predefinido</string>
+    <string name="home_default_sub" formatted="false">O MG4 Launcher abre ao ligar e com o botão Início</string>
+    <string name="home_default_off_sub" formatted="false">Desligado: usa-se o início original MG</string>
+    <string name="officina_until_sub">Modo oficina até %1$s</string>
+    <string name="officina_title" formatted="false">Modo oficina</string>
+    <string name="officina_sub" formatted="false">Durante alguns dias o carro usa o início original MG; depois o launcher volta sozinho</string>
+    <string name="days_1" formatted="false">1 dia</string>
+    <string name="days_3" formatted="false">3 dias</string>
+    <string name="days_7" formatted="false">7 dias</string>
+    <string name="btn_activate" formatted="false">Ativar</string>
+    <string name="btn_deactivate" formatted="false">Desativar</string>
+    <string name="btn_cancel" formatted="false">Cancelar</string>
+    <string name="btn_turn_off" formatted="false">Desligar</string>
+    <string name="btn_keep" formatted="false">Manter</string>
+    <string name="confirm_home_off_title" formatted="false">Usar o início original MG?</string>
+    <string name="confirm_home_off_msg" formatted="false">O início MG passa a ser o predefinido, também ao ligar. O início MG não mostra o MG4 Launcher nas suas apps: para voltar será preciso um computador (adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity). Se for só por alguns dias, usa o Modo oficina: o launcher volta sozinho.</string>
+    <string name="confirm_officina_title" formatted="false">Ativar o modo oficina?</string>
+    <string name="confirm_officina_msg">Até %1$s o carro usará o início original MG e as atualizações ficam em pausa. No fim, o MG4 Launcher volta sozinho, como antes.</string>
+    <string name="officina_active_title" formatted="false">Modo oficina ativo</string>
+    <string name="officina_active_msg">Modo oficina ativo até %1$s. Queres desativá-lo?</string>
     <string name="set_ui_size" formatted="false">TAMANHO DOS COMANDOS</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Grande</string>

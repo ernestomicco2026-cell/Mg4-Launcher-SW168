@@ -96,6 +96,28 @@
     <string name="upd_new">Yeni sürüm mevcut: %1$s</string>
     <string name="upd_new_short">Yeni sürüm %1$s</string>
     <string name="upd_unknown" formatted="false">Güncellemeler henüz denetlenmedi</string>
+    <string name="a11y_desc" formatted="false">Yalnızca açılışta hangi uygulamanın önde olduğunu görmek ve MG ana ekranı yerine MG4 Launcher\'ı başlatmak için kullanılır. Ekran içeriğini okumaz.</string>
+    <string name="set_start_section" formatted="false">Ana ekran ve servis modu</string>
+    <string name="home_default_title" formatted="false">Varsayılan ana ekran olarak kullan</string>
+    <string name="home_default_sub" formatted="false">MG4 Launcher açılışta ve Ana ekran düğmesiyle açılır</string>
+    <string name="home_default_off_sub" formatted="false">Kapalı: orijinal MG ana ekranı kullanılır</string>
+    <string name="officina_until_sub">Servis modu %1$s tarihine kadar</string>
+    <string name="officina_title" formatted="false">Servis modu</string>
+    <string name="officina_sub" formatted="false">Birkaç gün araç orijinal MG ana ekranını kullanır, sonra başlatıcı kendiliğinden geri gelir</string>
+    <string name="days_1" formatted="false">1 gün</string>
+    <string name="days_3" formatted="false">3 gün</string>
+    <string name="days_7" formatted="false">7 gün</string>
+    <string name="btn_activate" formatted="false">Etkinleştir</string>
+    <string name="btn_deactivate" formatted="false">Kapat</string>
+    <string name="btn_cancel" formatted="false">İptal</string>
+    <string name="btn_turn_off" formatted="false">Kapat</string>
+    <string name="btn_keep" formatted="false">Açık bırak</string>
+    <string name="confirm_home_off_title" formatted="false">Orijinal MG ana ekranı kullanılsın mı?</string>
+    <string name="confirm_home_off_msg" formatted="false">MG ana ekranı, açılışta da varsayılan olur. MG ana ekranı uygulamaları arasında MG4 Launcher\'ı göstermez: geri dönmek için bilgisayar gerekir (adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity). Yalnızca birkaç gün içinse Servis modunu kullan: başlatıcı kendiliğinden geri gelir.</string>
+    <string name="confirm_officina_title" formatted="false">Servis modu açılsın mı?</string>
+    <string name="confirm_officina_msg">%1$s tarihine kadar araç orijinal MG ana ekranını kullanacak ve güncellemeler duraklatılacak. Süre bitince MG4 Launcher kendiliğinden, eskisi gibi geri gelir.</string>
+    <string name="officina_active_title" formatted="false">Servis modu açık</string>
+    <string name="officina_active_msg">Servis modu %1$s tarihine kadar açık. Kapatmak istiyor musun?</string>
     <string name="set_ui_size" formatted="false">KONTROL BOYUTU</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Büyük</string>

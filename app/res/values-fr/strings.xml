@@ -96,6 +96,28 @@
     <string name="upd_new">Nouvelle version disponible : %1$s</string>
     <string name="upd_new_short">Nouvelle version %1$s</string>
     <string name="upd_unknown" formatted="false">Mises à jour pas encore vérifiées</string>
+    <string name="a11y_desc" formatted="false">Sert uniquement à savoir quelle app est au premier plan au démarrage pour lancer MG4 Launcher à la place de l\'accueil MG. Ne lit pas le contenu de l\'écran.</string>
+    <string name="set_start_section" formatted="false">Accueil et mode atelier</string>
+    <string name="home_default_title" formatted="false">Utiliser comme accueil par défaut</string>
+    <string name="home_default_sub" formatted="false">MG4 Launcher s\'ouvre au démarrage et avec le bouton Accueil</string>
+    <string name="home_default_off_sub" formatted="false">Désactivé : l\'accueil MG d\'origine est utilisé</string>
+    <string name="officina_until_sub">Mode atelier jusqu\'au %1$s</string>
+    <string name="officina_title" formatted="false">Mode atelier</string>
+    <string name="officina_sub" formatted="false">Pendant quelques jours, la voiture utilise l\'accueil MG d\'origine, puis le launcher revient tout seul</string>
+    <string name="days_1" formatted="false">1 jour</string>
+    <string name="days_3" formatted="false">3 jours</string>
+    <string name="days_7" formatted="false">7 jours</string>
+    <string name="btn_activate" formatted="false">Activer</string>
+    <string name="btn_deactivate" formatted="false">Désactiver</string>
+    <string name="btn_cancel" formatted="false">Annuler</string>
+    <string name="btn_turn_off" formatted="false">Désactiver</string>
+    <string name="btn_keep" formatted="false">Garder</string>
+    <string name="confirm_home_off_title" formatted="false">Utiliser l\'accueil MG d\'origine ?</string>
+    <string name="confirm_home_off_msg" formatted="false">L\'accueil MG devient celui par défaut, y compris au démarrage. L\'accueil MG n\'affiche pas MG4 Launcher parmi ses apps : pour revenir, il faudra un ordinateur (adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity). Si c\'est seulement pour quelques jours, utilise le Mode atelier : le launcher revient tout seul.</string>
+    <string name="confirm_officina_title" formatted="false">Activer le mode atelier ?</string>
+    <string name="confirm_officina_msg">Jusqu\'au %1$s, la voiture utilisera l\'accueil MG d\'origine et les mises à jour seront suspendues. À l\'échéance, MG4 Launcher revient tout seul, comme avant.</string>
+    <string name="officina_active_title" formatted="false">Mode atelier actif</string>
+    <string name="officina_active_msg">Mode atelier actif jusqu\'au %1$s. Veux-tu le désactiver ?</string>
     <string name="set_ui_size" formatted="false">TAILLE DES COMMANDES</string>
     <string name="ui_size_normal" formatted="false">Normale</string>
     <string name="ui_size_large" formatted="false">Grande</string>

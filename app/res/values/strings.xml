@@ -96,6 +96,28 @@
     <string name="upd_new">New version available: %1$s</string>
     <string name="upd_new_short">New version %1$s</string>
     <string name="upd_unknown" formatted="false">Updates not checked yet</string>
+    <string name="a11y_desc" formatted="false">Used only to see which app is in the foreground at power-on and start MG4 Launcher instead of the MG home. It does not read screen content.</string>
+    <string name="set_start_section" formatted="false">Home and service mode</string>
+    <string name="home_default_title" formatted="false">Use as default home</string>
+    <string name="home_default_sub" formatted="false">MG4 Launcher opens at power-on and with the Home button</string>
+    <string name="home_default_off_sub" formatted="false">Off: the original MG home is used</string>
+    <string name="officina_until_sub">Service mode until %1$s</string>
+    <string name="officina_title" formatted="false">Service mode</string>
+    <string name="officina_sub" formatted="false">For a few days the car uses the original MG home, then the launcher comes back by itself</string>
+    <string name="days_1" formatted="false">1 day</string>
+    <string name="days_3" formatted="false">3 days</string>
+    <string name="days_7" formatted="false">7 days</string>
+    <string name="btn_activate" formatted="false">Activate</string>
+    <string name="btn_deactivate" formatted="false">Turn off</string>
+    <string name="btn_cancel" formatted="false">Cancel</string>
+    <string name="btn_turn_off" formatted="false">Turn off</string>
+    <string name="btn_keep" formatted="false">Keep it on</string>
+    <string name="confirm_home_off_title" formatted="false">Use the original MG home?</string>
+    <string name="confirm_home_off_msg" formatted="false">The MG home becomes the default, also at power-on. The MG home does not list MG4 Launcher among its apps: to come back you will need a computer (adb shell cmd package set-home-activity com.mg4.launcher/.MainActivity). If you only need it for a few days, use Service mode: the launcher comes back by itself.</string>
+    <string name="confirm_officina_title" formatted="false">Turn on service mode?</string>
+    <string name="confirm_officina_msg">Until %1$s the car will use the original MG home and updates will be paused. When it expires, MG4 Launcher comes back by itself, as before.</string>
+    <string name="officina_active_title" formatted="false">Service mode is on</string>
+    <string name="officina_active_msg">Service mode is on until %1$s. Do you want to turn it off?</string>
     <string name="set_ui_size" formatted="false">CONTROL SIZE</string>
     <string name="ui_size_normal" formatted="false">Normal</string>
     <string name="ui_size_large" formatted="false">Large</string>
