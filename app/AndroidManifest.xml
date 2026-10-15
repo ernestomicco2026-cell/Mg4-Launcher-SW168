@@ -17,6 +17,9 @@
     <!-- concessi automaticamente perché l'app è firmata con la chiave platform del sistema -->
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
     <uses-permission android:name="android.permission.REAL_GET_TASKS" />
+    <!-- avvio all'accensione e riconferma della home predefinita -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SET_PREFERRED_APPLICATIONS" />
     <!-- aggiornamento da GitHub senza conferma (permesso di sistema, concesso dalla firma platform) -->
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
@@ -51,6 +54,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- all'accensione il firmware apre la home MG per nome: questo receiver riporta in primo piano il launcher -->
+        <receiver
+            android:name=".svc.BootWatcher"
+            android:directBootAware="true"
+            android:exported="true">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name=".svc.TokenReceiver"

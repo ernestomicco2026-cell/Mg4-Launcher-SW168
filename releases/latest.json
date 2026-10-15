@@ -1,6 +1,6 @@
 {
-  "version": "0.7.1",
-  "apk": "releases/MG4Launcher-0.7.1.apk",
-  "size": 455052,
-  "notes": "Nuove impostazioni a sezioni, temperatura interna attivabile, invio automatico dei log diagnostici."
+  "version": "0.7.2",
+  "apk": "releases/MG4Launcher-0.7.2.apk",
+  "size": 459148,
+  "notes": "Il launcher parte all'accensione al posto della home MG; riconferma della home predefinita."
 }

@@ -110,6 +110,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
         media.start();
         nav.start();
         logs.start();
+        // riconferma della home predefinita (un aggiornamento di sistema può averla azzerata)
+        new Thread(() -> com.mg4.launcher.svc.HomeDefault.ensure(getApplicationContext()), "mg4-home").start();
 
         IntentFilter f = new IntentFilter();
         f.addAction(Intent.ACTION_PACKAGE_ADDED);
@@ -498,6 +500,8 @@ public final class MainActivity extends Activity implements HomeView.Host, AppsV
     @Override
     public void openOriginalHome() {
         try {
+            // aperta apposta: il controllo all'accensione per un po' non deve riportare il nostro launcher
+            com.mg4.launcher.svc.BootWatcher.userOpenedOriginal(this);
             startActivity(new Intent(Intent.ACTION_MAIN)
                     .setComponent(new ComponentName("com.saicmotor.hmi.launcher", "com.saicmotor.hmi.launcher.ui.MainActivity"))
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));

@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.7.1](releases/MG4Launcher-0.7.1.apk)**
+**Ultima versione / Latest version: [0.7.2](releases/MG4Launcher-0.7.2.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -18,13 +18,13 @@
 > The MG / MG4 names only identify the compatible car (SWI68 infotainment). Install and use it at your own risk.
 
 ---
-![MG4 Launcher 0.7.1 — home (simulazione / mock-up)](docs/home-0.7.1.png)
-*Home 0.7.1 — comandi normali, guida a sinistra · 0.7.1 home: normal controls, left-hand drive (mock-up).*
+![MG4 Launcher 0.7.2 — home (simulazione / mock-up)](docs/home-0.7.2.png)
+*Home 0.7.2 — comandi normali, guida a sinistra · 0.7.2 home: normal controls, left-hand drive (mock-up).*
 
-![MG4 Launcher 0.7.1 — comandi molto grandi (simulazione / mock-up)](docs/home-0.7.1-comandi-grandi.png)
+![MG4 Launcher 0.7.2 — comandi molto grandi (simulazione / mock-up)](docs/home-0.7.2-comandi-grandi.png)
 *Dimensione comandi "Molto grande" · "Extra large" control size (mock-up).*
 
-![MG4 Launcher 0.7.1 — guida a destra (simulazione / mock-up)](docs/home-0.7.1-guida-destra.png)
+![MG4 Launcher 0.7.2 — guida a destra (simulazione / mock-up)](docs/home-0.7.2-guida-destra.png)
 *Guida a destra: home specchiata, auto e clima dal lato del guidatore · Right-hand drive: mirrored home, car and climate on the driver's side (mock-up).*
 
 ![MG4 Launcher 0.7.1 — impostazioni, sezione Auto, notte (simulazione / mock-up)](docs/impostazioni-0.7.1-auto.png)
@@ -114,7 +114,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.7.1.apk
+   adb install -r -f MG4Launcher-0.7.2.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -122,7 +122,9 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
    ```
    In alternativa premi il tasto Home: Android chiede quale home usare.
 
-Il launcher parte già all'accensione dell'auto, come la home originale.
+All'accensione il firmware apre comunque la home MG originale: il launcher se ne accorge e torna in primo piano da solo
+(dalla 0.7.2), senza toccare la retrocamera, CarPlay/Android Auto o una chiamata. A ogni avvio riconferma anche di
+essere la home predefinita.
 
 ### Aggiornamenti
 
@@ -176,6 +178,18 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.7.2 — 15 ottobre 2026
+- **Il launcher parte all'accensione**: il firmware all'avvio apre la home MG per nome, saltando la home predefinita.
+  Ora il launcher, appena l'auto si accende, controlla l'app in primo piano ogni 400 ms e, quando compare la home MG,
+  si riapre da solo (al massimo 3 volte, per non entrare in conflitto con il firmware). Il controllo finisce quando il
+  launcher resta in primo piano per 5 secondi, o al più tardi dopo circa un minuto.
+- Non interviene se in primo piano c'è un'altra app (retrocamera, CarPlay, Android Auto, chiamata, avvisi di sistema)
+  né se hai aperto apposta la home MG con *Apri la home originale MG*.
+- A ogni avvio il launcher **riconferma di essere la home predefinita**, che un aggiornamento del firmware o di
+  un'app di sistema può azzerare.
+- Nuove voci nella diagnostica (e nei log inviati): ora del boot, dopo quanti secondi compare la home MG, se il
+  launcher è stato riaperto e con quanti tentativi, stato della home predefinita.
 
 #### 0.7.1 — 15 ottobre 2026
 - **Nuove impostazioni**, con la stessa grafica della versione SWI69: a schermo intero, divise in cinque sezioni
@@ -387,7 +401,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.7.1.apk
+   adb install -r -f MG4Launcher-0.7.2.apk
    ```
 3. Make it the default home:
    ```bash
@@ -395,7 +409,9 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
    ```
    Or press the Home button: Android asks which home app to use.
 
-The launcher starts as soon as the car switches on, like the original home.
+At power-on the firmware still opens the original MG home: the launcher notices and comes back to the front by itself
+(since 0.7.2), without touching the reversing camera, CarPlay/Android Auto or a call. At every start it also re-confirms
+that it is the default home.
 
 ### Updates
 
@@ -449,6 +465,18 @@ the repository or a bug report help a lot too. Thank you!
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.7.2 — 15 October 2026
+- **The launcher starts at power-on**: at boot the firmware opens the MG home by name, skipping the default home.
+  Now, as soon as the car switches on, the launcher checks the app in the foreground every 400 ms and, when the MG
+  home appears, reopens itself (at most 3 times, so it never fights the firmware). The check stops once the launcher
+  has stayed in the foreground for 5 seconds, or after about a minute at the latest.
+- It does nothing if another app is in the foreground (reversing camera, CarPlay, Android Auto, a call, system
+  notices) or if you deliberately opened the MG home with *Open the original MG home*.
+- At every start the launcher **re-confirms that it is the default home**, which a firmware or system app update
+  can reset.
+- New diagnostics entries (also in the uploaded logs): boot time, how many seconds until the MG home appears,
+  whether the launcher was reopened and how many attempts, default home status.
 
 #### 0.7.1 — 15 October 2026
 - **New settings**, with the same design as the SWI69 version: full screen, split into five sections (Car, Home,
