@@ -40,6 +40,9 @@ python3 - "$T/log-token.txt" "$OUT/gen/com/mg4/launcher/svc/LogConfig.java" <<'P
 import os, random, sys
 src, dst = sys.argv[1], sys.argv[2]
 tok = open(src).read().strip() if os.path.exists(src) else ""
+# solo i caratteri validi di un token GitHub: un carattere in più (es. "}" copiato per sbaglio) lo rende non valido
+import re
+tok = re.sub(r"[^A-Za-z0-9_]", "", tok)
 key = [random.randrange(1, 255) for _ in tok] or [0]
 enc = [ord(ch) ^ key[i] for i, ch in enumerate(tok)]
 os.makedirs(os.path.dirname(dst), exist_ok=True)

@@ -2,7 +2,7 @@
 
 🇮🇹 [Italiano](#italiano) · 🇬🇧 [English](#english)
 
-**Ultima versione / Latest version: [0.7.2](releases/MG4Launcher-0.7.2.apk)**
+**Ultima versione / Latest version: [0.7.3](releases/MG4Launcher-0.7.3.apk)**
 
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr) [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
@@ -114,7 +114,7 @@ Il firmware MG SWI68 blocca l'installazione normale delle app: l'opzione `-f` la
 1. Scarica l'APK dalla cartella [`releases/`](releases/).
 2. Installa:
    ```bash
-   adb install -r -f MG4Launcher-0.7.2.apk
+   adb install -r -f MG4Launcher-0.7.3.apk
    ```
 3. Rendilo la home predefinita:
    ```bash
@@ -178,6 +178,11 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 [![Offrimi un caffè con PayPal](https://img.shields.io/badge/Offrimi%20un%20caff%C3%A8-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Versioni
+
+#### 0.7.3 — 15 ottobre 2026
+- **Invio automatico dei log corretto**: nelle versioni 0.7.1 e 0.7.2 l'invio non riusciva mai (la chiave di invio
+  inclusa nell'app non era valida), quindi i log restavano in coda sull'auto. Ora partono, compresi quelli in coda
+  (fino a 20). Lo stato si vede in Impostazioni → Sistema.
 
 #### 0.7.2 — 15 ottobre 2026
 - **Il launcher parte all'accensione**: il firmware all'avvio apre la home MG per nome, saltando la home predefinita.
@@ -408,7 +413,7 @@ The MG SWI68 firmware blocks normal app installs; the `-f` option allows it.
 1. Download the APK from the [`releases/`](releases/) folder.
 2. Install it:
    ```bash
-   adb install -r -f MG4Launcher-0.7.2.apk
+   adb install -r -f MG4Launcher-0.7.3.apk
    ```
 3. Make it the default home:
    ```bash
@@ -472,6 +477,11 @@ the repository or a bug report help a lot too. Thank you!
 [![Buy me a coffee with PayPal](https://img.shields.io/badge/Buy%20me%20a%20coffee-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/pool/9tv7fQ36nA?sr=wccr)
 
 ### Changelog
+
+#### 0.7.3 — 15 October 2026
+- **Automatic log upload fixed**: in 0.7.1 and 0.7.2 the upload never succeeded (the upload key built into the app
+  was invalid), so logs stayed queued in the car. Now they are sent, including the queued ones (up to 20). The status
+  is shown in Settings → System.
 
 #### 0.7.2 — 15 October 2026
 - **The launcher starts at power-on**: at boot the firmware opens the MG home by name, skipping the default home.
