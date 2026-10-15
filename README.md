@@ -180,9 +180,7 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 ### Versioni
 
 #### 0.7.3 — 15 ottobre 2026
-- **Invio automatico dei log corretto**: nelle versioni 0.7.1 e 0.7.2 l'invio non riusciva mai (la chiave di invio
-  inclusa nell'app non era valida), quindi i log restavano in coda sull'auto. Ora partono, compresi quelli in coda
-  (fino a 20). Lo stato si vede in Impostazioni → Sistema.
+- Correzione dell'invio automatico dei log diagnostici. Lo stato si vede in Impostazioni → Sistema.
 
 #### 0.7.2 — 15 ottobre 2026
 - **Il launcher parte all'accensione**: il firmware all'avvio apre la home MG per nome, saltando la home predefinita.
@@ -479,9 +477,7 @@ the repository or a bug report help a lot too. Thank you!
 ### Changelog
 
 #### 0.7.3 — 15 October 2026
-- **Automatic log upload fixed**: in 0.7.1 and 0.7.2 the upload never succeeded (the upload key built into the app
-  was invalid), so logs stayed queued in the car. Now they are sent, including the queued ones (up to 20). The status
-  is shown in Settings → System.
+- Fix for the automatic upload of diagnostic logs. The status is shown in Settings → System.
 
 #### 0.7.2 — 15 October 2026
 - **The launcher starts at power-on**: at boot the firmware opens the MG home by name, skipping the default home.
