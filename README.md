@@ -190,6 +190,13 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
   un'app di sistema può azzerare.
 - Nuove voci nella diagnostica (e nei log inviati): ora del boot, dopo quanti secondi compare la home MG, se il
   launcher è stato riaperto e con quanti tentativi, stato della home predefinita.
+- **Sedili riscaldati**: il pulsante segue lo stesso ciclo dell'auto e del launcher originale — primo tocco livello
+  massimo (3 tacche), poi 2, 1 e spento. Prima le tacche mostravano per qualche secondo l'ordine opposto
+  (1 → 2 → 3) e con tocchi rapidi si perdevano il passo: ora ogni tocco avanza di un livello partendo dall'ultimo
+  mostrato, e ogni tocco arriva all'auto nell'ordine giusto.
+- **Volante riscaldato**: il pulsante passa sempre da acceso a spento e viceversa, qualunque valore usi l'auto
+  per "acceso".
+- Nella diagnostica, per ogni sedile, il livello previsto dopo il tocco e quello letto dall'auto.
 
 #### 0.7.1 — 15 ottobre 2026
 - **Nuove impostazioni**, con la stessa grafica della versione SWI69: a schermo intero, divise in cinque sezioni
@@ -477,6 +484,12 @@ the repository or a bug report help a lot too. Thank you!
   can reset.
 - New diagnostics entries (also in the uploaded logs): boot time, how many seconds until the MG home appears,
   whether the launcher was reopened and how many attempts, default home status.
+- **Heated seats**: the button follows the same cycle as the car and the original launcher — first tap maximum
+  level (3 marks), then 2, 1 and off. Before, the marks briefly showed the opposite order (1 → 2 → 3) and lost
+  track with quick taps: now every tap moves one level on from the last one shown, and each tap reaches the car
+  in the right order.
+- **Heated steering wheel**: the button always switches between on and off, whatever value the car uses for "on".
+- In the diagnostics, for each seat, the level expected after the tap and the one read from the car.
 
 #### 0.7.1 — 15 October 2026
 - **New settings**, with the same design as the SWI69 version: full screen, split into five sections (Car, Home,

@@ -314,6 +314,10 @@ public final class VehicleClient {
                     s.seatRight = held(AC_GET_PSG_SEAT_HEAT, rs >= 0 && rs <= 3 ? rs : -1, now);
                     s.wheelHeat = held(AC_GET_WHEEL_HEAT, wh == 3 ? 1 : wh == 0 ? 0 : -1, now);
                     Diag.put("clima.sedili sx/dx · volante", ls + " / " + rs + " · " + wh);
+                    // previsione dopo un tocco a confronto con il valore dell'auto (si vede nei log)
+                    int pl = predicted(AC_GET_DRV_SEAT_HEAT, Integer.MIN_VALUE), pr = predicted(AC_GET_PSG_SEAT_HEAT, Integer.MIN_VALUE);
+                    if (pl != Integer.MIN_VALUE) Diag.put("clima.sedileSx", "tocco, previsto " + pl + ", letto dall'auto " + ls);
+                    if (pr != Integer.MIN_VALUE) Diag.put("clima.sedileDx", "tocco, previsto " + pr + ", letto dall'auto " + rs);
                 }
             } catch (Exception e) {
                 Diag.error("clima", e.toString());
@@ -464,6 +468,14 @@ public final class VehicleClient {
         }
     }
 
+    /** Ultimo valore previsto ancora valido per un comando, oppure fallback se non ce n'è. */
+    private int predicted(int getCode, int fallback) {
+        synchronized (holds) {
+            long[] h = holds.get(getCode);
+            return h != null && android.os.SystemClock.uptimeMillis() < h[1] ? (int) h[0] : fallback;
+        }
+    }
+
     private void hold(int getCode, int value) {
         synchronized (holds) {
             holds.put(getCode, new long[]{value, android.os.SystemClock.uptimeMillis() + HOLD_MS});
@@ -495,7 +507,10 @@ public final class VehicleClient {
         press("aircondition", AC, AC_SET_AUTO, AC_GET_AUTO, last.autoOn, "clima.auto");
     }
 
-    /** Sedile: ogni tocco passa al livello successivo (0 → 1 → 2 → 3 → 0), come il tasto dell'app Clima. */
+    /**
+     * Sedile: ogni tocco invia "premuto" e l'auto passa al livello successivo con il suo ciclo, come il launcher
+     * originale: spento → 3 (massimo) → 2 → 1 → spento.
+     */
     public void pressSeatLeft() {
         pressLevel(AC_SET_DRV_SEAT_HEAT, AC_GET_DRV_SEAT_HEAT, last.seatLeft, "clima.sedileSx");
     }
@@ -504,14 +519,25 @@ public final class VehicleClient {
         pressLevel(AC_SET_PSG_SEAT_HEAT, AC_GET_PSG_SEAT_HEAT, last.seatRight, "clima.sedileDx");
     }
 
+    /** Volante: acceso ↔ spento (l'auto usa 3 per acceso; qui 0 = spento, > 0 = acceso). */
     public void toggleWheelHeat() {
-        if (last.wheelHeat == 0 || last.wheelHeat == 1) hold(AC_GET_WHEEL_HEAT, 1 - last.wheelHeat);
+        int cur = predicted(AC_GET_WHEEL_HEAT, last.wheelHeat);
+        if (cur >= 0) hold(AC_GET_WHEEL_HEAT, cur > 0 ? 0 : 1);
         sendPress(AC_SET_WHEEL_HEAT, "clima.volante");
     }
 
+    /**
+     * Con tocchi rapidi il livello successivo parte dall'ultimo previsto ancora valido, non dall'ultimo letto
+     * dall'auto: ogni tocco avanza di un passo (0 → 3 → 2 → 1 → 0) e il tempo di attesa riparte.
+     */
     private void pressLevel(int setCode, int getCode, int current, String what) {
-        if (current >= 0) hold(getCode, (current + 1) % 4);
-        sendPress(setCode, what);
+        int cur = predicted(getCode, current);
+        if (cur >= 0) {
+            int next = cur == 0 ? 3 : cur - 1;
+            hold(getCode, next);
+            Diag.put(what, "tocco, previsto " + next + ", letto dall'auto " + current);
+        }
+        sendPress(setCode, what);   // un "premuto" per tocco, in ordine sulla stessa coda
     }
 
     private void sendPress(int setCode, String what) {
