@@ -190,7 +190,7 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 
 ### Versioni
 
-#### 0.7.4 — 15 ottobre 2026
+#### 0.7.4
 - **Avvio all'accensione più rapido**: un servizio di accessibilità del launcher (attivato da solo, guarda solo quale
   app passa in primo piano, non legge il contenuto dello schermo) parte con il sistema, prima del segnale di avvio
   completato che arrivava dopo 30 secondi circa: appena compare la home MG il launcher torna in primo piano. Vale anche
@@ -205,14 +205,14 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
   accessibilità, home predefinita e officina.
 - Restano le icone **Impostazioni Android** e **File Android** nella pagina App, arrivate con la 0.7.3.
 
-#### 0.7.3 — 15 ottobre 2026
+#### 0.7.3
 - Nella pagina App, in fondo alle app dell'auto, due nuove icone: **Impostazioni Android** (le impostazioni di
   sistema di Android) e **File Android** (il gestore file dell'auto: DocumentsUI, quello MediaTek o File Explorer,
   altrimenti la schermata di Android per aprire i documenti). Ogni icona compare solo se sull'auto c'è davvero.
 - Le altre app di sistema di Android restano nascoste come prima.
 - Nella diagnostica, la riga `app.sistema` dice se le impostazioni e il gestore file sono stati trovati.
 
-#### 0.7.2 — 15 ottobre 2026
+#### 0.7.2
 - **Il launcher parte all'accensione**: il firmware all'avvio apre la home MG per nome, saltando la home predefinita.
   Ora il launcher, appena l'auto si accende, controlla l'app in primo piano ogni 400 ms e, quando compare la home MG,
   si riapre da solo (al massimo 3 volte, per non entrare in conflitto con il firmware). Il controllo finisce quando il
@@ -232,7 +232,7 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 - Nella diagnostica, per ogni sedile, il livello previsto dopo il tocco e quello letto dall'auto.
 - Correzione dell'invio automatico dei log diagnostici.
 
-#### 0.7.1 — 15 ottobre 2026
+#### 0.7.1
 - **Nuove impostazioni**, con la stessa grafica della versione SWI69: a schermo intero, divise in cinque sezioni
   (Auto, Home, Aspetto, Guida, Sistema) con un menu a sinistra (la sezione aperta ha una barra a lato e l'icona piena);
   ogni sezione ha il suo titolo e il pulsante di chiusura, righe grandi raggruppate in schede, interruttori e scelte
@@ -247,7 +247,7 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
   senza rete restano in coda. Si disattiva in Impostazioni → Sistema, dove si vede anche l'ora dell'ultimo invio.
 - Il popup degli aggiornamenti apre direttamente la sezione Sistema.
 
-#### 0.7.0 — 14 ottobre 2026
+#### 0.7.0
 - **Dimensione comandi** in Impostazioni: Normale, Grande o Molto grande. Si ingrandiscono solo i pulsanti da toccare
   (clima, A/C, AUTO, sedili, fendinebbia, scorciatoie, sorgenti, FM/DAB, stazioni, schede); testi e pannelli restano
   uguali. Con *Molto grande* il mini-player lascia il posto ai pulsanti (i comandi della musica restano nel pannello Media).
@@ -256,22 +256,22 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 - **Spazio per la spia luci del sistema**: sulle auto dove la barra di sistema mostra sempre la spia in alto a sinistra,
   il launcher lascia libero quell'angolo.
 
-#### 0.6.3 — 14 ottobre 2026
+#### 0.6.3
 - **Pressione pneumatici (TPMS)** ora visibile: il launcher chiede alla radio il permesso necessario per leggere i sensori.
 - **Avviso discreto per i nuovi aggiornamenti**: quando su GitHub c'è una versione nuova compare in alto una piccola
   scheda con **Aggiorna** e **Più tardi**; si disattiva in Impostazioni → Aggiornamenti.
 
-#### 0.6.2 — 14 ottobre 2026
+#### 0.6.2
 - Percentuale della batteria **con decimali** (es. 76,6%), da attivare in Impostazioni → Visualizzazione.
 - **Riscaldamento sedili** sinistro e destro (3 livelli, con tacche) e **volante riscaldato**, dopo A/C e AUTO.
 - **Pressione pneumatici (TPMS)** sotto l'auto, anteriori e posteriori (ambra sotto 2,0 bar); si può nascondere.
 - **Temperatura interna** sotto quella esterna.
 
-#### 0.6.1 — 13 ottobre 2026
+#### 0.6.1
 - Nome corretto del software: **SWI68** (non SW168). Repository rinominato in **Mg4-Launcher-SWI68**; il launcher
   passa da solo al nuovo nome per gli aggiornamenti (anche da Mg4-Launcher-SW168 e mg4-launcher).
 
-#### 0.6.0 — 13 ottobre 2026
+#### 0.6.0
 - **Orologio** nel riquadro della batteria, grande quanto l'autonomia; la percentuale passa accanto alla barra.
 - **Fendinebbia** nella barra in basso: retronebbia sempre, anteriori se l'auto li ha (stessi comandi della barra
   di stato originale); icona verde / ambra quando sono accesi.
@@ -281,7 +281,7 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
   (2G / 3G / 4G con le tacche), letti come la barra di stato originale.
 - Media: con il telefono collegato le sorgenti non scelte mostrano solo l'icona, per lasciare spazio agli indicatori.
 
-#### 0.5.0 — 13 ottobre 2026
+#### 0.5.0
 - **Multilingua**: italiano, inglese, spagnolo, tedesco, portoghese, francese e turco. Nuova voce **Lingua** nelle
   impostazioni: *Automatica* segue la lingua di sistema dell'auto (e si aggiorna da sola), oppure una lingua a scelta.
 - **Mappa**: riquadro *Dove andiamo?* ridisegnato, con barra *Cerca una destinazione*, navigatore predefinito
@@ -292,7 +292,7 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
   Download degli aggiornamenti più robusto (segue lo spostamento del repository, riprova da raw.githubusercontent.com).
 - Chi ha la 0.4.x: installa questa versione con `adb install -r -f` (la 0.4.x cerca ancora il vecchio nome).
 
-#### 0.4.1 — 12 ottobre 2026
+#### 0.4.1
 - "Ricarica fino a" corretto: l'auto restituisce un codice (5 = 80%), ora convertito in percentuale; anche la tacca
   del limite sulla barra della batteria è nel punto giusto.
 - Consumo: ora è la **media degli ultimi 50 km**, come la pagina Energia dell'auto, invece del valore dell'ultimo km.
@@ -301,7 +301,7 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 - **V2L** cliccabile: apre direttamente la scheda Scarica (presa esterna) della gestione energia.
 - Release su GitHub: l'APK viene allegato in automatico (GitHub Actions) quando si pubblica la release.
 
-#### 0.4.0 — 11 ottobre 2026
+#### 0.4.0
 - Aggiornamenti dalle impostazioni: l'APK non viene più salvato in un file temporaneo ma va direttamente
   all'installazione (installazione interna come `adb install -r -f`); download di riserva da raw.githubusercontent.com
   e messaggi d'errore precisi (download o installazione).
@@ -311,14 +311,14 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 - Tolto il pulsante App nella barra in basso e la freccia nella pagina App: si passa scorrendo.
 - Nuova icona a ingranaggio per Impostazioni (barra in basso e app) e per le impostazioni del launcher.
 
-#### 0.3.1 — 11 ottobre 2026
+#### 0.3.1
 - Radio: il pulsante play/pausa ora mostra lo stato reale e la radio riparte dopo la pausa
   (pausa e ripresa come nella home originale).
 - Navigatore: riga **Apri con** nel pannello Mappa (MG, CarPlay/Android Auto, Waze/Google Maps installati)
   e scelta del **navigatore predefinito** nelle impostazioni (Automatico = telefono se collegato, altrimenti MG).
 - README in italiano e inglese.
 
-#### 0.3.0 — 11 ottobre 2026
+#### 0.3.0
 - Nuova icona Telecamera 360°, nella barra in basso e tra le app.
 - Temperatura esterna accanto allo stato di ricarica.
 - Home e App a scorrimento orizzontale.
@@ -328,7 +328,7 @@ segnalazione di un problema sono un aiuto prezioso. Grazie!
 - Navigatore: il launcher riceve le notifiche del servizio di navigazione come la home originale.
 - Diagnostica su logcat e su file. Tolto il campo del token (repository pubblico).
 
-#### 0.2.0 — 11 ottobre 2026
+#### 0.2.0
 - Schermo intero; avvio all'accensione come la home originale.
 - Radio riconosciuta correttamente; pannello Mappa aggiornato all'avvio della guida, con prossima manovra.
 - Temperatura senza rimbalzo al primo tocco; controllo della ventola nella barra in basso.
@@ -516,7 +516,7 @@ the repository or a bug report help a lot too. Thank you!
 
 ### Changelog
 
-#### 0.7.4 — 15 October 2026
+#### 0.7.4
 - **Faster start at power-on**: a launcher accessibility service (turned on automatically; it only looks at which app
   comes to the foreground and does not read screen content) starts with the system, before the boot-completed
   signal that arrived after about 30 seconds: as soon as the MG home appears, the launcher comes back to the front.
@@ -531,14 +531,14 @@ the repository or a bug report help a lot too. Thank you!
   default home and service mode.
 - The **Android settings** and **Android files** icons on the Apps page, added in 0.7.3, are still there.
 
-#### 0.7.3 — 15 October 2026
+#### 0.7.3
 - On the Apps page, at the end of the car apps, two new icons: **Android settings** (Android's system settings) and
   **Android files** (the car's file manager: DocumentsUI, the MediaTek one or File Explorer, otherwise Android's
   document picker). Each icon appears only if it really exists on the car.
 - The other Android system apps stay hidden as before.
 - In the diagnostics, the `app.sistema` line says whether the settings and the file manager were found.
 
-#### 0.7.2 — 15 October 2026
+#### 0.7.2
 - **The launcher starts at power-on**: at boot the firmware opens the MG home by name, skipping the default home.
   Now, as soon as the car switches on, the launcher checks the app in the foreground every 400 ms and, when the MG
   home appears, reopens itself (at most 3 times, so it never fights the firmware). The check stops once the launcher
@@ -557,7 +557,7 @@ the repository or a bug report help a lot too. Thank you!
 - In the diagnostics, for each seat, the level expected after the tap and the one read from the car.
 - Fix for the automatic upload of diagnostic logs.
 
-#### 0.7.1 — 15 October 2026
+#### 0.7.1
 - **New settings**, with the same design as the SWI69 version: full screen, split into five sections (Car, Home,
   Appearance, Driving, System) with a menu on the left (the open section has a side bar and a filled icon); each
   section has its own title and close button, large rows grouped in cards, switches and choices that follow the
@@ -571,7 +571,7 @@ the repository or a bug report help a lot too. Thank you!
   without a connection they are queued. It can be turned off in Settings → System, which also shows the last upload time.
 - The update pop-up opens the System section directly.
 
-#### 0.7.0 — 14 October 2026
+#### 0.7.0
 - **Control size** in Settings: Normal, Large or Extra large. Only the buttons you touch get bigger (climate, A/C,
   AUTO, seats, fog lights, shortcuts, sources, FM/DAB, stations, tabs); texts and panels stay the same. With
   *Extra large* the mini-player makes room for the buttons (music controls stay in the Media panel).
@@ -580,22 +580,22 @@ the repository or a bug report help a lot too. Thank you!
 - **Room for the system light indicator**: on cars where the system bar always shows the indicator at the top left,
   the launcher keeps that corner free.
 
-#### 0.6.3 — 14 October 2026
+#### 0.6.3
 - **Tyre pressure (TPMS)** now shown: the launcher requests the permission the radio needs to read the sensors.
 - **Discreet notice for new updates**: when a new version is on GitHub, a small card appears at the top with
   **Update** and **Later**; it can be turned off in Settings → Updates.
 
-#### 0.6.2 — 14 October 2026
+#### 0.6.2
 - Battery percentage **with decimals** (e.g. 76.6%), enabled in Settings → Display.
 - Left and right **heated seats** (3 levels, with level marks) and **heated steering wheel**, after A/C and AUTO.
 - **Tyre pressure (TPMS)** under the car, front and rear (amber below 2.0 bar); can be hidden.
 - **Interior temperature** under the outside one.
 
-#### 0.6.1 — 13 October 2026
+#### 0.6.1
 - Correct software name: **SWI68** (not SW168). Repository renamed to **Mg4-Launcher-SWI68**; the launcher switches
   to the new name for updates by itself (also from Mg4-Launcher-SW168 and mg4-launcher).
 
-#### 0.6.0 — 13 October 2026
+#### 0.6.0
 - **Clock** in the battery panel, as large as the range; the percentage moves next to the bar.
 - **Fog lights** in the bottom bar: rear always, front if the car has them (same commands as the original status bar);
   green / amber icon when on.
@@ -605,7 +605,7 @@ the repository or a bug report help a lot too. Thank you!
   (2G / 3G / 4G with bars), read like the original status bar.
 - Media: with a phone connected, unselected sources show only their icon to make room for the indicators.
 
-#### 0.5.0 — 13 October 2026
+#### 0.5.0
 - **Multilingual**: Italian, English, Spanish, German, Portuguese, French and Turkish. New **Language** setting:
   *Automatic* follows the car's system language (and updates by itself), or pick a language.
 - **Map**: redesigned *Where to?* panel with a *Search for a destination* bar, the default navigator shown under the
@@ -616,7 +616,7 @@ the repository or a bug report help a lot too. Thank you!
   Sturdier update download (follows the repository move, retries from raw.githubusercontent.com).
 - If you have 0.4.x: install this version with `adb install -r -f` (0.4.x still looks for the old name).
 
-#### 0.4.1 — 12 October 2026
+#### 0.4.1
 - "Ricarica fino a" (charge limit) fixed: the car returns a code (5 = 80%), now converted to a percentage; the
   limit mark on the battery bar is in the right place too.
 - Consumption: now the **average of the last 50 km**, like the car's Energy page, instead of the last-km value.
@@ -625,7 +625,7 @@ the repository or a bug report help a lot too. Thank you!
 - **V2L** is tappable: opens the Discharge (external socket) tab of energy management.
 - GitHub releases: the APK is attached automatically (GitHub Actions) when the release is published.
 
-#### 0.4.0 — 11 October 2026
+#### 0.4.0
 - Updates from the settings: the APK is no longer saved to a temporary file but streamed straight into the installer
   (internal install like `adb install -r -f`); fallback download from raw.githubusercontent.com and precise error
   messages (download or install).
@@ -635,14 +635,14 @@ the repository or a bug report help a lot too. Thank you!
 - Apps button in the bottom bar and back arrow on the Apps page removed: swipe between pages.
 - New gear icon for Settings (bottom bar and apps) and for the launcher settings.
 
-#### 0.3.1 — 11 October 2026
+#### 0.3.1
 - Radio: the play/pause button now shows the real state and the radio resumes after a pause
   (pause and resume work like the original home).
 - Navigator: **Open with** row in the Map panel (MG, CarPlay/Android Auto, installed Waze/Google Maps)
   and a **default navigator** choice in the settings (Auto = phone when connected, otherwise MG).
 - README in Italian and English.
 
-#### 0.3.0 — 11 October 2026
+#### 0.3.0
 - New 360° camera icon, in the bottom bar and in the app grid.
 - Outside temperature next to the charging status.
 - Home and Apps as horizontally swipeable pages.
@@ -652,7 +652,7 @@ the repository or a bug report help a lot too. Thank you!
 - Navigator: the launcher receives the navigation service notifications, like the original home.
 - Diagnostics on logcat and to a file. GitHub token field removed (public repository).
 
-#### 0.2.0 — 11 October 2026
+#### 0.2.0
 - Full screen; starts at power-on like the original home.
 - Radio correctly detected; Map panel updates when guidance starts, with next manoeuvre.
 - No temperature bounce on the first tap; fan control in the bottom bar.
